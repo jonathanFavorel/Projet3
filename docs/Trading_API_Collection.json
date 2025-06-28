@@ -1031,6 +1031,147 @@
           "response": []
         }
       ]
+    },
+    {
+      "name": "💬 Messages",
+      "item": [
+        {
+          "name": "Envoyer Message",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"Salut ! Comment ça va ?\",\n  \"recipientId\": \"user-uuid-here\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/messages",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_prefix}}", "messages"]
+            },
+            "description": "Envoyer un message privé à un autre utilisateur"
+          },
+          "response": []
+        },
+        {
+          "name": "Conversations",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/messages/conversations",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_prefix}}", "messages", "conversations"]
+            },
+            "description": "Récupérer la liste des conversations de l'utilisateur connecté"
+          },
+          "response": []
+        },
+        {
+          "name": "Messages d'une Conversation",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/messages/conversation/:otherUserId",
+              "host": ["{{base_url}}"],
+              "path": [
+                "{{api_prefix}}",
+                "messages",
+                "conversation",
+                ":otherUserId"
+              ],
+              "variable": [
+                {
+                  "key": "otherUserId",
+                  "value": "user-uuid-here"
+                }
+              ]
+            },
+            "description": "Récupérer tous les messages d'une conversation avec un utilisateur spécifique"
+          },
+          "response": []
+        },
+        {
+          "name": "Message par ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/messages/:id",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_prefix}}", "messages", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "message-uuid-here"
+                }
+              ]
+            },
+            "description": "Récupérer un message spécifique par son ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Marquer comme Lu",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/messages/:id/read",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_prefix}}", "messages", ":id", "read"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "message-uuid-here"
+                }
+              ]
+            },
+            "description": "Marquer un message comme lu"
+          },
+          "response": []
+        },
+        {
+          "name": "Messages Non Lus",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/messages/unread/count",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_prefix}}", "messages", "unread", "count"]
+            },
+            "description": "Récupérer le nombre de messages non lus"
+          },
+          "response": []
+        },
+        {
+          "name": "Supprimer Message",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/messages/:id",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_prefix}}", "messages", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "message-uuid-here"
+                }
+              ]
+            },
+            "description": "Supprimer un message (seul l'expéditeur peut supprimer)"
+          },
+          "response": []
+        }
+      ]
     }
   ],
   "event": [

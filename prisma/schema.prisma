@@ -27,7 +27,8 @@ model User {
   analyses      Analysis[]
   comments      Comment[]
   tradingAccount TradingAccount?
-  messages      MessageHaveUser[]
+  sentMessages  Message[] @relation("MessageSender")
+  receivedMessages Message[] @relation("MessageRecipient")
   roles         UserHaveRole[]
 
   @@map("_User")
@@ -59,13 +60,17 @@ model Currency {
 }
 
 model Message {
-  idMessage String   @id @default(uuid()) @map("idMessage")
-  content   String   @db.Text
-  createdAt DateTime @default(now())
-  updateAt  DateTime @updatedAt @map("updateAt")
+  idMessage   String   @id @default(uuid()) @map("idMessage")
+  content     String   @db.Text
+  isRead      Boolean  @default(false) @map("isRead")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt @map("updatedAt")
+  senderId    String   @map("senderId")
+  recipientId String   @map("recipientId")
 
   // Relations
-  users MessageHaveUser[]
+  sender    User @relation("MessageSender", fields: [senderId], references: [idUser], onDelete: Cascade)
+  recipient User @relation("MessageRecipient", fields: [recipientId], references: [idUser], onDelete: Cascade)
 
   @@map("message")
 }
@@ -182,18 +187,6 @@ model AccountStats {
   tradingAccount TradingAccount @relation(fields: [idTradingAccount], references: [idTradingAccount], onDelete: Cascade)
 
   @@map("accountStats")
-}
-
-model MessageHaveUser {
-  idUser    String
-  idMessage String
-
-  // Relations
-  user    User    @relation(fields: [idUser], references: [idUser], onDelete: Cascade)
-  message Message @relation(fields: [idMessage], references: [idMessage], onDelete: Cascade)
-
-  @@id([idUser, idMessage])
-  @@map("messageHaveUser")
 }
 
 model UserHaveRole {

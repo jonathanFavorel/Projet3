@@ -514,6 +514,7 @@ Pour mettre à jour la collection :
 - [Devises](#devises)
 - [Prop Firms](#prop-firms)
 - [Commentaires](#commentaires)
+- [Messages](#messages)
 
 ## ⚙️ Configuration
 
@@ -534,255 +535,325 @@ Pour mettre à jour la collection :
 
 ### Inscription
 
-- **POST** `{{base_url}}{{api_prefix}}/auth/register`
-- Crée un nouveau compte utilisateur
-- Retourne un token d'authentification
+- **POST** `/api/v1/auth/register`
+- **Body**: `{ "nameTag", "firstname", "lastname", "email", "password" }`
+- **Description**: Créer un nouveau compte utilisateur
 
 ### Connexion
 
-- **POST** `{{base_url}}{{api_prefix}}/auth/login`
-- Se connecter avec email et mot de passe
-- Le token est automatiquement stocké dans les variables de collection
-
-### Profil Utilisateur
-
-- **GET** `{{base_url}}{{api_prefix}}/auth/me`
-- Récupère les informations de l'utilisateur connecté
+- **POST** `/api/v1/auth/login`
+- **Body**: `{ "email", "password" }`
+- **Description**: Se connecter et obtenir un token JWT
 
 ### Déconnexion
 
-- **POST** `{{base_url}}{{api_prefix}}/auth/logout`
-- Se déconnecte et supprime le token
+- **POST** `/api/v1/auth/logout`
+- **Headers**: `Authorization: Bearer <token>`
+- **Description**: Se déconnecter et invalider le token
+
+### Profil utilisateur
+
+- **GET** `/api/v1/auth/me`
+- **Headers**: `Authorization: Bearer <token>`
+- **Description**: Récupérer les informations du profil connecté
 
 ## 👥 Utilisateurs
 
-### Créer Utilisateur
+### Liste des utilisateurs
 
-- **POST** `{{base_url}}{{api_prefix}}/users`
-- Crée un nouvel utilisateur (admin uniquement)
-
-### Liste des Utilisateurs
-
-- **GET** `{{base_url}}{{api_prefix}}/users`
-- Récupère la liste des utilisateurs avec pagination
-- Paramètres: `page`, `limit`, `search`
+- **GET** `/api/v1/users`
+- **Headers**: `Authorization: Bearer <token>`
+- **Query**: `page`, `limit`, `search`
+- **Description**: Récupérer la liste des utilisateurs avec pagination
 
 ### Utilisateur par ID
 
-- **GET** `{{base_url}}{{api_prefix}}/users/:id`
-- Récupère un utilisateur par son ID
+- **GET** `/api/v1/users/:id`
+- **Headers**: `Authorization: Bearer <token>`
+- **Description**: Récupérer un utilisateur spécifique
 
-### Mettre à jour Utilisateur
+### Créer utilisateur
 
-- **PUT** `{{base_url}}{{api_prefix}}/users/:id`
-- Met à jour un utilisateur (propriétaire ou admin)
+- **POST** `/api/v1/users`
+- **Headers**: `Authorization: Bearer <token>`
+- **Body**: `{ "nameTag", "firstname", "lastname", "email", "password", "phone", "bio" }`
+- **Description**: Créer un nouvel utilisateur (admin uniquement)
 
-### Supprimer Utilisateur
+### Mettre à jour utilisateur
 
-- **DELETE** `{{base_url}}{{api_prefix}}/users/:id`
-- Supprime un utilisateur (admin uniquement)
+- **PUT** `/api/v1/users/:id`
+- **Headers**: `Authorization: Bearer <token>`
+- **Body**: `{ "firstname", "lastname", "phone", "bio" }`
+- **Description**: Mettre à jour un utilisateur
 
-### Statistiques Utilisateurs
+### Changer mot de passe
 
-- **GET** `{{base_url}}{{api_prefix}}/users/stats`
-- Récupère les statistiques des utilisateurs
+- **PATCH** `/api/v1/users/:id/password`
+- **Headers**: `Authorization: Bearer <token>`
+- **Body**: `{ "currentPassword", "newPassword" }`
+- **Description**: Changer le mot de passe d'un utilisateur
 
-### Changer Mot de Passe
+### Supprimer utilisateur
 
-- **PATCH** `{{base_url}}{{api_prefix}}/users/:id/password`
-- Change le mot de passe d'un utilisateur
+- **DELETE** `/api/v1/users/:id`
+- **Headers**: `Authorization: Bearer <token>`
+- **Description**: Supprimer un utilisateur
+
+### Statistiques utilisateurs
+
+- **GET** `/api/v1/users/stats`
+- **Headers**: `Authorization: Bearer <token>`
+- **Description**: Récupérer les statistiques des utilisateurs
 
 ## 📊 Analyses
 
-### Créer Analyse
+### Liste des analyses
 
-- **POST** `{{base_url}}{{api_prefix}}/analyses`
-- Crée une nouvelle analyse de trading
-
-### Liste des Analyses
-
-- **GET** `{{base_url}}{{api_prefix}}/analyses`
-- Récupère la liste des analyses
+- **GET** `/api/v1/analyses`
+- **Headers**: `Authorization: Bearer <token>`
+- **Query**: `page`, `limit`
+- **Description**: Récupérer la liste des analyses
 
 ### Analyse par ID
 
-- **GET** `{{base_url}}{{api_prefix}}/analyses/:id`
-- Récupère une analyse par son ID
+- **GET** `/api/v1/analyses/:id`
+- **Headers**: `Authorization: Bearer <token>`
+- **Description**: Récupérer une analyse spécifique
 
-### Mettre à jour Analyse
+### Créer analyse
 
-- **PUT** `{{base_url}}{{api_prefix}}/analyses/:id`
-- Met à jour une analyse (propriétaire uniquement)
+- **POST** `/api/v1/analyses`
+- **Headers**: `Authorization: Bearer <token>`
+- **Body**: `{ "title", "content" }`
+- **Description**: Créer une nouvelle analyse
 
-### Supprimer Analyse
+### Mettre à jour analyse
 
-- **DELETE** `{{base_url}}{{api_prefix}}/analyses/:id`
-- Supprime une analyse (propriétaire uniquement)
+- **PUT** `/api/v1/analyses/:id`
+- **Headers**: `Authorization: Bearer <token>`
+- **Body**: `{ "title", "content" }`
+- **Description**: Mettre à jour une analyse
 
-## 📈 Trades
+### Supprimer analyse
 
-### Créer Trade
+- **DELETE** `/api/v1/analyses/:id`
+- **Headers**: `Authorization: Bearer <token>`
+- **Description**: Supprimer une analyse
 
-- **POST** `{{base_url}}{{api_prefix}}/trades`
-- Crée un nouveau trade
+## 💰 Trades
 
-### Liste des Trades
+### Liste des trades
 
-- **GET** `{{base_url}}{{api_prefix}}/trades`
-- Récupère la liste des trades
+- **GET** `/api/v1/trades`
+- **Headers**: `Authorization: Bearer <token>`
+- **Query**: `page`, `limit`, `accountId`
+- **Description**: Récupérer la liste des trades
 
 ### Trade par ID
 
-- **GET** `{{base_url}}{{api_prefix}}/trades/:id`
-- Récupère un trade par son ID
+- **GET** `/api/v1/trades/:id`
+- **Headers**: `Authorization: Bearer <token>`
+- **Description**: Récupérer un trade spécifique
 
-### Mettre à jour Trade
+### Créer trade
 
-- **PUT** `{{base_url}}{{api_prefix}}/trades/:id`
-- Met à jour un trade (propriétaire uniquement)
+- **POST** `/api/v1/trades`
+- **Headers**: `Authorization: Bearer <token>`
+- **Body**: `{ "entryPrice", "exitPrice", "takeProfit", "quantity", "status", "dateEntry", "dateExit", "idTradingAccount", "idCurrency" }`
+- **Description**: Créer un nouveau trade
 
-### Supprimer Trade
+### Mettre à jour trade
 
-- **DELETE** `{{base_url}}{{api_prefix}}/trades/:id`
-- Supprime un trade (propriétaire uniquement)
+- **PUT** `/api/v1/trades/:id`
+- **Headers**: `Authorization: Bearer <token>`
+- **Body**: `{ "entryPrice", "exitPrice", "takeProfit", "quantity", "status", "dateEntry", "dateExit" }`
+- **Description**: Mettre à jour un trade
 
-## 💰 Comptes de Trading
+### Supprimer trade
 
-### Créer Compte
+- **DELETE** `/api/v1/trades/:id`
+- **Headers**: `Authorization: Bearer <token>`
+- **Description**: Supprimer un trade
 
-- **POST** `{{base_url}}{{api_prefix}}/accounts`
-- Crée un nouveau compte de trading
+## 🏦 Comptes de Trading
 
-### Liste des Comptes
+### Liste des comptes
 
-- **GET** `{{base_url}}{{api_prefix}}/accounts`
-- Récupère la liste des comptes de trading
+- **GET** `/api/v1/accounts`
+- **Headers**: `Authorization: Bearer <token>`
+- **Query**: `page`, `limit`
+- **Description**: Récupérer la liste des comptes de trading
 
 ### Compte par ID
 
-- **GET** `{{base_url}}{{api_prefix}}/accounts/:id`
-- Récupère un compte par son ID
+- **GET** `/api/v1/accounts/:id`
+- **Headers**: `Authorization: Bearer <token>`
+- **Description**: Récupérer un compte spécifique
 
-### Mettre à jour Compte
+### Créer compte
 
-- **PUT** `{{base_url}}{{api_prefix}}/accounts/:id`
-- Met à jour un compte (propriétaire uniquement)
+- **POST** `/api/v1/accounts`
+- **Headers**: `Authorization: Bearer <token>`
+- **Body**: `{ "leverage", "isPropFirm", "amount", "idCurrency", "idPropFirm" }`
+- **Description**: Créer un nouveau compte de trading
 
-### Supprimer Compte
+### Mettre à jour compte
 
-- **DELETE** `{{base_url}}{{api_prefix}}/accounts/:id`
-- Supprime un compte (propriétaire uniquement)
+- **PUT** `/api/v1/accounts/:id`
+- **Headers**: `Authorization: Bearer <token>`
+- **Body**: `{ "leverage", "isPropFirm", "amount", "idCurrency", "idPropFirm" }`
+- **Description**: Mettre à jour un compte de trading
+
+### Supprimer compte
+
+- **DELETE** `/api/v1/accounts/:id`
+- **Headers**: `Authorization: Bearer <token>`
+- **Description**: Supprimer un compte de trading
 
 ## 💱 Devises
 
-### Créer Devise
+### Liste des devises
 
-- **POST** `{{base_url}}{{api_prefix}}/currencies`
-- Crée une nouvelle devise
-
-### Liste des Devises
-
-- **GET** `{{base_url}}{{api_prefix}}/currencies`
-- Récupère la liste des devises
+- **GET** `/api/v1/currencies`
+- **Headers**: `Authorization: Bearer <token>`
+- **Query**: `page`, `limit`
+- **Description**: Récupérer la liste des devises
 
 ### Devise par ID
 
-- **GET** `{{base_url}}{{api_prefix}}/currencies/:id`
-- Récupère une devise par son ID
+- **GET** `/api/v1/currencies/:id`
+- **Headers**: `Authorization: Bearer <token>`
+- **Description**: Récupérer une devise spécifique
 
-### Mettre à jour Devise
+### Créer devise
 
-- **PUT** `{{base_url}}{{api_prefix}}/currencies/:id`
-- Met à jour une devise
+- **POST** `/api/v1/currencies`
+- **Headers**: `Authorization: Bearer <token>`
+- **Body**: `{ "name", "symbol", "contractSize", "type" }`
+- **Description**: Créer une nouvelle devise
 
-### Supprimer Devise
+### Mettre à jour devise
 
-- **DELETE** `{{base_url}}{{api_prefix}}/currencies/:id`
-- Supprime une devise
+- **PUT** `/api/v1/currencies/:id`
+- **Headers**: `Authorization: Bearer <token>`
+- **Body**: `{ "name", "symbol", "contractSize", "type" }`
+- **Description**: Mettre à jour une devise
+
+### Supprimer devise
+
+- **DELETE** `/api/v1/currencies/:id`
+- **Headers**: `Authorization: Bearer <token>`
+- **Description**: Supprimer une devise
 
 ## 🏢 Prop Firms
 
-### Créer Prop Firm
+### Liste des prop firms
 
-- **POST** `{{base_url}}{{api_prefix}}/prop-firms`
-- Crée une nouvelle prop firm
+- **GET** `/api/v1/prop-firms`
+- **Headers**: `Authorization: Bearer <token>`
+- **Query**: `page`, `limit`
+- **Description**: Récupérer la liste des prop firms
 
-### Liste des Prop Firms
+### Prop firm par ID
 
-- **GET** `{{base_url}}{{api_prefix}}/prop-firms`
-- Récupère la liste des prop firms
+- **GET** `/api/v1/prop-firms/:id`
+- **Headers**: `Authorization: Bearer <token>`
+- **Description**: Récupérer une prop firm spécifique
 
-### Prop Firm par ID
+### Créer prop firm
 
-- **GET** `{{base_url}}{{api_prefix}}/prop-firms/:id`
-- Récupère une prop firm par son ID
+- **POST** `/api/v1/prop-firms`
+- **Headers**: `Authorization: Bearer <token>`
+- **Body**: `{ "name", "logoUrl" }`
+- **Description**: Créer une nouvelle prop firm
 
-### Mettre à jour Prop Firm
+### Mettre à jour prop firm
 
-- **PUT** `{{base_url}}{{api_prefix}}/prop-firms/:id`
-- Met à jour une prop firm
+- **PUT** `/api/v1/prop-firms/:id`
+- **Headers**: `Authorization: Bearer <token>`
+- **Body**: `{ "name", "logoUrl" }`
+- **Description**: Mettre à jour une prop firm
 
-### Supprimer Prop Firm
+### Supprimer prop firm
 
-- **DELETE** `{{base_url}}{{api_prefix}}/prop-firms/:id`
-- Supprime une prop firm
+- **DELETE** `/api/v1/prop-firms/:id`
+- **Headers**: `Authorization: Bearer <token>`
+- **Description**: Supprimer une prop firm
 
 ## 💬 Commentaires
 
-### Créer Commentaire
+### Créer commentaire
 
-- **POST** `{{base_url}}{{api_prefix}}/comments`
-- Crée un nouveau commentaire sur une analyse
-- Requiert authentification
+- **POST** `/api/v1/comments`
+- **Headers**: `Authorization: Bearer <token>`
+- **Body**: `{ "content", "idAnalysis" }`
+- **Description**: Créer un nouveau commentaire sur une analyse
 
-### Commentaires par Analyse
+### Commentaires par analyse
 
-- **GET** `{{base_url}}{{api_prefix}}/comments/analysis/:analysisId`
-- Récupère tous les commentaires d'une analyse
-- Triés par date de création (plus récents en premier)
+- **GET** `/api/v1/comments/analysis/:analysisId`
+- **Headers**: `Authorization: Bearer <token>`
+- **Description**: Récupérer tous les commentaires d'une analyse
 
 ### Commentaire par ID
 
-- **GET** `{{base_url}}{{api_prefix}}/comments/:id`
-- Récupère un commentaire par son ID
-- Inclut les informations de l'utilisateur et de l'analyse
+- **GET** `/api/v1/comments/:id`
+- **Headers**: `Authorization: Bearer <token>`
+- **Description**: Récupérer un commentaire spécifique
 
-### Mettre à jour Commentaire
+### Mettre à jour commentaire
 
-- **PUT** `{{base_url}}{{api_prefix}}/comments/:id`
-- Met à jour un commentaire
-- Seul le propriétaire du commentaire peut le modifier
-- Requiert authentification
+- **PUT** `/api/v1/comments/:id`
+- **Headers**: `Authorization: Bearer <token>`
+- **Body**: `{ "content" }`
+- **Description**: Mettre à jour un commentaire (seul le propriétaire peut modifier)
 
-### Supprimer Commentaire
+### Supprimer commentaire
 
-- **DELETE** `{{base_url}}{{api_prefix}}/comments/:id`
-- Supprime un commentaire
-- Seul le propriétaire du commentaire peut le supprimer
-- Requiert authentification
+- **DELETE** `/api/v1/comments/:id`
+- **Headers**: `Authorization: Bearer <token>`
+- **Description**: Supprimer un commentaire (seul le propriétaire peut supprimer)
 
-## 🔧 Utilisation
+## 💬 Messages
 
-### Workflow recommandé
+### Envoyer message
 
-1. **Importer** la collection Postman
-2. **Configurer** les variables d'environnement
-3. **S'inscrire** ou se connecter pour obtenir un token
-4. **Tester** les différentes fonctionnalités
+- **POST** `/api/v1/messages`
+- **Headers**: `Authorization: Bearer <token>`
+- **Body**: `{ "content", "recipientId" }`
+- **Description**: Envoyer un message privé à un autre utilisateur
 
-### Gestion automatique des tokens
+### Conversations
 
-- Le token d'authentification est automatiquement récupéré lors de la connexion
-- Il est stocké dans la variable de collection `auth_token`
-- Il est automatiquement supprimé lors de la déconnexion
+- **GET** `/api/v1/messages/conversations`
+- **Headers**: `Authorization: Bearer <token>`
+- **Description**: Récupérer la liste des conversations de l'utilisateur connecté
 
-### Tests automatiques
+### Messages d'une conversation
 
-- Chaque requête inclut des tests de base
-- Vérification du code de statut
-- Vérification du temps de réponse
+- **GET** `/api/v1/messages/conversation/:otherUserId`
+- **Headers**: `Authorization: Bearer <token>`
+- **Description**: Récupérer tous les messages d'une conversation avec un utilisateur spécifique
 
-## 📝 Notes importantes
+### Message par ID
+
+- **GET** `/api/v1/messages/:id`
+- **Headers**: `Authorization: Bearer <token>`
+- **Description**: Récupérer un message spécifique par son ID
+
+### Marquer comme lu
+
+- **PATCH** `/api/v1/messages/:id/read`
+- **Headers**: `Authorization: Bearer <token>`
+- **Description**: Marquer un message comme lu
+
+### Messages non lus
+
+- **GET** `/api/v1/messages/unread/count`
+- **Headers**: `Authorization: Bearer <token>`
+- **Description**: Récupérer le nombre de messages non lus
+
+### Supprimer message
 
 - Toutes les requêtes nécessitant une authentification utilisent automatiquement le token Bearer
 - Les erreurs sont retournées avec des codes HTTP appropriés et des messages explicites

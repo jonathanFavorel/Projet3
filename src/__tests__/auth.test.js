@@ -8,25 +8,41 @@ describe('🔐 Authentification', () => {
   let testUser;
 
   beforeAll(async () => {
-    // Nettoyer la base de données de test
+    // Nettoyer tous les utilisateurs de test potentiels
     await prisma.user.deleteMany({
       where: {
-        email: 'test@example.com',
+        OR: [
+          { email: 'authuser@example.com' },
+          { email: 'authuser2@example.com' },
+          { nameTag: 'authuser' },
+          { nameTag: 'authuser2' },
+        ],
       },
     });
   });
 
   afterAll(async () => {
+    // Nettoyer tous les utilisateurs de test créés
+    await prisma.user.deleteMany({
+      where: {
+        OR: [
+          { email: 'authuser@example.com' },
+          { email: 'authuser2@example.com' },
+          { nameTag: 'authuser' },
+          { nameTag: 'authuser2' },
+        ],
+      },
+    });
     await prisma.$disconnect();
   });
 
   describe('POST /api/v1/auth/register', () => {
     it('devrait créer un nouvel utilisateur avec des données valides', async () => {
       const userData = {
-        nameTag: 'testuser',
+        nameTag: 'authuser',
         firstname: 'Test',
         lastname: 'User',
-        email: 'test@example.com',
+        email: 'authuser@example.com',
         phone: '+33123456789',
         password: 'TestPass123!',
         bio: 'Utilisateur de test',
@@ -49,10 +65,10 @@ describe('🔐 Authentification', () => {
 
     it("devrait refuser l'inscription avec un email déjà existant", async () => {
       const userData = {
-        nameTag: 'testuser2',
+        nameTag: 'authuser2',
         firstname: 'Test',
         lastname: 'User',
-        email: 'test@example.com', // Email déjà utilisé
+        email: 'authuser@example.com', // Email déjà utilisé
         password: 'TestPass123!',
       };
 
@@ -69,10 +85,10 @@ describe('🔐 Authentification', () => {
 
     it("devrait refuser l'inscription avec un nameTag déjà existant", async () => {
       const userData = {
-        nameTag: 'testuser', // NameTag déjà utilisé
+        nameTag: 'authuser', // NameTag déjà utilisé
         firstname: 'Test',
         lastname: 'User',
-        email: 'test2@example.com',
+        email: 'authuser2@example.com',
         password: 'TestPass123!',
       };
 
@@ -107,7 +123,7 @@ describe('🔐 Authentification', () => {
   describe('POST /api/v1/auth/login', () => {
     it('devrait connecter un utilisateur avec des identifiants valides', async () => {
       const loginData = {
-        email: 'test@example.com',
+        email: 'authuser@example.com',
         password: 'TestPass123!',
       };
 
@@ -141,7 +157,7 @@ describe('🔐 Authentification', () => {
 
     it('devrait refuser la connexion avec un mot de passe incorrect', async () => {
       const loginData = {
-        email: 'test@example.com',
+        email: 'authuser@example.com',
         password: 'WrongPassword123!',
       };
 
@@ -176,7 +192,7 @@ describe('🔐 Authentification', () => {
     beforeAll(async () => {
       // Se connecter pour obtenir un token
       const loginResponse = await request(app).post('/api/v1/auth/login').send({
-        email: 'test@example.com',
+        email: 'authuser@example.com',
         password: 'TestPass123!',
       });
 
@@ -191,8 +207,8 @@ describe('🔐 Authentification', () => {
 
       expect(response.body.success).toBe(true);
       expect(response.body.data.user).toHaveProperty('idUser');
-      expect(response.body.data.user.email).toBe('test@example.com');
-      expect(response.body.data.user.nameTag).toBe('testuser');
+      expect(response.body.data.user.email).toBe('authuser@example.com');
+      expect(response.body.data.user.nameTag).toBe('authuser');
     });
 
     it("devrait refuser l'accès sans token", async () => {
@@ -219,7 +235,7 @@ describe('🔐 Authentification', () => {
     beforeAll(async () => {
       // Se connecter pour obtenir un token
       const loginResponse = await request(app).post('/api/v1/auth/login').send({
-        email: 'test@example.com',
+        email: 'authuser@example.com',
         password: 'TestPass123!',
       });
 

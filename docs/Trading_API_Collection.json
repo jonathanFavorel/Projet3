@@ -111,7 +111,25 @@
               "host": ["{{base_url}}"],
               "path": ["{{api_prefix}}", "auth", "login"]
             },
-            "description": "Se connecter avec email et mot de passe"
+            "description": "Se connecter avec email et mot de passe",
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "// Récupérer le token d'authentification",
+                    "if (pm.response.code === 200) {",
+                    "    const responseJson = pm.response.json();",
+                    "    if (responseJson.data && responseJson.data.token) {",
+                    "        pm.collectionVariables.set('auth_token', responseJson.data.token);",
+                    "        console.log('Token d\\'authentification récupéré et stocké');",
+                    "    }",
+                    "}"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ]
           },
           "response": []
         },
@@ -139,7 +157,20 @@
               "host": ["{{base_url}}"],
               "path": ["{{api_prefix}}", "auth", "logout"]
             },
-            "description": "Se déconnecter"
+            "description": "Se déconnecter",
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "// Supprimer le token d'authentification",
+                    "pm.collectionVariables.set('auth_token', '');",
+                    "console.log('Token d\\'authentification supprimé');"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ]
           },
           "response": []
         }
@@ -148,6 +179,29 @@
     {
       "name": "👥 Utilisateurs",
       "item": [
+        {
+          "name": "Créer Utilisateur",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nameTag\": \"newtrader\",\n  \"firstname\": \"Jane\",\n  \"lastname\": \"Smith\",\n  \"email\": \"jane.smith@example.com\",\n  \"phone\": \"+33987654321\",\n  \"password\": \"SecurePass123!\",\n  \"bio\": \"Nouvelle trader passionnée\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/users",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_prefix}}", "users"]
+            },
+            "description": "Créer un nouvel utilisateur (Admin uniquement)"
+          },
+          "response": []
+        },
         {
           "name": "Liste des Utilisateurs",
           "request": {
@@ -173,6 +227,40 @@
           "response": []
         },
         {
+          "name": "Rechercher Utilisateurs",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/users?search=john",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_prefix}}", "users"],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "john"
+                }
+              ]
+            },
+            "description": "Rechercher des utilisateurs par nom, prénom, email ou nameTag"
+          },
+          "response": []
+        },
+        {
+          "name": "Statistiques Utilisateurs",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/users/stats",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_prefix}}", "users", "stats"]
+            },
+            "description": "Récupérer les statistiques des utilisateurs (Admin uniquement)"
+          },
+          "response": []
+        },
+        {
           "name": "Utilisateur par ID",
           "request": {
             "method": "GET",
@@ -188,7 +276,7 @@
                 }
               ]
             },
-            "description": "Récupérer un utilisateur par son ID"
+            "description": "Récupérer un utilisateur par son ID avec ses relations (compte trading, analyses)"
           },
           "response": []
         },
@@ -204,7 +292,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"firstname\": \"John Updated\",\n  \"lastname\": \"Doe Updated\",\n  \"phone\": \"+33987654321\",\n  \"bio\": \"Bio mise à jour\"\n}"
+              "raw": "{\n  \"firstname\": \"John Updated\",\n  \"lastname\": \"Doe Updated\",\n  \"bio\": \"Bio mise à jour\",\n  \"phone\": \"+33123456789\"\n}"
             },
             "url": {
               "raw": "{{base_url}}{{api_prefix}}/users/:id",
@@ -218,6 +306,35 @@
               ]
             },
             "description": "Mettre à jour les informations d'un utilisateur"
+          },
+          "response": []
+        },
+        {
+          "name": "Changer Mot de Passe",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"currentPassword\": \"MotDePasse123!\",\n  \"newPassword\": \"NouveauMotDePasse456!\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/users/:id/password",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_prefix}}", "users", ":id", "password"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "user-uuid-here"
+                }
+              ]
+            },
+            "description": "Changer le mot de passe d'un utilisateur"
           },
           "response": []
         },
@@ -237,7 +354,7 @@
                 }
               ]
             },
-            "description": "Supprimer un utilisateur"
+            "description": "Supprimer un utilisateur (Admin uniquement)"
           },
           "response": []
         }
@@ -252,21 +369,34 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{base_url}}{{api_prefix}}/analyses?page=1&limit=10",
+              "raw": "{{base_url}}{{api_prefix}}/analyses",
               "host": ["{{base_url}}"],
-              "path": ["{{api_prefix}}", "analyses"],
-              "query": [
-                {
-                  "key": "page",
-                  "value": "1"
-                },
-                {
-                  "key": "limit",
-                  "value": "10"
-                }
-              ]
+              "path": ["{{api_prefix}}", "analyses"]
             },
-            "description": "Récupérer la liste des analyses de marché"
+            "description": "Récupérer la liste des analyses"
+          },
+          "response": []
+        },
+        {
+          "name": "Créer Analyse",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Analyse EUR/USD\",\n  \"content\": \"Analyse technique détaillée de la paire EUR/USD...\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/analyses",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_prefix}}", "analyses"]
+            },
+            "description": "Créer une nouvelle analyse"
           },
           "response": []
         },
@@ -291,29 +421,6 @@
           "response": []
         },
         {
-          "name": "Créer une Analyse",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"title\": \"Analyse EUR/USD - Bullish\",\n  \"content\": \"L'EUR/USD montre des signaux de reprise avec un support solide à 1.0850...\",\n  \"images\": [\n    {\n      \"url\": \"https://example.com/chart1.png\",\n      \"caption\": \"Graphique EUR/USD 4H\"\n    }\n  ]\n}"
-            },
-            "url": {
-              "raw": "{{base_url}}{{api_prefix}}/analyses",
-              "host": ["{{base_url}}"],
-              "path": ["{{api_prefix}}", "analyses"]
-            },
-            "description": "Créer une nouvelle analyse de marché"
-          },
-          "response": []
-        },
-        {
           "name": "Mettre à jour Analyse",
           "request": {
             "method": "PUT",
@@ -325,7 +432,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"title\": \"Analyse EUR/USD - Bullish (Mise à jour)\",\n  \"content\": \"Contenu mis à jour...\"\n}"
+              "raw": "{\n  \"title\": \"Analyse EUR/USD Mise à Jour\",\n  \"content\": \"Contenu mis à jour...\"\n}"
             },
             "url": {
               "raw": "{{base_url}}{{api_prefix}}/analyses/:id",
@@ -365,7 +472,7 @@
       ]
     },
     {
-      "name": "💹 Trades",
+      "name": "💰 Trades",
       "item": [
         {
           "name": "Liste des Trades",
@@ -373,21 +480,34 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{base_url}}{{api_prefix}}/trades?page=1&limit=10",
+              "raw": "{{base_url}}{{api_prefix}}/trades",
               "host": ["{{base_url}}"],
-              "path": ["{{api_prefix}}", "trades"],
-              "query": [
-                {
-                  "key": "page",
-                  "value": "1"
-                },
-                {
-                  "key": "limit",
-                  "value": "10"
-                }
-              ]
+              "path": ["{{api_prefix}}", "trades"]
             },
             "description": "Récupérer la liste des trades"
+          },
+          "response": []
+        },
+        {
+          "name": "Créer Trade",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"entryPrice\": 1.0850,\n  \"exitPrice\": 1.0900,\n  \"takeProfit\": 1.0950,\n  \"quantity\": 1.0,\n  \"status\": \"closed\",\n  \"dateEntry\": \"2024-01-15T10:00:00Z\",\n  \"dateExit\": \"2024-01-15T15:00:00Z\",\n  \"idTradingAccount\": \"account-uuid-here\",\n  \"idCurrency\": \"currency-uuid-here\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/trades",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_prefix}}", "trades"]
+            },
+            "description": "Créer un nouveau trade"
           },
           "response": []
         },
@@ -412,29 +532,6 @@
           "response": []
         },
         {
-          "name": "Créer un Trade",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"entryPrice\": 1.0850,\n  \"exitPrice\": 1.0900,\n  \"takeProfit\": 1.0950,\n  \"quantity\": 1.0,\n  \"status\": \"CLOSED\",\n  \"dateEntry\": \"2024-01-15T10:30:00Z\",\n  \"dateExit\": \"2024-01-15T14:45:00Z\",\n  \"idCurrency\": \"currency-uuid-here\"\n}"
-            },
-            "url": {
-              "raw": "{{base_url}}{{api_prefix}}/trades",
-              "host": ["{{base_url}}"],
-              "path": ["{{api_prefix}}", "trades"]
-            },
-            "description": "Créer un nouveau trade"
-          },
-          "response": []
-        },
-        {
           "name": "Mettre à jour Trade",
           "request": {
             "method": "PUT",
@@ -446,7 +543,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"exitPrice\": 1.0920,\n  \"status\": \"CLOSED\",\n  \"dateExit\": \"2024-01-15T15:00:00Z\"\n}"
+              "raw": "{\n  \"exitPrice\": 1.0920,\n  \"status\": \"closed\",\n  \"dateExit\": \"2024-01-15T16:00:00Z\"\n}"
             },
             "url": {
               "raw": "{{base_url}}{{api_prefix}}/trades/:id",
@@ -486,7 +583,7 @@
       ]
     },
     {
-      "name": "💰 Comptes de Trading",
+      "name": "🏦 Comptes Trading",
       "item": [
         {
           "name": "Liste des Comptes",
@@ -494,21 +591,34 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{base_url}}{{api_prefix}}/accounts?page=1&limit=10",
+              "raw": "{{base_url}}{{api_prefix}}/accounts",
               "host": ["{{base_url}}"],
-              "path": ["{{api_prefix}}", "accounts"],
-              "query": [
-                {
-                  "key": "page",
-                  "value": "1"
-                },
-                {
-                  "key": "limit",
-                  "value": "10"
-                }
-              ]
+              "path": ["{{api_prefix}}", "accounts"]
             },
-            "description": "Récupérer la liste des comptes de trading"
+            "description": "Récupérer la liste des comptes trading"
+          },
+          "response": []
+        },
+        {
+          "name": "Créer Compte",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"leverage\": 100,\n  \"isPropFirm\": true,\n  \"amount\": 10000,\n  \"idCurrency\": \"currency-uuid-here\",\n  \"idUser\": \"user-uuid-here\",\n  \"idPropFirm\": \"propfirm-uuid-here\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/accounts",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_prefix}}", "accounts"]
+            },
+            "description": "Créer un nouveau compte trading"
           },
           "response": []
         },
@@ -528,30 +638,7 @@
                 }
               ]
             },
-            "description": "Récupérer un compte par son ID"
-          },
-          "response": []
-        },
-        {
-          "name": "Créer un Compte",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"leverage\": 100,\n  \"isPropFirm\": false,\n  \"amount\": 10000,\n  \"idCurrency\": \"currency-uuid-here\",\n  \"idPropFirm\": null\n}"
-            },
-            "url": {
-              "raw": "{{base_url}}{{api_prefix}}/accounts",
-              "host": ["{{base_url}}"],
-              "path": ["{{api_prefix}}", "accounts"]
-            },
-            "description": "Créer un nouveau compte de trading"
+            "description": "Récupérer un compte trading par son ID"
           },
           "response": []
         },
@@ -567,7 +654,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"amount\": 15000,\n  \"leverage\": 200\n}"
+              "raw": "{\n  \"leverage\": 200,\n  \"amount\": 15000\n}"
             },
             "url": {
               "raw": "{{base_url}}{{api_prefix}}/accounts/:id",
@@ -580,27 +667,7 @@
                 }
               ]
             },
-            "description": "Mettre à jour un compte de trading"
-          },
-          "response": []
-        },
-        {
-          "name": "Statistiques du Compte",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}{{api_prefix}}/accounts/:id/stats",
-              "host": ["{{base_url}}"],
-              "path": ["{{api_prefix}}", "accounts", ":id", "stats"],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "account-uuid-here"
-                }
-              ]
-            },
-            "description": "Récupérer les statistiques d'un compte de trading"
+            "description": "Mettre à jour un compte trading"
           },
           "response": []
         },
@@ -620,7 +687,7 @@
                 }
               ]
             },
-            "description": "Supprimer un compte de trading"
+            "description": "Supprimer un compte trading"
           },
           "response": []
         }
@@ -639,7 +706,30 @@
               "host": ["{{base_url}}"],
               "path": ["{{api_prefix}}", "currencies"]
             },
-            "description": "Récupérer la liste des devises disponibles"
+            "description": "Récupérer la liste des devises"
+          },
+          "response": []
+        },
+        {
+          "name": "Créer Devise",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Euro US Dollar\",\n  \"symbol\": \"EUR/USD\",\n  \"contractSize\": 100000,\n  \"type\": \"forex\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/currencies",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_prefix}}", "currencies"]
+            },
+            "description": "Créer une nouvelle devise"
           },
           "response": []
         },
@@ -664,9 +754,9 @@
           "response": []
         },
         {
-          "name": "Créer une Devise",
+          "name": "Mettre à jour Devise",
           "request": {
-            "method": "POST",
+            "method": "PUT",
             "header": [
               {
                 "key": "Content-Type",
@@ -675,24 +765,50 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Euro US Dollar\",\n  \"symbol\": \"EURUSD\",\n  \"contractSize\": 100000,\n  \"type\": \"FOREX\"\n}"
+              "raw": "{\n  \"contractSize\": 125000,\n  \"type\": \"forex\"\n}"
             },
             "url": {
-              "raw": "{{base_url}}{{api_prefix}}/currencies",
+              "raw": "{{base_url}}{{api_prefix}}/currencies/:id",
               "host": ["{{base_url}}"],
-              "path": ["{{api_prefix}}", "currencies"]
+              "path": ["{{api_prefix}}", "currencies", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "currency-uuid-here"
+                }
+              ]
             },
-            "description": "Créer une nouvelle devise"
+            "description": "Mettre à jour une devise"
+          },
+          "response": []
+        },
+        {
+          "name": "Supprimer Devise",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/currencies/:id",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_prefix}}", "currencies", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "currency-uuid-here"
+                }
+              ]
+            },
+            "description": "Supprimer une devise"
           },
           "response": []
         }
       ]
     },
     {
-      "name": "🏢 Firmes de Trading",
+      "name": "🏢 Prop Firms",
       "item": [
         {
-          "name": "Liste des Firmes",
+          "name": "Liste des Prop Firms",
           "request": {
             "method": "GET",
             "header": [],
@@ -701,32 +817,12 @@
               "host": ["{{base_url}}"],
               "path": ["{{api_prefix}}", "prop-firms"]
             },
-            "description": "Récupérer la liste des firmes de trading"
+            "description": "Récupérer la liste des prop firms"
           },
           "response": []
         },
         {
-          "name": "Firme par ID",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}{{api_prefix}}/prop-firms/:id",
-              "host": ["{{base_url}}"],
-              "path": ["{{api_prefix}}", "prop-firms", ":id"],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "firm-uuid-here"
-                }
-              ]
-            },
-            "description": "Récupérer une firme par son ID"
-          },
-          "response": []
-        },
-        {
-          "name": "Créer une Firme",
+          "name": "Créer Prop Firm",
           "request": {
             "method": "POST",
             "header": [
@@ -744,7 +840,76 @@
               "host": ["{{base_url}}"],
               "path": ["{{api_prefix}}", "prop-firms"]
             },
-            "description": "Créer une nouvelle firme de trading"
+            "description": "Créer une nouvelle prop firm"
+          },
+          "response": []
+        },
+        {
+          "name": "Prop Firm par ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/prop-firms/:id",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_prefix}}", "prop-firms", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "propfirm-uuid-here"
+                }
+              ]
+            },
+            "description": "Récupérer une prop firm par son ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Mettre à jour Prop Firm",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"FTMO Updated\",\n  \"logoUrl\": \"https://example.com/ftmo-logo-new.png\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/prop-firms/:id",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_prefix}}", "prop-firms", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "propfirm-uuid-here"
+                }
+              ]
+            },
+            "description": "Mettre à jour une prop firm"
+          },
+          "response": []
+        },
+        {
+          "name": "Supprimer Prop Firm",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/prop-firms/:id",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_prefix}}", "prop-firms", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "propfirm-uuid-here"
+                }
+              ]
+            },
+            "description": "Supprimer une prop firm"
           },
           "response": []
         }

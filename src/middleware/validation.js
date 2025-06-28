@@ -1,4 +1,4 @@
-const { body } = require('express-validator');
+const { body, validationResult } = require('express-validator');
 
 // Validation pour l'inscription
 const validateRegister = [
@@ -55,7 +55,21 @@ const validateLogin = [
   body('password').notEmpty().withMessage('Le mot de passe est requis'),
 ];
 
+// Middleware générique pour gérer les erreurs de validation
+const validateRequest = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({
+      success: false,
+      message: 'Données invalides',
+      errors: errors.array(),
+    });
+  }
+  next();
+};
+
 module.exports = {
   validateRegister,
   validateLogin,
+  validateRequest,
 };

@@ -20,6 +20,11 @@
       "key": "auth_token",
       "value": "",
       "type": "string"
+    },
+    {
+      "key": "admin_token",
+      "value": "",
+      "type": "string"
     }
   ],
   "auth": {
@@ -1313,6 +1318,220 @@
               ]
             },
             "description": "Supprimer un signalement (créateur du signalement ou admin)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "👑 Administration",
+      "item": [
+        {
+          "name": "Statistiques Dashboard",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/admin/stats",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_prefix}}", "admin", "stats"]
+            },
+            "description": "Récupérer les statistiques globales du dashboard admin"
+          },
+          "response": []
+        },
+        {
+          "name": "Liste Utilisateurs",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/admin/users",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_prefix}}", "admin", "users"]
+            },
+            "description": "Récupérer la liste complète des utilisateurs avec leurs avertissements et statut de bannissement"
+          },
+          "response": []
+        },
+        {
+          "name": "Commentaires Signalés",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/admin/reported-comments",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_prefix}}", "admin", "reported-comments"]
+            },
+            "description": "Récupérer tous les commentaires signalés avec leurs détails"
+          },
+          "response": []
+        },
+        {
+          "name": "Analyses Signalées",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/admin/reported-analyses",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_prefix}}", "admin", "reported-analyses"]
+            },
+            "description": "Récupérer toutes les analyses signalées avec leurs détails"
+          },
+          "response": []
+        },
+        {
+          "name": "Supprimer Commentaire",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/admin/comment/:id",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_prefix}}", "admin", "comment", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "comment-uuid-here"
+                }
+              ]
+            },
+            "description": "Supprimer un commentaire signalé (action admin)"
+          },
+          "response": []
+        },
+        {
+          "name": "Supprimer Analyse",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/admin/analysis/:id",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_prefix}}", "admin", "analysis", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "analysis-uuid-here"
+                }
+              ]
+            },
+            "description": "Supprimer une analyse signalée (action admin)"
+          },
+          "response": []
+        },
+        {
+          "name": "Avertir Utilisateur",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/admin/user/:id/warn",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_prefix}}", "admin", "user", ":id", "warn"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "user-uuid-here"
+                }
+              ]
+            },
+            "description": "Avertir un utilisateur (3 avertissements = bannissement automatique)"
+          },
+          "response": []
+        },
+        {
+          "name": "Bannir Utilisateur",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"Contenu inapproprié et violation des règles de la communauté\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/admin/user/:id/ban",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_prefix}}", "admin", "user", ":id", "ban"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "user-uuid-here"
+                }
+              ]
+            },
+            "description": "Bannir un utilisateur avec une raison spécifique"
+          },
+          "response": []
+        },
+        {
+          "name": "Supprimer Utilisateur",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/admin/user/:id",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_prefix}}", "admin", "user", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "user-uuid-here"
+                }
+              ]
+            },
+            "description": "Supprimer définitivement un utilisateur (action irréversible)"
           },
           "response": []
         }

@@ -885,6 +885,78 @@ Pour mettre à jour la collection :
 - Contenu du signalement obligatoire
 - Accès restreint pour la consultation (admin)
 
+## 👑 Administration
+
+### Dashboard et Statistiques
+
+- **GET** `/api/v1/admin/stats` - Statistiques globales du dashboard admin
+  - Nombre total d'utilisateurs
+  - Utilisateurs connectés
+  - Commentaires signalés
+  - Analyses signalées
+
+### Gestion des Utilisateurs
+
+- **GET** `/api/v1/admin/users` - Liste complète des utilisateurs
+  - Inclut les avertissements et statut de bannissement
+  - Accès admin uniquement
+
+### Contenu Signalé
+
+- **GET** `/api/v1/admin/reported-comments` - Commentaires signalés
+  - Détails complets des commentaires et signalements
+- **GET** `/api/v1/admin/reported-analyses` - Analyses signalées
+  - Détails complets des analyses et signalements
+
+### Actions de Modération
+
+#### Suppression de Contenu
+
+- **DELETE** `/api/v1/admin/comment/:id` - Supprimer un commentaire signalé
+- **DELETE** `/api/v1/admin/analysis/:id` - Supprimer une analyse signalée
+
+#### Gestion des Utilisateurs
+
+- **POST** `/api/v1/admin/user/:id/warn` - Avertir un utilisateur
+  - Incrémente le compteur d'avertissements
+  - Bannissement automatique après 3 avertissements
+- **POST** `/api/v1/admin/user/:id/ban` - Bannir un utilisateur
+  - Body: `{ "reason": "Raison du bannissement" }`
+  - Bannissement immédiat avec raison
+- **DELETE** `/api/v1/admin/user/:id` - Supprimer définitivement un utilisateur
+  - Action irréversible
+  - Supprime toutes les données associées
+
+### Système d'Avertissements
+
+- **Compteur d'avertissements** : 0 à 3 par utilisateur
+- **Bannissement automatique** : Après 3 avertissements
+- **Bannissement manuel** : Possible à tout moment avec raison
+- **Statut utilisateur** : `warnings`, `isBanned`, `banReason`
+
+### Variables d'Environnement Admin
+
+Ajoutez la variable `admin_token` dans Postman :
+
+```json
+{
+  "admin_token": "token-jwt-admin-ici"
+}
+```
+
+### Workflow d'Administration
+
+1. **Connexion Admin** : Utilisez un compte avec privilèges admin
+2. **Consultation Dashboard** : Vérifiez les statistiques et signalements
+3. **Modération** : Avertir, bannir ou supprimer selon les cas
+4. **Nettoyage** : Supprimer le contenu inapproprié
+
+### Sécurité Admin
+
+- **Middleware isAdmin** : Vérification des privilèges sur toutes les routes
+- **Logs d'actions** : Toutes les actions admin sont tracées
+- **Validation stricte** : Vérification des permissions avant chaque action
+
 ## 🔧 Utilisation
 
 ### 1. Configuration initiale

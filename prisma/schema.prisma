@@ -22,6 +22,10 @@ model User {
   createdAt     DateTime @default(now())
   lastLogin     DateTime?
   isConnected   Boolean  @default(false)
+  warnings      Int      @default(0) @map("warnings")
+  isBanned      Boolean  @default(false) @map("isBanned")
+  banReason     String?  @db.Text @map("banReason")
+  isAdmin       Boolean  @default(false) @map("isAdmin")
 
   // Relations
   analyses      Analysis[]

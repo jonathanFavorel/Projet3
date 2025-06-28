@@ -15,6 +15,7 @@ Backend API pour une application de trading avec analyse de marchés, gestion de
 - Docker et Docker Compose
 - Node.js (version 18+)
 - npm ou yarn
+- Postman (pour tester l'API)
 
 ## 🛠️ Installation
 
@@ -34,7 +35,7 @@ Backend API pour une application de trading avec analyse de marchés, gestion de
 3. **Configurer les variables d'environnement**
 
    ```bash
-   cp .env.example .env
+   cp env.example .env
    # Éditer le fichier .env avec vos configurations
    ```
 
@@ -63,6 +64,9 @@ Backend API pour une application de trading avec analyse de marchés, gestion de
 ├── prisma/
 │   ├── schema.prisma   # Schéma de base de données
 │   └── migrations/     # Migrations Prisma
+├── docs/
+│   ├── Trading_API_Collection.json  # Collection Postman
+│   └── README_Postman.md            # Guide Postman
 ├── docker/
 │   └── Dockerfile
 ├── docker-compose.yml
@@ -82,6 +86,37 @@ Le projet utilise PostgreSQL avec les tables suivantes :
 - `accountStats` - Statistiques de comptes
 - `message` - Messages
 - `role` - Rôles utilisateurs
+
+## 📚 Documentation API
+
+### Collection Postman
+
+Une collection Postman complète est disponible dans le dossier `docs/` :
+
+1. **Importer la collection**
+   - Ouvrir Postman
+   - Importer le fichier `docs/Trading_API_Collection.json`
+
+2. **Configurer l'environnement**
+   - Créer un environnement "Trading API Local"
+   - Ajouter les variables :
+     - `base_url`: `http://localhost:3000`
+     - `api_prefix`: `/api/v1`
+     - `auth_token`: (vide au début)
+
+3. **Guide d'utilisation**
+   - Consulter `docs/README_Postman.md` pour le guide complet
+
+### Endpoints disponibles
+
+- **🔍 Health Check**: `/health`, `/`
+- **🔐 Authentification**: `/api/v1/auth/*`
+- **👥 Utilisateurs**: `/api/v1/users/*`
+- **📊 Analyses**: `/api/v1/analyses/*`
+- **💹 Trades**: `/api/v1/trades/*`
+- **💰 Comptes**: `/api/v1/accounts/*`
+- **💱 Devises**: `/api/v1/currencies/*`
+- **🏢 Firmes**: `/api/v1/prop-firms/*`
 
 ## 🔄 Git Flow
 
@@ -103,12 +138,47 @@ Ce projet suit la convention Git Flow :
 - `npm run db:migrate` - Exécution des migrations
 - `npm run db:generate` - Génération du client Prisma
 
+## 🧪 Tests
+
+### Tests unitaires
+
+```bash
+npm test
+```
+
+### Tests avec Postman
+
+1. Importer la collection Postman
+2. Configurer l'environnement
+3. Exécuter les tests dans l'ordre recommandé
+
 ## 🤝 Contribution
 
 1. Créer une branche feature : `git flow feature start nom-feature`
 2. Développer et commiter vos changements
 3. Finaliser la feature : `git flow feature finish nom-feature`
 4. Créer une pull request vers `develop`
+
+## 📊 Monitoring
+
+- **API Health**: http://localhost:3000/health
+- **pgAdmin**: http://localhost:5050 (admin@trading.com / admin123)
+- **Logs Docker**: `docker-compose logs app`
+
+## 🚨 Dépannage
+
+### Erreurs courantes
+
+- **Port 3000 occupé**: Arrêter l'application locale ou utiliser Docker
+- **Erreur Prisma**: Vérifier la connexion à la base de données
+- **Erreur Docker**: Reconstruire l'image avec `docker-compose up -d --build`
+
+### Solutions
+
+1. Vérifier que Docker est démarré
+2. Vérifier les variables d'environnement
+3. Consulter les logs : `docker-compose logs app`
+4. Redémarrer les services : `docker-compose restart`
 
 ## 📄 Licence
 

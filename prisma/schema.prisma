@@ -1,0 +1,209 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  idUser        String   @id @default(uuid()) @map("idUser")
+  nameTag       String   @unique @db.VarChar(75)
+  firstname     String   @db.VarChar(100)
+  lastname      String   @db.VarChar(100)
+  email         String   @unique @db.VarChar(150)
+  phone         String?  @db.VarChar(20)
+  password      String   @db.Text
+  bio           String?  @db.Text
+  createdAt     DateTime @default(now())
+  lastLogin     DateTime?
+  isConnected   Boolean  @default(false)
+
+  // Relations
+  analyses      Analysis[]
+  comments      Comment[]
+  tradingAccount TradingAccount?
+  messages      MessageHaveUser[]
+  roles         UserHaveRole[]
+
+  @@map("_User")
+}
+
+model PropFirm {
+  idPropFirm String @id @default(uuid()) @map("idPropFirm")
+  name       String @db.VarChar(100)
+  logoUrl    String? @db.Text
+
+  // Relations
+  tradingAccounts TradingAccount[]
+
+  @@map("propFirm")
+}
+
+model Currency {
+  idCurrency   String @id @default(uuid()) @map("idCurrency")
+  name         String @db.VarChar(100)
+  symbol       String @db.VarChar(10)
+  contractSize Float  @map("contractSize")
+  type         String @db.VarChar(50)
+
+  // Relations
+  tradingAccounts TradingAccount[]
+  trades         Trade[]
+
+  @@map("currency")
+}
+
+model Message {
+  idMessage String   @id @default(uuid()) @map("idMessage")
+  content   String   @db.Text
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt @map("updateAt")
+
+  // Relations
+  users MessageHaveUser[]
+
+  @@map("message")
+}
+
+model Role {
+  idRole   String @id @default(uuid()) @map("idRole")
+  analyst  Boolean @default(false)
+  admin    Boolean @default(false)
+
+  // Relations
+  users UserHaveRole[]
+
+  @@map("role")
+}
+
+model Analysis {
+  idAnalysis String   @id @default(uuid()) @map("idAnalysis")
+  title      String   @db.VarChar(100)
+  content    String   @db.Text
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  idUser     String   @map("idUser")
+
+  // Relations
+  user       User     @relation(fields: [idUser], references: [idUser], onDelete: Cascade)
+  images     AnalysisImage[]
+  comments   Comment[]
+
+  @@map("_Analysis")
+}
+
+model AnalysisImage {
+  idImage    String   @id @default(uuid()) @map("idImage")
+  url        String   @db.Text
+  caption    String?  @db.VarChar(255)
+  uploadedAt DateTime @default(now())
+  idAnalysis String   @map("idAnalysis")
+
+  // Relations
+  analysis Analysis @relation(fields: [idAnalysis], references: [idAnalysis], onDelete: Cascade)
+
+  @@map("_AnalysisImage")
+}
+
+model Comment {
+  idComment  String   @id @default(uuid()) @map("idComment")
+  content    String   @db.Text
+  createdAt  DateTime @default(now())
+  idUser     String   @map("idUser")
+  idAnalysis String   @map("idAnalysis")
+
+  // Relations
+  user     User     @relation(fields: [idUser], references: [idUser], onDelete: Cascade)
+  analysis Analysis @relation(fields: [idAnalysis], references: [idAnalysis], onDelete: Cascade)
+
+  @@map("_Comment")
+}
+
+model TradingAccount {
+  idTradingAccount String   @id @default(uuid()) @map("idTradingAccount")
+  leverage         Decimal? @db.Decimal(15, 2)
+  isPropFirm       Boolean? @map("isPropFirm")
+  amount           Float    @map("amount")
+  idCurrency       String   @map("idCurrency")
+  idUser           String   @unique @map("idUser")
+  idPropFirm       String?  @map("idPropFirm")
+
+  // Relations
+  currency    Currency      @relation(fields: [idCurrency], references: [idCurrency])
+  user        User          @relation(fields: [idUser], references: [idUser], onDelete: Cascade)
+  propFirm    PropFirm?     @relation(fields: [idPropFirm], references: [idPropFirm])
+  trades      Trade[]
+  accountStats AccountStats?
+
+  @@map("tradingAccount")
+}
+
+model Trade {
+  idTrade         String   @id @default(uuid()) @map("idTrade")
+  entryPrice      Float    @map("entryPrice")
+  exitPrice       Float    @map("exitPrice")
+  takeProfit      Float    @map("takeProfit")
+  quantity        Float    @map("quantity")
+  status          String   @db.VarChar(50)
+  dateEntry       DateTime @map("dateEntry")
+  dateExit        DateTime @map("dateExit")
+  idTradingAccount String  @map("idTradingAccount")
+  idCurrency      String   @map("idCurrency")
+
+  // Relations
+  tradingAccount TradingAccount @relation(fields: [idTradingAccount], references: [idTradingAccount], onDelete: Cascade)
+  currency       Currency       @relation(fields: [idCurrency], references: [idCurrency])
+
+  @@map("trade")
+}
+
+model AccountStats {
+  idAccountStat    String @id @default(uuid()) @map("idAccountStat")
+  totalTrade       Float  @map("totalTrade")
+  winningTrade     Float  @map("winningTrade")
+  losingTrade      Float  @map("losingTrade")
+  breakEvenTrade   Float  @map("breakEvenTrade")
+  profit           Float  @map("profit")
+  loss             Float  @map("loss")
+  winRate          Float  @map("winRate")
+  averageWin       Float  @map("averageWin")
+  averageLoss      Float  @map("averageLoss")
+  profitFactor     Float  @map("profitFactor")
+  averageTrade     Float  @map("averageTrade")
+  rankAccount      Int    @map("rankAccount")
+  idTradingAccount String @unique @map("idTradingAccount")
+
+  // Relations
+  tradingAccount TradingAccount @relation(fields: [idTradingAccount], references: [idTradingAccount], onDelete: Cascade)
+
+  @@map("accountStats")
+}
+
+model MessageHaveUser {
+  idUser    String
+  idMessage String
+
+  // Relations
+  user    User    @relation(fields: [idUser], references: [idUser], onDelete: Cascade)
+  message Message @relation(fields: [idMessage], references: [idMessage], onDelete: Cascade)
+
+  @@id([idUser, idMessage])
+  @@map("messageHaveUser")
+}
+
+model UserHaveRole {
+  idUser String
+  idRole String
+
+  // Relations
+  user User @relation(fields: [idUser], references: [idUser], onDelete: Cascade)
+  role Role @relation(fields: [idRole], references: [idRole], onDelete: Cascade)
+
+  @@id([idUser, idRole])
+  @@map("userHaveRole")
+} 

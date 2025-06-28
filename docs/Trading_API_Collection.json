@@ -914,6 +914,123 @@
           "response": []
         }
       ]
+    },
+    {
+      "name": "💬 Commentaires",
+      "item": [
+        {
+          "name": "Créer Commentaire",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"Excellent commentaire sur cette analyse !\",\n  \"idAnalysis\": \"analysis-uuid-here\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/comments",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_prefix}}", "comments"]
+            },
+            "description": "Créer un nouveau commentaire sur une analyse"
+          },
+          "response": []
+        },
+        {
+          "name": "Commentaires par Analyse",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/comments/analysis/:analysisId",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_prefix}}", "comments", "analysis", ":analysisId"],
+              "variable": [
+                {
+                  "key": "analysisId",
+                  "value": "analysis-uuid-here"
+                }
+              ]
+            },
+            "description": "Récupérer tous les commentaires d'une analyse"
+          },
+          "response": []
+        },
+        {
+          "name": "Commentaire par ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/comments/:id",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_prefix}}", "comments", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "comment-uuid-here"
+                }
+              ]
+            },
+            "description": "Récupérer un commentaire par son ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Mettre à jour Commentaire",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"Commentaire mis à jour avec de nouvelles informations\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/comments/:id",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_prefix}}", "comments", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "comment-uuid-here"
+                }
+              ]
+            },
+            "description": "Mettre à jour un commentaire (seul le propriétaire peut modifier)"
+          },
+          "response": []
+        },
+        {
+          "name": "Supprimer Commentaire",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/comments/:id",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_prefix}}", "comments", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "comment-uuid-here"
+                }
+              ]
+            },
+            "description": "Supprimer un commentaire (seul le propriétaire peut supprimer)"
+          },
+          "response": []
+        }
+      ]
     }
   ],
   "event": [

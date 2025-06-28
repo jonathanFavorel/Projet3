@@ -76,6 +76,7 @@ app.use(`${API_PREFIX}/trades`, require('./routes/trades'));
 app.use(`${API_PREFIX}/accounts`, require('./routes/accounts'));
 app.use(`${API_PREFIX}/currencies`, require('./routes/currencies'));
 app.use(`${API_PREFIX}/prop-firms`, require('./routes/propFirms'));
+app.use(`${API_PREFIX}/comments`, require('./routes/comments'));
 
 // Middleware de gestion d'erreurs
 app.use((req, res, next) => {

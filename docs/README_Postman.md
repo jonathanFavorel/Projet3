@@ -500,3 +500,291 @@ Pour mettre à jour la collection :
 - Utiliser le script de récupération du token dans la requête login (onglet Tests)
 - Utiliser la variable `{{auth_token}}` en Bearer Token pour les requêtes protégées
 - Ajouter des exemples de réponses dans Postman pour chaque endpoint
+
+# Documentation API Trading Backend - Postman
+
+## 📋 Table des matières
+
+- [Configuration](#configuration)
+- [Authentification](#authentification)
+- [Utilisateurs](#utilisateurs)
+- [Analyses](#analyses)
+- [Trades](#trades)
+- [Comptes de Trading](#comptes-de-trading)
+- [Devises](#devises)
+- [Prop Firms](#prop-firms)
+- [Commentaires](#commentaires)
+
+## ⚙️ Configuration
+
+### Variables d'environnement
+
+- `base_url`: URL de base de l'API (ex: http://localhost:3000)
+- `api_prefix`: Préfixe de l'API (ex: /api/v1)
+- `auth_token`: Token d'authentification (géré automatiquement)
+
+### Import de la collection
+
+1. Ouvrir Postman
+2. Cliquer sur "Import"
+3. Sélectionner le fichier `Trading_API_Collection.json`
+4. La collection sera importée avec toutes les requêtes préconfigurées
+
+## 🔐 Authentification
+
+### Inscription
+
+- **POST** `{{base_url}}{{api_prefix}}/auth/register`
+- Crée un nouveau compte utilisateur
+- Retourne un token d'authentification
+
+### Connexion
+
+- **POST** `{{base_url}}{{api_prefix}}/auth/login`
+- Se connecter avec email et mot de passe
+- Le token est automatiquement stocké dans les variables de collection
+
+### Profil Utilisateur
+
+- **GET** `{{base_url}}{{api_prefix}}/auth/me`
+- Récupère les informations de l'utilisateur connecté
+
+### Déconnexion
+
+- **POST** `{{base_url}}{{api_prefix}}/auth/logout`
+- Se déconnecte et supprime le token
+
+## 👥 Utilisateurs
+
+### Créer Utilisateur
+
+- **POST** `{{base_url}}{{api_prefix}}/users`
+- Crée un nouvel utilisateur (admin uniquement)
+
+### Liste des Utilisateurs
+
+- **GET** `{{base_url}}{{api_prefix}}/users`
+- Récupère la liste des utilisateurs avec pagination
+- Paramètres: `page`, `limit`, `search`
+
+### Utilisateur par ID
+
+- **GET** `{{base_url}}{{api_prefix}}/users/:id`
+- Récupère un utilisateur par son ID
+
+### Mettre à jour Utilisateur
+
+- **PUT** `{{base_url}}{{api_prefix}}/users/:id`
+- Met à jour un utilisateur (propriétaire ou admin)
+
+### Supprimer Utilisateur
+
+- **DELETE** `{{base_url}}{{api_prefix}}/users/:id`
+- Supprime un utilisateur (admin uniquement)
+
+### Statistiques Utilisateurs
+
+- **GET** `{{base_url}}{{api_prefix}}/users/stats`
+- Récupère les statistiques des utilisateurs
+
+### Changer Mot de Passe
+
+- **PATCH** `{{base_url}}{{api_prefix}}/users/:id/password`
+- Change le mot de passe d'un utilisateur
+
+## 📊 Analyses
+
+### Créer Analyse
+
+- **POST** `{{base_url}}{{api_prefix}}/analyses`
+- Crée une nouvelle analyse de trading
+
+### Liste des Analyses
+
+- **GET** `{{base_url}}{{api_prefix}}/analyses`
+- Récupère la liste des analyses
+
+### Analyse par ID
+
+- **GET** `{{base_url}}{{api_prefix}}/analyses/:id`
+- Récupère une analyse par son ID
+
+### Mettre à jour Analyse
+
+- **PUT** `{{base_url}}{{api_prefix}}/analyses/:id`
+- Met à jour une analyse (propriétaire uniquement)
+
+### Supprimer Analyse
+
+- **DELETE** `{{base_url}}{{api_prefix}}/analyses/:id`
+- Supprime une analyse (propriétaire uniquement)
+
+## 📈 Trades
+
+### Créer Trade
+
+- **POST** `{{base_url}}{{api_prefix}}/trades`
+- Crée un nouveau trade
+
+### Liste des Trades
+
+- **GET** `{{base_url}}{{api_prefix}}/trades`
+- Récupère la liste des trades
+
+### Trade par ID
+
+- **GET** `{{base_url}}{{api_prefix}}/trades/:id`
+- Récupère un trade par son ID
+
+### Mettre à jour Trade
+
+- **PUT** `{{base_url}}{{api_prefix}}/trades/:id`
+- Met à jour un trade (propriétaire uniquement)
+
+### Supprimer Trade
+
+- **DELETE** `{{base_url}}{{api_prefix}}/trades/:id`
+- Supprime un trade (propriétaire uniquement)
+
+## 💰 Comptes de Trading
+
+### Créer Compte
+
+- **POST** `{{base_url}}{{api_prefix}}/accounts`
+- Crée un nouveau compte de trading
+
+### Liste des Comptes
+
+- **GET** `{{base_url}}{{api_prefix}}/accounts`
+- Récupère la liste des comptes de trading
+
+### Compte par ID
+
+- **GET** `{{base_url}}{{api_prefix}}/accounts/:id`
+- Récupère un compte par son ID
+
+### Mettre à jour Compte
+
+- **PUT** `{{base_url}}{{api_prefix}}/accounts/:id`
+- Met à jour un compte (propriétaire uniquement)
+
+### Supprimer Compte
+
+- **DELETE** `{{base_url}}{{api_prefix}}/accounts/:id`
+- Supprime un compte (propriétaire uniquement)
+
+## 💱 Devises
+
+### Créer Devise
+
+- **POST** `{{base_url}}{{api_prefix}}/currencies`
+- Crée une nouvelle devise
+
+### Liste des Devises
+
+- **GET** `{{base_url}}{{api_prefix}}/currencies`
+- Récupère la liste des devises
+
+### Devise par ID
+
+- **GET** `{{base_url}}{{api_prefix}}/currencies/:id`
+- Récupère une devise par son ID
+
+### Mettre à jour Devise
+
+- **PUT** `{{base_url}}{{api_prefix}}/currencies/:id`
+- Met à jour une devise
+
+### Supprimer Devise
+
+- **DELETE** `{{base_url}}{{api_prefix}}/currencies/:id`
+- Supprime une devise
+
+## 🏢 Prop Firms
+
+### Créer Prop Firm
+
+- **POST** `{{base_url}}{{api_prefix}}/prop-firms`
+- Crée une nouvelle prop firm
+
+### Liste des Prop Firms
+
+- **GET** `{{base_url}}{{api_prefix}}/prop-firms`
+- Récupère la liste des prop firms
+
+### Prop Firm par ID
+
+- **GET** `{{base_url}}{{api_prefix}}/prop-firms/:id`
+- Récupère une prop firm par son ID
+
+### Mettre à jour Prop Firm
+
+- **PUT** `{{base_url}}{{api_prefix}}/prop-firms/:id`
+- Met à jour une prop firm
+
+### Supprimer Prop Firm
+
+- **DELETE** `{{base_url}}{{api_prefix}}/prop-firms/:id`
+- Supprime une prop firm
+
+## 💬 Commentaires
+
+### Créer Commentaire
+
+- **POST** `{{base_url}}{{api_prefix}}/comments`
+- Crée un nouveau commentaire sur une analyse
+- Requiert authentification
+
+### Commentaires par Analyse
+
+- **GET** `{{base_url}}{{api_prefix}}/comments/analysis/:analysisId`
+- Récupère tous les commentaires d'une analyse
+- Triés par date de création (plus récents en premier)
+
+### Commentaire par ID
+
+- **GET** `{{base_url}}{{api_prefix}}/comments/:id`
+- Récupère un commentaire par son ID
+- Inclut les informations de l'utilisateur et de l'analyse
+
+### Mettre à jour Commentaire
+
+- **PUT** `{{base_url}}{{api_prefix}}/comments/:id`
+- Met à jour un commentaire
+- Seul le propriétaire du commentaire peut le modifier
+- Requiert authentification
+
+### Supprimer Commentaire
+
+- **DELETE** `{{base_url}}{{api_prefix}}/comments/:id`
+- Supprime un commentaire
+- Seul le propriétaire du commentaire peut le supprimer
+- Requiert authentification
+
+## 🔧 Utilisation
+
+### Workflow recommandé
+
+1. **Importer** la collection Postman
+2. **Configurer** les variables d'environnement
+3. **S'inscrire** ou se connecter pour obtenir un token
+4. **Tester** les différentes fonctionnalités
+
+### Gestion automatique des tokens
+
+- Le token d'authentification est automatiquement récupéré lors de la connexion
+- Il est stocké dans la variable de collection `auth_token`
+- Il est automatiquement supprimé lors de la déconnexion
+
+### Tests automatiques
+
+- Chaque requête inclut des tests de base
+- Vérification du code de statut
+- Vérification du temps de réponse
+
+## 📝 Notes importantes
+
+- Toutes les requêtes nécessitant une authentification utilisent automatiquement le token Bearer
+- Les erreurs sont retournées avec des codes HTTP appropriés et des messages explicites
+- La pagination est disponible pour les listes avec les paramètres `page` et `limit`
+- Les recherches textuelles sont disponibles avec le paramètre `search`

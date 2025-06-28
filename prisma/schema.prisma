@@ -30,6 +30,7 @@ model User {
   sentMessages  Message[] @relation("MessageSender")
   receivedMessages Message[] @relation("MessageRecipient")
   roles         UserHaveRole[]
+  reports       Report[]
 
   @@map("_User")
 }
@@ -98,6 +99,7 @@ model Analysis {
   user       User     @relation(fields: [idUser], references: [idUser], onDelete: Cascade)
   images     AnalysisImage[]
   comments   Comment[]
+  reports    Report[]
 
   @@map("_Analysis")
 }
@@ -125,6 +127,7 @@ model Comment {
   // Relations
   user     User     @relation(fields: [idUser], references: [idUser], onDelete: Cascade)
   analysis Analysis @relation(fields: [idAnalysis], references: [idAnalysis], onDelete: Cascade)
+  reports  Report[]
 
   @@map("_Comment")
 }
@@ -199,4 +202,20 @@ model UserHaveRole {
 
   @@id([idUser, idRole])
   @@map("userHaveRole")
+}
+
+model Report {
+  idReport   String   @id @default(uuid()) @map("idReport")
+  content    String   @db.Text
+  createdAt  DateTime @default(now())
+  idUser     String   @map("idUser")
+  idAnalysis String?  @map("idAnalysis")
+  idComment  String?  @map("idComment")
+
+  // Relations
+  user     User     @relation(fields: [idUser], references: [idUser], onDelete: Cascade)
+  analysis Analysis? @relation(fields: [idAnalysis], references: [idAnalysis], onDelete: Cascade)
+  comment  Comment?  @relation(fields: [idComment], references: [idComment], onDelete: Cascade)
+
+  @@map("_Report")
 } 

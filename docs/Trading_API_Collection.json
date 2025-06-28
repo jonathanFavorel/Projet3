@@ -1172,6 +1172,151 @@
           "response": []
         }
       ]
+    },
+    {
+      "name": "🚨 Signalements",
+      "item": [
+        {
+          "name": "Créer Signalement",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"Ce contenu contient du spam et des informations inappropriées\",\n  \"idAnalysis\": \"analysis-uuid-here\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/reports",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_prefix}}", "reports"]
+            },
+            "description": "Créer un signalement pour une analyse ou un commentaire inapproprié"
+          },
+          "response": []
+        },
+        {
+          "name": "Signalement Commentaire",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"Ce commentaire contient du contenu offensant\",\n  \"idComment\": \"comment-uuid-here\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/reports",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_prefix}}", "reports"]
+            },
+            "description": "Créer un signalement pour un commentaire inapproprié"
+          },
+          "response": []
+        },
+        {
+          "name": "Tous les Signalements",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/reports",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_prefix}}", "reports"]
+            },
+            "description": "Récupérer tous les signalements (accès admin)"
+          },
+          "response": []
+        },
+        {
+          "name": "Signalement par ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/reports/:id",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_prefix}}", "reports", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "report-uuid-here"
+                }
+              ]
+            },
+            "description": "Récupérer un signalement par son ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Signalements d'une Analyse",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/reports/analysis/:analysisId",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_prefix}}", "reports", "analysis", ":analysisId"],
+              "variable": [
+                {
+                  "key": "analysisId",
+                  "value": "analysis-uuid-here"
+                }
+              ]
+            },
+            "description": "Récupérer tous les signalements d'une analyse spécifique"
+          },
+          "response": []
+        },
+        {
+          "name": "Signalements d'un Commentaire",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/reports/comment/:commentId",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_prefix}}", "reports", "comment", ":commentId"],
+              "variable": [
+                {
+                  "key": "commentId",
+                  "value": "comment-uuid-here"
+                }
+              ]
+            },
+            "description": "Récupérer tous les signalements d'un commentaire spécifique"
+          },
+          "response": []
+        },
+        {
+          "name": "Supprimer Signalement",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/reports/:id",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_prefix}}", "reports", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "report-uuid-here"
+                }
+              ]
+            },
+            "description": "Supprimer un signalement (créateur du signalement ou admin)"
+          },
+          "response": []
+        }
+      ]
     }
   ],
   "event": [

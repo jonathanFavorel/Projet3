@@ -515,6 +515,7 @@ Pour mettre à jour la collection :
 - [Prop Firms](#prop-firms)
 - [Commentaires](#commentaires)
 - [Messages](#messages)
+- [Signalements](#signalements)
 
 ## ⚙️ Configuration
 
@@ -859,3 +860,77 @@ Pour mettre à jour la collection :
 - Les erreurs sont retournées avec des codes HTTP appropriés et des messages explicites
 - La pagination est disponible pour les listes avec les paramètres `page` et `limit`
 - Les recherches textuelles sont disponibles avec le paramètre `search`
+
+## 🚨 Signalements
+
+### Système de Signalement
+
+- **POST** `/api/v1/reports` - Créer un signalement (analyse ou commentaire)
+- **GET** `/api/v1/reports` - Récupérer tous les signalements (admin)
+- **GET** `/api/v1/reports/:id` - Récupérer un signalement par ID
+- **GET** `/api/v1/reports/analysis/:analysisId` - Signalements d'une analyse
+- **GET** `/api/v1/reports/comment/:commentId` - Signalements d'un commentaire
+- **DELETE** `/api/v1/reports/:id` - Supprimer un signalement
+
+### Types de Signalements
+
+- **Signalement d'analyse** : Spécifier `idAnalysis` dans le body
+- **Signalement de commentaire** : Spécifier `idComment` dans le body
+- Un seul type de signalement à la fois (analyse OU commentaire)
+
+### Règles de Signalement
+
+- Impossible de signaler son propre contenu
+- Un seul signalement par utilisateur par contenu
+- Contenu du signalement obligatoire
+- Accès restreint pour la consultation (admin)
+
+## 🔧 Utilisation
+
+### 1. Configuration initiale
+
+1. Importer la collection Postman
+2. Configurer les variables d'environnement
+3. Créer un compte utilisateur via l'endpoint d'inscription
+
+### 2. Authentification
+
+1. Se connecter via l'endpoint de login
+2. Le token JWT sera automatiquement géré par Postman
+3. Toutes les requêtes authentifiées utiliseront ce token
+
+### 3. Utilisation des endpoints
+
+- Chaque endpoint est préconfiguré avec les bons headers
+- Les exemples de données sont fournis dans le body des requêtes
+- Les variables sont utilisées pour les IDs dynamiques
+
+### 4. Gestion des erreurs
+
+- Les codes de statut HTTP sont documentés
+- Les messages d'erreur sont explicites
+- Validation des données côté serveur
+
+## 📝 Notes importantes
+
+- Tous les endpoints nécessitant une authentification utilisent le header `Authorization: Bearer <token>`
+- Les IDs sont des UUIDs générés automatiquement
+- La pagination est disponible pour les listes (paramètres `page` et `limit`)
+- La recherche est disponible pour certains endpoints (paramètre `search`)
+- Les dates sont au format ISO 8601
+- Les mots de passe doivent respecter les règles de sécurité
+
+## 🚀 Déploiement
+
+### Variables d'environnement de production
+
+- `base_url`: URL de votre serveur de production
+- `api_prefix`: Préfixe de l'API (généralement `/api/v1`)
+- `auth_token`: Sera automatiquement géré lors de la connexion
+
+### Sécurité
+
+- Utilisez HTTPS en production
+- Gardez vos tokens JWT sécurisés
+- Ne partagez pas vos tokens d'authentification
+- Utilisez des mots de passe forts

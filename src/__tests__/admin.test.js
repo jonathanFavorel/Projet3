@@ -311,4 +311,165 @@ describe('Admin Dashboard', () => {
       expect(res.body.success).toBe(true);
     });
   });
+
+  describe('GET /api/v1/admin/analysts', () => {
+    it('récupérer liste des analystes', async () => {
+      const res = await request(app)
+        .get('/api/v1/admin/analysts')
+        .set('Authorization', `Bearer ${adminToken}`);
+
+      expect(res.status).toBe(200);
+      expect(res.body.success).toBe(true);
+      expect(Array.isArray(res.body.data)).toBe(true);
+    });
+  });
+
+  describe('POST /api/v1/admin/user/:id/analyst', () => {
+    it('ajouter rôle analyste à un utilisateur', async () => {
+      // Créer un nouvel utilisateur pour ce test
+      const timestamp = Date.now();
+      const analystUserEmail = `analystuser${timestamp}@test.com`;
+
+      await request(app)
+        .post('/api/v1/auth/register')
+        .send({
+          nameTag: `analystuser${timestamp}`,
+          firstname: 'Analyst',
+          lastname: 'User',
+          email: analystUserEmail,
+          password: userPassword,
+        });
+
+      const loginRes = await request(app)
+        .post('/api/v1/auth/login')
+        .send({ email: analystUserEmail, password: userPassword });
+      const analystUserId = loginRes.body.data.user.idUser;
+
+      const res = await request(app)
+        .post(`/api/v1/admin/user/${analystUserId}/analyst`)
+        .set('Authorization', `Bearer ${adminToken}`);
+
+      expect(res.status).toBe(200);
+      expect(res.body.success).toBe(true);
+      expect(res.body.data.isAnalyste).toBe(true);
+    });
+
+    it('erreur ajouter rôle analyste à un utilisateur déjà analyste', async () => {
+      // Créer un utilisateur analyste
+      const timestamp = Date.now();
+      const analystUserEmail = `analystuser2${timestamp}@test.com`;
+
+      await request(app)
+        .post('/api/v1/auth/register')
+        .send({
+          nameTag: `analystuser2${timestamp}`,
+          firstname: 'Analyst',
+          lastname: 'User',
+          email: analystUserEmail,
+          password: userPassword,
+        });
+
+      const loginRes = await request(app)
+        .post('/api/v1/auth/login')
+        .send({ email: analystUserEmail, password: userPassword });
+      const analystUserId = loginRes.body.data.user.idUser;
+
+      // Ajouter le rôle analyste une première fois
+      await request(app)
+        .post(`/api/v1/admin/user/${analystUserId}/analyst`)
+        .set('Authorization', `Bearer ${adminToken}`);
+
+      // Essayer d'ajouter le rôle une deuxième fois
+      const res = await request(app)
+        .post(`/api/v1/admin/user/${analystUserId}/analyst`)
+        .set('Authorization', `Bearer ${adminToken}`);
+
+      expect(res.status).toBe(400);
+      expect(res.body.success).toBe(false);
+    });
+
+    it('erreur ajouter rôle analyste à un utilisateur inexistant', async () => {
+      const res = await request(app)
+        .post('/api/v1/admin/user/fake-id/analyst')
+        .set('Authorization', `Bearer ${adminToken}`);
+
+      expect(res.status).toBe(404);
+      expect(res.body.success).toBe(false);
+    });
+  });
+
+  describe('DELETE /api/v1/admin/user/:id/analyst', () => {
+    it("retirer rôle analyste d'un utilisateur", async () => {
+      // Créer un utilisateur analyste
+      const timestamp = Date.now();
+      const analystUserEmail = `analystuser3${timestamp}@test.com`;
+
+      await request(app)
+        .post('/api/v1/auth/register')
+        .send({
+          nameTag: `analystuser3${timestamp}`,
+          firstname: 'Analyst',
+          lastname: 'User',
+          email: analystUserEmail,
+          password: userPassword,
+        });
+
+      const loginRes = await request(app)
+        .post('/api/v1/auth/login')
+        .send({ email: analystUserEmail, password: userPassword });
+      const analystUserId = loginRes.body.data.user.idUser;
+
+      // Ajouter le rôle analyste
+      await request(app)
+        .post(`/api/v1/admin/user/${analystUserId}/analyst`)
+        .set('Authorization', `Bearer ${adminToken}`);
+
+      // Retirer le rôle analyste
+      const res = await request(app)
+        .delete(`/api/v1/admin/user/${analystUserId}/analyst`)
+        .set('Authorization', `Bearer ${adminToken}`);
+
+      expect(res.status).toBe(200);
+      expect(res.body.success).toBe(true);
+      expect(res.body.data.isAnalyste).toBe(false);
+    });
+
+    it("erreur retirer rôle analyste d'un utilisateur non analyste", async () => {
+      // Créer un utilisateur normal
+      const timestamp = Date.now();
+      const normalUserEmail = `normaluser${timestamp}@test.com`;
+
+      await request(app)
+        .post('/api/v1/auth/register')
+        .send({
+          nameTag: `normaluser${timestamp}`,
+          firstname: 'Normal',
+          lastname: 'User',
+          email: normalUserEmail,
+          password: userPassword,
+        });
+
+      const loginRes = await request(app)
+        .post('/api/v1/auth/login')
+        .send({ email: normalUserEmail, password: userPassword });
+      const normalUserId = loginRes.body.data.user.idUser;
+
+      // Essayer de retirer le rôle analyste
+      const res = await request(app)
+        .delete(`/api/v1/admin/user/${normalUserId}/analyst`)
+        .set('Authorization', `Bearer ${adminToken}`);
+
+      expect(res.status).toBe(400);
+      expect(res.body.success).toBe(false);
+    });
+
+    it("erreur retirer rôle analyste d'un utilisateur inexistant", async () => {
+      const res = await request(app)
+        .delete('/api/v1/admin/user/fake-id/analyst')
+        .set('Authorization', `Bearer ${adminToken}`);
+
+      expect(res.status).toBe(404);
+      expect(res.body.success).toBe(false);
+    });
+  });
 });

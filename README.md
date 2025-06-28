@@ -183,3 +183,48 @@ npm test
 ## 📄 Licence
 
 Ce projet est sous licence MIT.
+
+## Fonctionnalités principales
+
+- Authentification JWT (utilisateur/admin)
+- CRUD Utilisateurs
+- Analyses, commentaires, comptes de trading, devises, prop firms
+- Système de signalement (analyses, commentaires)
+- Dashboard d'administration (statistiques, modération, bannissement, avertissements)
+- **Gestion des rôles analyste** (ajout/retrait par un admin)
+- **Tests automatisés** (Jest + Supertest, 100% réussite)
+- **Documentation Postman** automatisée et à jour
+
+## Gestion des rôles analyste
+
+- `POST /api/v1/admin/user/:id/analyst` : Ajoute le rôle analyste à un utilisateur (admin uniquement)
+- `DELETE /api/v1/admin/user/:id/analyst` : Retire le rôle analyste
+- `GET /api/v1/admin/analysts` : Liste tous les analystes
+
+## Lancer les tests
+
+```bash
+npm test
+```
+
+## Documentation Postman
+
+- Collection : `docs/Trading_API_Collection.json`
+- Toutes les routes sont à jour et automatisées (variables d'environnement, gestion du token, etc.)
+
+## Lancer le projet
+
+```bash
+docker-compose up -d
+npm install
+npx prisma migrate dev
+npm start
+```
+
+## Variables d'environnement
+
+Voir `.env.example` pour la configuration.
+
+## Contribution
+
+Workflow Git Flow, PR, tests et documentation obligatoires pour toute feature.

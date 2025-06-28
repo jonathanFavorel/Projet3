@@ -26,6 +26,7 @@ model User {
   isBanned      Boolean  @default(false) @map("isBanned")
   banReason     String?  @db.Text @map("banReason")
   isAdmin       Boolean  @default(false) @map("isAdmin")
+  isAnalyste    Boolean  @default(false) @map("isAnalyste")
 
   // Relations
   analyses      Analysis[]

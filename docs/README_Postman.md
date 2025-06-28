@@ -606,6 +606,18 @@ Pour mettre à jour la collection :
 - **Headers**: `Authorization: Bearer <token>`
 - **Description**: Récupérer les statistiques des utilisateurs
 
+### Gestion des Rôles Analyste
+
+- **GET** `/api/v1/admin/analysts` - Liste de tous les analystes
+  - Inclut les statistiques de publications et commentaires
+  - Accès admin uniquement
+- **POST** `/api/v1/admin/user/:id/analyst` - Ajouter le rôle analyste
+  - Permet à l'utilisateur de créer des analyses
+  - Vérification que l'utilisateur n'est pas déjà analyste
+- **DELETE** `/api/v1/admin/user/:id/analyst` - Retirer le rôle analyste
+  - Retire les privilèges de création d'analyses
+  - Vérification que l'utilisateur est analyste
+
 ## 📊 Analyses
 
 ### Liste des analyses
@@ -900,6 +912,18 @@ Pour mettre à jour la collection :
 - **GET** `/api/v1/admin/users` - Liste complète des utilisateurs
   - Inclut les avertissements et statut de bannissement
   - Accès admin uniquement
+
+### Gestion des Rôles Analyste
+
+- **GET** `/api/v1/admin/analysts` - Liste de tous les analystes
+  - Inclut les statistiques de publications et commentaires
+  - Accès admin uniquement
+- **POST** `/api/v1/admin/user/:id/analyst` - Ajouter le rôle analyste
+  - Permet à l'utilisateur de créer des analyses
+  - Vérification que l'utilisateur n'est pas déjà analyste
+- **DELETE** `/api/v1/admin/user/:id/analyst` - Retirer le rôle analyste
+  - Retire les privilèges de création d'analyses
+  - Vérification que l'utilisateur est analyste
 
 ### Contenu Signalé
 

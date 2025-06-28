@@ -1534,6 +1534,75 @@
             "description": "Supprimer définitivement un utilisateur (action irréversible)"
           },
           "response": []
+        },
+        {
+          "name": "Liste des Analystes",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/admin/analysts",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_prefix}}", "admin", "analysts"]
+            },
+            "description": "Récupérer la liste de tous les utilisateurs ayant le rôle analyste"
+          },
+          "response": []
+        },
+        {
+          "name": "Ajouter Rôle Analyste",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/admin/user/:id/analyst",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_prefix}}", "admin", "user", ":id", "analyst"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "user-uuid-here"
+                }
+              ]
+            },
+            "description": "Ajouter le rôle analyste à un utilisateur (permet de créer des analyses)"
+          },
+          "response": []
+        },
+        {
+          "name": "Retirer Rôle Analyste",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}{{api_prefix}}/admin/user/:id/analyst",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_prefix}}", "admin", "user", ":id", "analyst"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "user-uuid-here"
+                }
+              ]
+            },
+            "description": "Retirer le rôle analyste d'un utilisateur"
+          },
+          "response": []
         }
       ]
     }

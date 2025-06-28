@@ -10,10 +10,14 @@ const { authenticateToken } = require('../middleware/auth');
 // PUT /api/v1/currencies/:id - Mettre à jour une devise
 // DELETE /api/v1/currencies/:id - Supprimer une devise
 
-router.get('/', (req, res) => {
-  res.json({ message: 'Route devises - À implémenter' });
-});
+router.get('/', currencyController.getAllCurrencies);
+
+router.get('/:id', currencyController.getCurrencyById);
 
 router.post('/', authenticateToken, currencyController.createCurrency);
+
+router.put('/:id', authenticateToken, currencyController.updateCurrency);
+
+router.delete('/:id', authenticateToken, currencyController.deleteCurrency);
 
 module.exports = router;

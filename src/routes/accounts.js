@@ -1,5 +1,8 @@
 const express = require('express');
 const router = express.Router();
+const tradingAccountController = require('../controllers/tradingAccountController');
+const { authenticateToken } = require('../middleware/auth');
+// const { validateAccount } = require('../middleware/validation'); // À créer si besoin
 
 // TODO: Implémenter les routes de comptes de trading
 // GET /api/v1/accounts - Récupérer tous les comptes
@@ -9,8 +12,26 @@ const router = express.Router();
 // DELETE /api/v1/accounts/:id - Supprimer un compte
 // GET /api/v1/accounts/:id/stats - Récupérer les stats d'un compte
 
-router.get('/', (req, res) => {
-  res.json({ message: 'Route comptes de trading - À implémenter' });
-});
+// GET /api/v1/accounts - Récupérer tous les comptes
+router.get('/', tradingAccountController.getAllAccounts);
 
-module.exports = router; 
+// GET /api/v1/accounts/:id - Récupérer un compte par ID
+router.get('/:id', tradingAccountController.getAccountById);
+
+// POST /api/v1/accounts - Créer un nouveau compte
+router.post('/', authenticateToken, tradingAccountController.createAccount);
+
+// PUT /api/v1/accounts/:id - Mettre à jour un compte
+router.put('/:id', authenticateToken, tradingAccountController.updateAccount);
+
+// DELETE /api/v1/accounts/:id - Supprimer un compte
+router.delete(
+  '/:id',
+  authenticateToken,
+  tradingAccountController.deleteAccount
+);
+
+// GET /api/v1/accounts/:id/stats - Récupérer les stats d'un compte
+router.get('/:id/stats', tradingAccountController.getAccountStats);
+
+module.exports = router;

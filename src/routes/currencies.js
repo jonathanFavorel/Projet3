@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const currencyController = require('../controllers/currencyController');
+const { authenticateToken } = require('../middleware/auth');
 
 // TODO: Implémenter les routes de devises
 // GET /api/v1/currencies - Récupérer toutes les devises
@@ -12,4 +14,6 @@ router.get('/', (req, res) => {
   res.json({ message: 'Route devises - À implémenter' });
 });
 
-module.exports = router; 
+router.post('/', authenticateToken, currencyController.createCurrency);
+
+module.exports = router;

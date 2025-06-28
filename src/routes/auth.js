@@ -1,6 +1,10 @@
 const express = require('express');
 const router = express.Router();
 
+const authController = require('../controllers/authController');
+const { authenticateToken } = require('../middleware/auth');
+const { validateRegister, validateLogin } = require('../middleware/validation');
+
 // TODO: Implémenter les routes d'authentification
 // POST /api/v1/auth/register - Inscription
 // POST /api/v1/auth/login - Connexion
@@ -8,12 +12,16 @@ const router = express.Router();
 // POST /api/v1/auth/refresh - Rafraîchir le token
 // GET /api/v1/auth/me - Récupérer les infos de l'utilisateur connecté
 
-router.post('/register', (req, res) => {
-  res.json({ message: 'Route d\'inscription - À implémenter' });
-});
+// Route d'inscription
+router.post('/register', validateRegister, authController.register);
 
-router.post('/login', (req, res) => {
-  res.json({ message: 'Route de connexion - À implémenter' });
-});
+// Route de connexion
+router.post('/login', validateLogin, authController.login);
 
-module.exports = router; 
+// Route pour récupérer les infos de l'utilisateur connecté
+router.get('/me', authenticateToken, authController.getMe);
+
+// Route de déconnexion
+router.post('/logout', authenticateToken, authController.logout);
+
+module.exports = router;

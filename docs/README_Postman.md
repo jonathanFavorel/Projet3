@@ -379,3 +379,124 @@ Pour mettre à jour la collection :
 ---
 
 **Support** : Pour toute question ou problème, consultez la documentation de l'API ou contactez l'équipe de développement.
+
+## Endpoints Analyses
+
+### GET {{base_url}}{{api_prefix}}/analyses
+
+- **Description** : Récupère toutes les analyses.
+- **Réponse succès** :
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "idAnalysis": "uuid",
+      "title": "Analyse 1",
+      "content": "...",
+      "createdAt": "2024-06-28T...",
+      "user": { "idUser": "...", "nameTag": "..." },
+      ...
+    }
+  ]
+}
+```
+
+### GET {{base_url}}{{api_prefix}}/analyses/:id
+
+- **Description** : Récupère une analyse par son ID (UUID).
+- **Paramètre** : `id` (string, requis)
+- **Réponse succès** :
+
+```json
+{
+  "success": true,
+  "data": {
+    "idAnalysis": "uuid",
+    "title": "...",
+    "content": "...",
+    "createdAt": "...",
+    "user": { "idUser": "...", "nameTag": "..." },
+    ...
+  }
+}
+```
+
+- **Réponse erreur** :
+
+```json
+{
+  "success": false,
+  "message": "Analyse non trouvée"
+}
+```
+
+### POST {{base_url}}{{api_prefix}}/analyses
+
+- **Description** : Crée une nouvelle analyse (authentification requise).
+- **Body** :
+
+```json
+{
+  "title": "Titre analyse",
+  "content": "Contenu",
+  "idUser": "uuid-user"
+}
+```
+
+- **Réponse succès** :
+
+```json
+{
+  "success": true,
+  "data": { ... }
+}
+```
+
+### PUT {{base_url}}{{api_prefix}}/analyses/:id
+
+- **Description** : Met à jour une analyse (authentification requise).
+- **Body** :
+
+```json
+{
+  "title": "Nouveau titre",
+  "content": "Nouveau contenu"
+}
+```
+
+- **Réponse succès** :
+
+```json
+{
+  "success": true,
+  "data": { ... }
+}
+```
+
+### DELETE {{base_url}}{{api_prefix}}/analyses/:id
+
+- **Description** : Supprime une analyse (authentification requise).
+- **Réponse succès** :
+
+```json
+{
+  "success": true,
+  "message": "Analyse supprimée"
+}
+```
+
+---
+
+**Variables d'environnement à utiliser dans Postman :**
+
+- `base_url` : ex. http://localhost:3000
+- `api_prefix` : ex. /api/v1
+- `auth_token` : token JWT (récupéré à la connexion)
+
+**Bonnes pratiques :**
+
+- Utiliser le script de récupération du token dans la requête login (onglet Tests)
+- Utiliser la variable `{{auth_token}}` en Bearer Token pour les requêtes protégées
+- Ajouter des exemples de réponses dans Postman pour chaque endpoint

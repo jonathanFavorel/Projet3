@@ -4,8 +4,9 @@ const prisma = new PrismaClient();
 // Créer un compte de trading
 exports.createAccount = async (req, res) => {
   try {
-    const { leverage, isPropFirm, amount, idCurrency, idUser, idPropFirm } =
-      req.body;
+    const { leverage, isPropFirm, amount, idCurrency, idPropFirm } = req.body;
+    const idUser = req.user.idUser; // Extraire du token d'authentification
+
     if (!amount || !idCurrency || !idUser) {
       return res
         .status(400)
@@ -16,13 +17,11 @@ exports.createAccount = async (req, res) => {
     });
     res.status(201).json({ success: true, data: account });
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: 'Erreur serveur',
-        error: error.message,
-      });
+    res.status(500).json({
+      success: false,
+      message: 'Erreur serveur',
+      error: error.message,
+    });
   }
 };
 
@@ -40,13 +39,11 @@ exports.getAllAccounts = async (req, res) => {
     });
     res.json({ success: true, data: accounts });
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: 'Erreur serveur',
-        error: error.message,
-      });
+    res.status(500).json({
+      success: false,
+      message: 'Erreur serveur',
+      error: error.message,
+    });
   }
 };
 
@@ -71,13 +68,11 @@ exports.getAccountById = async (req, res) => {
     }
     res.json({ success: true, data: account });
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: 'Erreur serveur',
-        error: error.message,
-      });
+    res.status(500).json({
+      success: false,
+      message: 'Erreur serveur',
+      error: error.message,
+    });
   }
 };
 
@@ -92,13 +87,11 @@ exports.updateAccount = async (req, res) => {
     });
     res.json({ success: true, data: account });
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: 'Erreur serveur',
-        error: error.message,
-      });
+    res.status(500).json({
+      success: false,
+      message: 'Erreur serveur',
+      error: error.message,
+    });
   }
 };
 
@@ -109,13 +102,11 @@ exports.deleteAccount = async (req, res) => {
     await prisma.tradingAccount.delete({ where: { idTradingAccount: id } });
     res.json({ success: true, message: 'Compte supprimé' });
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: 'Erreur serveur',
-        error: error.message,
-      });
+    res.status(500).json({
+      success: false,
+      message: 'Erreur serveur',
+      error: error.message,
+    });
   }
 };
 
@@ -133,12 +124,10 @@ exports.getAccountStats = async (req, res) => {
     }
     res.json({ success: true, data: stats });
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: 'Erreur serveur',
-        error: error.message,
-      });
+    res.status(500).json({
+      success: false,
+      message: 'Erreur serveur',
+      error: error.message,
+    });
   }
 };

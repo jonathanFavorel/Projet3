@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 exports.createComment = async (req, res) => {
   try {
     const { content, idAnalysis } = req.body;
-    const idUser = req.user.userId; // Récupéré du middleware d'authentification
+    const idUser = req.user.idUser; // Récupéré du middleware d'authentification
 
     if (!content || !idAnalysis) {
       return res
@@ -107,7 +107,7 @@ exports.updateComment = async (req, res) => {
   try {
     const { id } = req.params;
     const { content } = req.body;
-    const idUser = req.user.userId;
+    const idUser = req.user.idUser;
 
     // Vérifier que l'utilisateur est propriétaire du commentaire
     const existingComment = await prisma.comment.findUnique({
@@ -160,7 +160,7 @@ exports.updateComment = async (req, res) => {
 exports.deleteComment = async (req, res) => {
   try {
     const { id } = req.params;
-    const idUser = req.user.userId;
+    const idUser = req.user.idUser;
 
     // Vérifier que l'utilisateur est propriétaire du commentaire
     const existingComment = await prisma.comment.findUnique({

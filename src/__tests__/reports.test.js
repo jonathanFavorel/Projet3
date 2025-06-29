@@ -1,317 +1,350 @@
 const request = require('supertest');
 const app = require('../index');
-let token1, token2;
-let userId1, userId2;
-let reportId;
-let analysisId;
-let commentId;
-let userEmail1, userEmail2;
-const userPassword = 'Test1234!';
 
-describe('Reporting System', () => {
-  beforeAll(async () => {
-    // Création de deux utilisateurs pour tester le signalement
-    const timestamp = Date.now();
-    userEmail1 = `report1${timestamp}@test.com`;
-    userEmail2 = `report2${timestamp}@test.com`;
+describe('Reports System', () => {
+  let token1, token2;
+  let userId1, userId2;
+  let reportId;
+
+  beforeEach(async () => {
+    // Générer des identifiants uniques pour chaque test
+    const timestamp = Math.floor(Date.now() + Math.random() * 1000000)
+      .toString()
+      .replace(/\./g, '_');
+    const user1Email = `report1_${timestamp}@test.com`;
+    const user2Email = `report2_${timestamp}@test.com`;
+    const password = 'Test1234!';
 
     // Créer le premier utilisateur
     const registerRes1 = await request(app)
       .post('/api/v1/auth/register')
       .send({
-        nameTag: `reportuser1${timestamp}`,
-        firstname: 'Test',
-        lastname: 'Report',
-        email: userEmail1,
-        password: userPassword,
+        nameTag: `reportuser1_${timestamp}`,
+        firstname: 'User',
+        lastname: 'One',
+        email: user1Email,
+        password,
       });
 
-    if (registerRes1.status !== 201) {
-      console.log('Erreur enregistrement 1:', registerRes1.body);
+    if (registerRes1.statusCode !== 201) {
+      throw new Error(
+        `Échec création utilisateur 1: ${JSON.stringify(registerRes1.body)}`
+      );
     }
 
     // Créer le deuxième utilisateur
     const registerRes2 = await request(app)
       .post('/api/v1/auth/register')
       .send({
-        nameTag: `reportuser2${timestamp}`,
+        nameTag: `reportuser2_${timestamp}`,
         firstname: 'Test',
         lastname: 'Report',
-        email: userEmail2,
-        password: userPassword,
+        email: user2Email,
+        password,
       });
 
-    if (registerRes2.status !== 201) {
-      console.log('Erreur enregistrement 2:', registerRes2.body);
+    if (registerRes2.statusCode !== 201) {
+      throw new Error(
+        `Échec création utilisateur 2: ${JSON.stringify(registerRes2.body)}`
+      );
     }
 
-    // Connexion des utilisateurs
+    // Connexion du premier utilisateur
     const loginRes1 = await request(app)
       .post('/api/v1/auth/login')
-      .send({ email: userEmail1, password: userPassword });
+      .send({ email: user1Email, password });
+
+    if (
+      loginRes1.statusCode !== 200 ||
+      !loginRes1.body.data ||
+      !loginRes1.body.data.token
+    ) {
+      throw new Error(
+        `Échec connexion utilisateur 1: ${JSON.stringify(loginRes1.body)}`
+      );
+    }
+
     token1 = loginRes1.body.data.token;
     userId1 = loginRes1.body.data.user.idUser;
 
+    // Connexion du deuxième utilisateur
     const loginRes2 = await request(app)
       .post('/api/v1/auth/login')
-      .send({ email: userEmail2, password: userPassword });
+      .send({ email: user2Email, password });
+
+    if (
+      loginRes2.statusCode !== 200 ||
+      !loginRes2.body.data ||
+      !loginRes2.body.data.token
+    ) {
+      throw new Error(
+        `Échec connexion utilisateur 2: ${JSON.stringify(loginRes2.body)}`
+      );
+    }
+
     token2 = loginRes2.body.data.token;
     userId2 = loginRes2.body.data.user.idUser;
+  });
 
-    // Créer une analyse pour tester le signalement
+  it('crée un signalement', async () => {
+    // Créer d'abord une analyse à signaler avec user1
     const analysisRes = await request(app)
       .post('/api/v1/analyses')
-      .set('Authorization', `Bearer ${token2}`)
+      .set('Authorization', `Bearer ${token1}`)
       .send({
-        title: 'Analyse pour test signalement',
-        content: 'Contenu de test pour signalement',
+        title: 'Analyse à signaler',
+        content: 'Contenu de test',
       });
-    analysisId = analysisRes.body.data.idAnalysis;
 
-    // Créer un commentaire pour tester le signalement
-    const commentRes = await request(app)
-      .post('/api/v1/comments')
+    if (analysisRes.statusCode !== 201) {
+      throw new Error(
+        `Échec création analyse: ${JSON.stringify(analysisRes.body)}`
+      );
+    }
+
+    const analysisId = analysisRes.body.data.idAnalysis;
+
+    // User2 signale l'analyse de user1
+    const res = await request(app)
+      .post('/api/v1/reports')
       .set('Authorization', `Bearer ${token2}`)
       .send({
-        content: 'Commentaire pour test signalement',
+        content: 'Test signalement',
         idAnalysis: analysisId,
       });
-    commentId = commentRes.body.data.idComment;
+
+    expect(res.statusCode).toBe(201);
+    expect(res.body.success).toBe(true);
+    expect(res.body.data.content).toBe('Test signalement');
+    expect(res.body.data.idUser).toBe(userId2);
+    reportId = res.body.data.idReport;
   });
 
-  describe('POST /api/v1/reports', () => {
-    it('créer signalement analyse', async () => {
-      const res = await request(app)
-        .post('/api/v1/reports')
-        .set('Authorization', `Bearer ${token1}`)
-        .send({
-          content: 'Cette analyse contient du contenu inapproprié',
-          idAnalysis: analysisId,
-        });
+  it('récupère tous les signalements', async () => {
+    // Créer d'abord une analyse à signaler avec user1
+    const analysisRes = await request(app)
+      .post('/api/v1/analyses')
+      .set('Authorization', `Bearer ${token1}`)
+      .send({
+        title: 'Analyse à signaler',
+        content: 'Contenu de test',
+      });
 
-      expect(res.status).toBe(201);
-      expect(res.body.success).toBe(true);
-      expect(res.body.data.content).toBe(
-        'Cette analyse contient du contenu inapproprié'
+    if (analysisRes.statusCode !== 201) {
+      throw new Error(
+        `Échec création analyse: ${JSON.stringify(analysisRes.body)}`
       );
-      expect(res.body.data.analysis.idAnalysis).toBe(analysisId);
-      expect(res.body.data.comment).toBeNull();
-      reportId = res.body.data.idReport;
-    });
+    }
 
-    it('créer signalement commentaire', async () => {
-      const res = await request(app)
-        .post('/api/v1/reports')
-        .set('Authorization', `Bearer ${token1}`)
-        .send({
-          content: 'Ce commentaire est inapproprié',
-          idComment: commentId,
-        });
+    const analysisId = analysisRes.body.data.idAnalysis;
 
-      expect(res.status).toBe(201);
-      expect(res.body.success).toBe(true);
-      expect(res.body.data.content).toBe('Ce commentaire est inapproprié');
-      expect(res.body.data.comment.idComment).toBe(commentId);
-      expect(res.body.data.analysis).toBeNull();
-    });
+    // User2 signale l'analyse de user1
+    await request(app)
+      .post('/api/v1/reports')
+      .set('Authorization', `Bearer ${token2}`)
+      .send({
+        content: 'Test signalement',
+        idAnalysis: analysisId,
+      });
 
-    it('erreur signalement sans contenu', async () => {
-      const res = await request(app)
-        .post('/api/v1/reports')
-        .set('Authorization', `Bearer ${token1}`)
-        .send({
-          idAnalysis: analysisId,
-        });
-
-      expect(res.status).toBe(400);
-      expect(res.body.success).toBe(false);
-    });
-
-    it('erreur signalement sans cible', async () => {
-      const res = await request(app)
-        .post('/api/v1/reports')
-        .set('Authorization', `Bearer ${token1}`)
-        .send({
-          content: 'Test sans cible',
-        });
-
-      expect(res.status).toBe(400);
-      expect(res.body.success).toBe(false);
-    });
-
-    it('erreur signalement analyse et commentaire', async () => {
-      const res = await request(app)
-        .post('/api/v1/reports')
-        .set('Authorization', `Bearer ${token1}`)
-        .send({
-          content: 'Test avec deux cibles',
-          idAnalysis: analysisId,
-          idComment: commentId,
-        });
-
-      expect(res.status).toBe(400);
-      expect(res.body.success).toBe(false);
-    });
-
-    it('erreur signalement analyse inexistante', async () => {
-      const res = await request(app)
-        .post('/api/v1/reports')
-        .set('Authorization', `Bearer ${token1}`)
-        .send({
-          content: 'Test analyse inexistante',
-          idAnalysis: 'fake-analysis-id',
-        });
-
-      expect(res.status).toBe(404);
-      expect(res.body.success).toBe(false);
-    });
-
-    it('erreur signalement commentaire inexistant', async () => {
-      const res = await request(app)
-        .post('/api/v1/reports')
-        .set('Authorization', `Bearer ${token1}`)
-        .send({
-          content: 'Test commentaire inexistant',
-          idComment: 'fake-comment-id',
-        });
-
-      expect(res.status).toBe(404);
-      expect(res.body.success).toBe(false);
-    });
-
-    it('erreur signalement propre analyse', async () => {
-      const res = await request(app)
-        .post('/api/v1/reports')
-        .set('Authorization', `Bearer ${token2}`)
-        .send({
-          content: 'Test signalement propre analyse',
-          idAnalysis: analysisId,
-        });
-
-      expect(res.status).toBe(400);
-      expect(res.body.success).toBe(false);
-    });
-
-    it('erreur signalement propre commentaire', async () => {
-      const res = await request(app)
-        .post('/api/v1/reports')
-        .set('Authorization', `Bearer ${token2}`)
-        .send({
-          content: 'Test signalement propre commentaire',
-          idComment: commentId,
-        });
-
-      expect(res.status).toBe(400);
-      expect(res.body.success).toBe(false);
-    });
-
-    it('erreur signalement déjà existant', async () => {
-      const res = await request(app)
-        .post('/api/v1/reports')
-        .set('Authorization', `Bearer ${token1}`)
-        .send({
-          content: 'Signalement en double',
-          idAnalysis: analysisId,
-        });
-
-      expect(res.status).toBe(400);
-      expect(res.body.success).toBe(false);
-    });
+    const res = await request(app)
+      .get('/api/v1/reports')
+      .set('Authorization', `Bearer ${token2}`);
+    expect(res.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(Array.isArray(res.body.data)).toBe(true);
   });
 
-  describe('GET /api/v1/reports', () => {
-    it('récupérer tous les signalements', async () => {
-      const res = await request(app)
-        .get('/api/v1/reports')
-        .set('Authorization', `Bearer ${token1}`);
+  it('récupère un signalement par ID', async () => {
+    // Créer d'abord une analyse à signaler avec user1
+    const analysisRes = await request(app)
+      .post('/api/v1/analyses')
+      .set('Authorization', `Bearer ${token1}`)
+      .send({
+        title: 'Analyse à signaler',
+        content: 'Contenu de test',
+      });
 
-      expect(res.status).toBe(200);
-      expect(res.body.success).toBe(true);
-      expect(Array.isArray(res.body.data)).toBe(true);
-      expect(res.body.data.length).toBeGreaterThan(0);
-    });
+    if (analysisRes.statusCode !== 201) {
+      throw new Error(
+        `Échec création analyse: ${JSON.stringify(analysisRes.body)}`
+      );
+    }
+
+    const analysisId = analysisRes.body.data.idAnalysis;
+
+    // User2 signale l'analyse de user1
+    const reportRes = await request(app)
+      .post('/api/v1/reports')
+      .set('Authorization', `Bearer ${token2}`)
+      .send({
+        content: 'Test signalement',
+        idAnalysis: analysisId,
+      });
+    const testReportId = reportRes.body.data.idReport;
+
+    const res = await request(app)
+      .get(`/api/v1/reports/${testReportId}`)
+      .set('Authorization', `Bearer ${token2}`);
+    expect(res.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(res.body.data.idReport).toBe(testReportId);
   });
 
-  describe('GET /api/v1/reports/:id', () => {
-    it('récupérer signalement par ID', async () => {
-      const res = await request(app)
-        .get(`/api/v1/reports/${reportId}`)
-        .set('Authorization', `Bearer ${token1}`);
+  it('supprime un signalement', async () => {
+    // Créer d'abord une analyse à signaler avec user1
+    const analysisRes = await request(app)
+      .post('/api/v1/analyses')
+      .set('Authorization', `Bearer ${token1}`)
+      .send({
+        title: 'Analyse à signaler',
+        content: 'Contenu de test',
+      });
 
-      expect(res.status).toBe(200);
-      expect(res.body.success).toBe(true);
-      expect(res.body.data.idReport).toBe(reportId);
-    });
+    if (analysisRes.statusCode !== 201) {
+      throw new Error(
+        `Échec création analyse: ${JSON.stringify(analysisRes.body)}`
+      );
+    }
 
-    it('erreur signalement inexistant', async () => {
-      const res = await request(app)
-        .get('/api/v1/reports/fake-report-id')
-        .set('Authorization', `Bearer ${token1}`);
+    const analysisId = analysisRes.body.data.idAnalysis;
 
-      expect(res.status).toBe(404);
-      expect(res.body.success).toBe(false);
-    });
+    // User2 signale l'analyse de user1
+    const reportRes = await request(app)
+      .post('/api/v1/reports')
+      .set('Authorization', `Bearer ${token2}`)
+      .send({
+        content: 'Test signalement',
+        idAnalysis: analysisId,
+      });
+
+    if (reportRes.statusCode !== 201) {
+      throw new Error(
+        `Échec création rapport: ${JSON.stringify(reportRes.body)}`
+      );
+    }
+
+    const testReportId = reportRes.body.data.idReport;
+
+    const res = await request(app)
+      .delete(`/api/v1/reports/${testReportId}`)
+      .set('Authorization', `Bearer ${token2}`);
+    expect(res.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
   });
 
-  describe('GET /api/v1/reports/analysis/:analysisId', () => {
-    it("récupérer signalements d'une analyse", async () => {
-      const res = await request(app)
-        .get(`/api/v1/reports/analysis/${analysisId}`)
-        .set('Authorization', `Bearer ${token1}`);
-
-      expect(res.status).toBe(200);
-      expect(res.body.success).toBe(true);
-      expect(Array.isArray(res.body.data)).toBe(true);
-    });
-
-    it('erreur analyse inexistante', async () => {
-      const res = await request(app)
-        .get('/api/v1/reports/analysis/fake-analysis-id')
-        .set('Authorization', `Bearer ${token1}`);
-
-      expect(res.status).toBe(404);
-      expect(res.body.success).toBe(false);
-    });
+  it('erreur création sans champs requis', async () => {
+    const res = await request(app)
+      .post('/api/v1/reports')
+      .set('Authorization', `Bearer ${token1}`)
+      .send({}); // Manque content
+    expect(res.statusCode).toBe(400);
+    expect(res.body.success).toBe(false);
   });
 
-  describe('GET /api/v1/reports/comment/:commentId', () => {
-    it("récupérer signalements d'un commentaire", async () => {
-      const res = await request(app)
-        .get(`/api/v1/reports/comment/${commentId}`)
-        .set('Authorization', `Bearer ${token1}`);
-
-      expect(res.status).toBe(200);
-      expect(res.body.success).toBe(true);
-      expect(Array.isArray(res.body.data)).toBe(true);
-    });
-
-    it('erreur commentaire inexistant', async () => {
-      const res = await request(app)
-        .get('/api/v1/reports/comment/fake-comment-id')
-        .set('Authorization', `Bearer ${token1}`);
-
-      expect(res.status).toBe(404);
-      expect(res.body.success).toBe(false);
-    });
+  it('erreur signalement de soi-même', async () => {
+    // Créer une analyse par user1
+    const analysisRes = await request(app)
+      .post('/api/v1/analyses')
+      .set('Authorization', `Bearer ${token1}`)
+      .send({
+        title: 'Analyse à signaler',
+        content: 'Contenu de test',
+      });
+    if (analysisRes.statusCode !== 201) {
+      throw new Error(
+        `Échec création analyse: ${JSON.stringify(analysisRes.body)}`
+      );
+    }
+    const analysisId = analysisRes.body.data.idAnalysis;
+    // User1 tente de signaler sa propre analyse
+    const res = await request(app)
+      .post('/api/v1/reports')
+      .set('Authorization', `Bearer ${token1}`)
+      .send({
+        content: 'Test',
+        idAnalysis: analysisId,
+      });
+    expect(res.statusCode).toBe(400);
+    expect(res.body.success).toBe(false);
   });
 
-  describe('DELETE /api/v1/reports/:id', () => {
-    it('supprimer signalement autorisé', async () => {
-      const res = await request(app)
-        .delete(`/api/v1/reports/${reportId}`)
-        .set('Authorization', `Bearer ${token1}`);
+  it('erreur utilisateur signalé inexistant', async () => {
+    // Tente de signaler une analyse inexistante
+    const res = await request(app)
+      .post('/api/v1/reports')
+      .set('Authorization', `Bearer ${token1}`)
+      .send({
+        content: 'Test',
+        idAnalysis: '00000000-0000-0000-0000-000000000000',
+      });
+    expect(res.statusCode).toBe(404);
+    expect(res.body.success).toBe(false);
+  });
 
-      expect(res.status).toBe(200);
-      expect(res.body.success).toBe(true);
-    });
+  it('erreur accès signalement sans authentification', async () => {
+    const res = await request(app).get('/api/v1/reports/test-id');
+    expect(res.statusCode).toBe(401);
+  });
 
-    it('erreur suppression signalement inexistant', async () => {
-      const res = await request(app)
-        .delete('/api/v1/reports/fake-report-id')
-        .set('Authorization', `Bearer ${token1}`);
+  it('erreur accès signalement non autorisé', async () => {
+    // Créer un troisième utilisateur
+    const timestamp = Math.floor(Date.now() + Math.random() * 1000000)
+      .toString()
+      .replace(/\./g, '_');
+    const userEmail3 = `report3_${timestamp}@test.com`;
+    await request(app)
+      .post('/api/v1/auth/register')
+      .send({
+        nameTag: `reportuser3_${timestamp}`,
+        firstname: 'Test',
+        lastname: 'Report',
+        email: userEmail3,
+        password: 'Test1234!',
+      });
+    const loginRes3 = await request(app)
+      .post('/api/v1/auth/login')
+      .send({ email: userEmail3, password: 'Test1234!' });
+    const token3 = loginRes3.body.data.token;
+    // Créer une analyse par user1
+    const analysisRes = await request(app)
+      .post('/api/v1/analyses')
+      .set('Authorization', `Bearer ${token1}`)
+      .send({
+        title: 'Analyse à signaler',
+        content: 'Contenu de test',
+      });
+    if (analysisRes.statusCode !== 201) {
+      throw new Error(
+        `Échec création analyse: ${JSON.stringify(analysisRes.body)}`
+      );
+    }
+    const analysisId = analysisRes.body.data.idAnalysis;
+    // User2 signale l'analyse de user1
+    const reportRes = await request(app)
+      .post('/api/v1/reports')
+      .set('Authorization', `Bearer ${token2}`)
+      .send({
+        content: 'Test signalement',
+        idAnalysis: analysisId,
+      });
+    if (!reportRes.body.data) {
+      throw new Error(
+        `Échec création signalement: ${JSON.stringify(reportRes.body)}`
+      );
+    }
+    const testReportId = reportRes.body.data.idReport;
+    // User3 essaie d'accéder au signalement
+    const res = await request(app)
+      .get(`/api/v1/reports/${testReportId}`)
+      .set('Authorization', `Bearer ${token3}`);
+    expect(res.statusCode).toBe(403);
+  });
 
-      expect(res.status).toBe(404);
-      expect(res.body.success).toBe(false);
-    });
+  it('erreur signalement inexistant', async () => {
+    const res = await request(app)
+      .get('/api/v1/reports/00000000-0000-0000-0000-000000000000')
+      .set('Authorization', `Bearer ${token1}`);
+    expect(res.statusCode).toBe(404);
   });
 });

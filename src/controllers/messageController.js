@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 exports.sendMessage = async (req, res) => {
   try {
     const { content, recipientId } = req.body;
-    const senderId = req.user.userId;
+    const senderId = req.user.idUser;
 
     if (!content || !recipientId) {
       return res
@@ -26,12 +26,10 @@ exports.sendMessage = async (req, res) => {
 
     // Empêcher l'envoi de message à soi-même
     if (senderId === recipientId) {
-      return res
-        .status(400)
-        .json({
-          success: false,
-          message: "Impossible d'envoyer un message à vous-même",
-        });
+      return res.status(400).json({
+        success: false,
+        message: "Impossible d'envoyer un message à vous-même",
+      });
     }
 
     const message = await prisma.message.create({
@@ -62,20 +60,18 @@ exports.sendMessage = async (req, res) => {
 
     res.status(201).json({ success: true, data: message });
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: 'Erreur serveur',
-        error: error.message,
-      });
+    res.status(500).json({
+      success: false,
+      message: 'Erreur serveur',
+      error: error.message,
+    });
   }
 };
 
 // Récupérer les conversations de l'utilisateur
 exports.getConversations = async (req, res) => {
   try {
-    const userId = req.user.userId;
+    const userId = req.user.idUser;
 
     // Récupérer toutes les conversations (messages envoyés et reçus)
     const conversations = await prisma.message.findMany({
@@ -135,13 +131,11 @@ exports.getConversations = async (req, res) => {
 
     res.json({ success: true, data: conversationsList });
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: 'Erreur serveur',
-        error: error.message,
-      });
+    res.status(500).json({
+      success: false,
+      message: 'Erreur serveur',
+      error: error.message,
+    });
   }
 };
 
@@ -149,7 +143,7 @@ exports.getConversations = async (req, res) => {
 exports.getConversationMessages = async (req, res) => {
   try {
     const { otherUserId } = req.params;
-    const userId = req.user.userId;
+    const userId = req.user.idUser;
 
     // Vérifier que l'autre utilisateur existe
     const otherUser = await prisma.user.findUnique({
@@ -213,13 +207,11 @@ exports.getConversationMessages = async (req, res) => {
 
     res.json({ success: true, data: { messages, otherUser } });
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: 'Erreur serveur',
-        error: error.message,
-      });
+    res.status(500).json({
+      success: false,
+      message: 'Erreur serveur',
+      error: error.message,
+    });
   }
 };
 
@@ -227,7 +219,7 @@ exports.getConversationMessages = async (req, res) => {
 exports.getMessageById = async (req, res) => {
   try {
     const { id } = req.params;
-    const userId = req.user.userId;
+    const userId = req.user.idUser;
 
     const message = await prisma.message.findUnique({
       where: { idMessage: id },
@@ -275,13 +267,11 @@ exports.getMessageById = async (req, res) => {
 
     res.json({ success: true, data: message });
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: 'Erreur serveur',
-        error: error.message,
-      });
+    res.status(500).json({
+      success: false,
+      message: 'Erreur serveur',
+      error: error.message,
+    });
   }
 };
 
@@ -289,7 +279,7 @@ exports.getMessageById = async (req, res) => {
 exports.deleteMessage = async (req, res) => {
   try {
     const { id } = req.params;
-    const userId = req.user.userId;
+    const userId = req.user.idUser;
 
     // Vérifier que l'utilisateur est l'expéditeur du message
     const message = await prisma.message.findUnique({
@@ -303,12 +293,10 @@ exports.deleteMessage = async (req, res) => {
     }
 
     if (message.senderId !== userId) {
-      return res
-        .status(403)
-        .json({
-          success: false,
-          message: 'Non autorisé à supprimer ce message',
-        });
+      return res.status(403).json({
+        success: false,
+        message: 'Non autorisé à supprimer ce message',
+      });
     }
 
     await prisma.message.delete({ where: { idMessage: id } });
@@ -319,13 +307,11 @@ exports.deleteMessage = async (req, res) => {
         .status(404)
         .json({ success: false, message: 'Message non trouvé' });
     }
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: 'Erreur serveur',
-        error: error.message,
-      });
+    res.status(500).json({
+      success: false,
+      message: 'Erreur serveur',
+      error: error.message,
+    });
   }
 };
 
@@ -333,7 +319,7 @@ exports.deleteMessage = async (req, res) => {
 exports.markAsRead = async (req, res) => {
   try {
     const { id } = req.params;
-    const userId = req.user.userId;
+    const userId = req.user.idUser;
 
     const message = await prisma.message.findUnique({
       where: { idMessage: id },
@@ -346,12 +332,10 @@ exports.markAsRead = async (req, res) => {
     }
 
     if (message.recipientId !== userId) {
-      return res
-        .status(403)
-        .json({
-          success: false,
-          message: 'Non autorisé à marquer ce message comme lu',
-        });
+      return res.status(403).json({
+        success: false,
+        message: 'Non autorisé à marquer ce message comme lu',
+      });
     }
 
     const updatedMessage = await prisma.message.update({
@@ -384,20 +368,18 @@ exports.markAsRead = async (req, res) => {
         .status(404)
         .json({ success: false, message: 'Message non trouvé' });
     }
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: 'Erreur serveur',
-        error: error.message,
-      });
+    res.status(500).json({
+      success: false,
+      message: 'Erreur serveur',
+      error: error.message,
+    });
   }
 };
 
 // Récupérer le nombre de messages non lus
 exports.getUnreadCount = async (req, res) => {
   try {
-    const userId = req.user.userId;
+    const userId = req.user.idUser;
 
     const unreadCount = await prisma.message.count({
       where: {
@@ -408,12 +390,10 @@ exports.getUnreadCount = async (req, res) => {
 
     res.json({ success: true, data: { unreadCount } });
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: 'Erreur serveur',
-        error: error.message,
-      });
+    res.status(500).json({
+      success: false,
+      message: 'Erreur serveur',
+      error: error.message,
+    });
   }
 };

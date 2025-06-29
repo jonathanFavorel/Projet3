@@ -7,7 +7,7 @@ const authenticateToken = (req, res, next) => {
   if (!token) {
     return res.status(401).json({
       success: false,
-      message: 'Token d\'accès requis',
+      message: "Token d'accès requis",
     });
   }
 

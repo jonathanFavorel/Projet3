@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 exports.createAnalysis = async (req, res) => {
   try {
     const { title, content } = req.body;
-    const idUser = req.user && req.user.userId;
+    const idUser = req.user && req.user.idUser;
     if (!title || !content || !idUser) {
       return res
         .status(400)

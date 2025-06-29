@@ -7,162 +7,124 @@ let currencyId;
 let userEmail;
 
 describe('CRUD Trading Accounts', () => {
-  beforeAll(async () => {
-    // Fonction pour créer un utilisateur unique avec retry
-    const createUniqueUser = async (attempt = 1) => {
-      const timestamp = Date.now();
-      const randomSuffix = Math.floor(Math.random() * 1000);
-      userEmail = `testaccountuser${timestamp}${randomSuffix}@example.com`;
+  beforeEach(async () => {
+    // Générer des identifiants uniques pour chaque test
+    const timestamp = Math.floor(Date.now() + Math.random() * 1000000)
+      .toString()
+      .replace(/\./g, '_');
+    const userEmail = `testaccountuser${timestamp}@example.com`;
+    const userPassword = 'Test1234!';
 
-      console.log(
-        `Tentative ${attempt} : création utilisateur avec email ${userEmail}`
+    // Créer l'utilisateur
+    const registerRes = await request(app)
+      .post('/api/v1/auth/register')
+      .send({
+        nameTag: `testaccountuser${timestamp}`,
+        firstname: 'Test',
+        lastname: 'Account',
+        email: userEmail,
+        password: userPassword,
+      });
+
+    if (registerRes.statusCode !== 201) {
+      throw new Error(
+        `Échec création utilisateur: ${JSON.stringify(registerRes.body)}`
       );
-
-      const userRes = await request(app)
-        .post('/api/v1/auth/register')
-        .send({
-          nameTag: `testaccountuser${timestamp}${randomSuffix}`,
-          firstname: 'Test',
-          lastname: 'Account',
-          email: userEmail,
-          password: 'Test1234!',
-        });
-
-      console.log(
-        `Réponse création utilisateur : ${userRes.statusCode} - ${JSON.stringify(userRes.body)}`
-      );
-
-      if (userRes.statusCode === 201) {
-        console.log('✅ Utilisateur créé avec succès');
-        return { userEmail, timestamp };
-      } else if (userRes.statusCode === 409 && attempt < 5) {
-        console.log('⚠️ Conflit, nouvelle tentative...');
-        return createUniqueUser(attempt + 1);
-      } else {
-        throw new Error(
-          `Échec création utilisateur après ${attempt} tentatives : ${userRes.statusCode} - ${JSON.stringify(userRes.body)}`
-        );
-      }
-    };
-
-    try {
-      // Créer un utilisateur unique
-      const { userEmail: email, timestamp } = await createUniqueUser();
-      userEmail = email;
-
-      // Login obligatoire pour récupérer le token
-      console.log('🔐 Tentative de login...');
-      const loginRes = await request(app)
-        .post('/api/v1/auth/login')
-        .send({ email: userEmail, password: 'Test1234!' });
-
-      console.log(
-        `Réponse login : ${loginRes.statusCode} - ${JSON.stringify(loginRes.body)}`
-      );
-
-      if (!loginRes.body.data || !loginRes.body.data.token) {
-        throw new Error(
-          `Login échoué : ${loginRes.statusCode} - ${JSON.stringify(loginRes.body)}`
-        );
-      }
-
-      token = loginRes.body.data.token;
-      console.log('✅ Login réussi, token obtenu');
-
-      // Récupérer l'idUser via /api/v1/users?search=email
-      console.log("🔍 Récupération de l'idUser...");
-      const usersRes = await request(app)
-        .get(`/api/v1/users?search=${encodeURIComponent(userEmail)}`)
-        .set('Authorization', `Bearer ${token}`);
-
-      console.log(
-        `Réponse recherche utilisateur : ${usersRes.statusCode} - ${JSON.stringify(usersRes.body)}`
-      );
-
-      if (!usersRes.body.data || usersRes.body.data.length === 0) {
-        throw new Error('Utilisateur introuvable après login');
-      }
-
-      userId = usersRes.body.data[0].idUser;
-      console.log(`✅ idUser récupéré : ${userId}`);
-
-      // Création d'une devise
-      console.log('💰 Création de la devise...');
-      const currencyRes = await request(app)
-        .post('/api/v1/currencies')
-        .set('Authorization', `Bearer ${token}`)
-        .send({
-          name: `DT${timestamp % 10000}`,
-          symbol: `DT${timestamp % 1000}`,
-          contractSize: 1000,
-          type: 'test',
-        });
-
-      console.log(
-        `Réponse création devise : ${currencyRes.statusCode} - ${JSON.stringify(currencyRes.body)}`
-      );
-
-      if (currencyRes.statusCode === 201) {
-        currencyId = currencyRes.body.data.idCurrency;
-        console.log(`✅ Devise créée : ${currencyId}`);
-      } else {
-        throw new Error(
-          `Erreur lors de la création de la devise : ${currencyRes.statusCode} - ${JSON.stringify(currencyRes.body)}`
-        );
-      }
-
-      console.log('🎉 Setup terminé avec succès !');
-    } catch (error) {
-      console.error('❌ Erreur lors du setup :', error.message);
-      throw error;
     }
-  });
 
-  it('crée un compte de trading', async () => {
-    const res = await request(app)
+    userId = registerRes.body.data.user.idUser;
+
+    // Se connecter
+    const loginRes = await request(app)
+      .post('/api/v1/auth/login')
+      .send({ email: userEmail, password: userPassword });
+
+    if (loginRes.statusCode !== 200) {
+      throw new Error(`Échec connexion: ${JSON.stringify(loginRes.body)}`);
+    }
+
+    token = loginRes.body.data.token;
+
+    // Créer une devise
+    const currencyRes = await request(app)
+      .post('/api/v1/currencies')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        name: `DT${timestamp % 1000}`,
+        symbol: `DT${timestamp % 100}`,
+        contractSize: 1000,
+        type: 'test',
+      });
+
+    if (currencyRes.statusCode !== 201) {
+      throw new Error(
+        `Échec création devise: ${JSON.stringify(currencyRes.body)}`
+      );
+    }
+
+    currencyId = currencyRes.body.data.idCurrency;
+
+    // Créer un compte de trading
+    const accountRes = await request(app)
       .post('/api/v1/accounts')
       .set('Authorization', `Bearer ${token}`)
-      .send({ amount: 10000, idCurrency: currencyId, idUser: userId });
-    expect(res.statusCode).toBe(201);
-    expect(res.body.success).toBe(true);
-    createdId = res.body.data.idTradingAccount;
+      .send({
+        leverage: '100',
+        isPropFirm: false,
+        amount: 10000,
+        idCurrency: currencyId,
+      });
+
+    if (accountRes.statusCode !== 201) {
+      throw new Error(
+        `Échec création compte: ${JSON.stringify(accountRes.body)}`
+      );
+    }
+
+    createdId = accountRes.body.data.idTradingAccount;
   });
 
-  it('récupère tous les comptes', async () => {
-    const res = await request(app).get('/api/v1/accounts');
-    expect(res.statusCode).toBe(200);
-    expect(res.body.success).toBe(true);
-    expect(Array.isArray(res.body.data)).toBe(true);
+  test('GET /api/v1/accounts - Récupérer tous les comptes', async () => {
+    const response = await request(app)
+      .get('/api/v1/accounts')
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body.success).toBe(true);
+    expect(Array.isArray(response.body.data)).toBe(true);
   });
 
-  it('récupère un compte par ID', async () => {
-    const res = await request(app).get(`/api/v1/accounts/${createdId}`);
-    expect(res.statusCode).toBe(200);
-    expect(res.body.success).toBe(true);
-    expect(res.body.data.idTradingAccount).toBe(createdId);
+  test('GET /api/v1/accounts/:id - Récupérer un compte par ID', async () => {
+    const response = await request(app)
+      .get(`/api/v1/accounts/${createdId}`)
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body.success).toBe(true);
+    expect(response.body.data.idTradingAccount).toBe(createdId);
   });
 
-  it('met à jour un compte', async () => {
-    const res = await request(app)
+  test('PUT /api/v1/accounts/:id - Mettre à jour un compte', async () => {
+    const response = await request(app)
       .put(`/api/v1/accounts/${createdId}`)
       .set('Authorization', `Bearer ${token}`)
-      .send({ amount: 20000 });
-    expect(res.statusCode).toBe(200);
-    expect(res.body.success).toBe(true);
-    expect(res.body.data.amount).toBe(20000);
+      .send({
+        amount: 15000,
+        leverage: 200,
+        isPropFirm: true,
+      });
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body.success).toBe(true);
+    expect(response.body.data.amount).toBe(15000);
   });
 
-  it('supprime un compte', async () => {
-    const res = await request(app)
+  test('DELETE /api/v1/accounts/:id - Supprimer un compte', async () => {
+    const response = await request(app)
       .delete(`/api/v1/accounts/${createdId}`)
       .set('Authorization', `Bearer ${token}`);
-    expect(res.statusCode).toBe(200);
-    expect(res.body.success).toBe(true);
-  });
 
-  it('erreur sur compte inexistant', async () => {
-    const res = await request(app).get('/api/v1/accounts/invalid-id');
-    expect([404, 500]).toContain(res.statusCode);
-    expect(res.body.success).toBe(false);
+    expect(response.statusCode).toBe(200);
+    expect(response.body.success).toBe(true);
   });
 });

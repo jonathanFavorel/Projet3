@@ -1,57 +1,58 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
-
-// Récupérer tous les trades
 exports.getAllTrades = async (req, res) => {
   try {
-    const trades = await prisma.trade.findMany();
+    const trades = await prisma.trade.findMany({
+      where: { tradingAccount: { idUser: req.user.idUser } },
+      include: { tradingAccount: true, currency: true },
+    });
     res.status(200).json({ success: true, data: trades });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Erreur lors de la récupération des trades',
-      error: error.message,
-    });
+    res
+      .status(500)
+      .json({
+        success: false,
+        message: 'Erreur lors de la récupération des trades',
+        error: error.message,
+      });
   }
 };
-
-// Récupérer un trade par ID
 exports.getTradeById = async (req, res) => {
   try {
     const trade = await prisma.trade.findUnique({
       where: { idTrade: req.params.id },
+      include: { tradingAccount: true, currency: true },
     });
     if (!trade) {
       return res
         .status(404)
         .json({ success: false, message: 'Trade non trouvé' });
     }
+    if (trade.tradingAccount.idUser !== req.user.idUser) {
+      return res
+        .status(403)
+        .json({ success: false, message: 'Accès non autorisé' });
+    }
     res.status(200).json({ success: true, data: trade });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Erreur lors de la récupération du trade',
-      error: error.message,
-    });
+    res
+      .status(500)
+      .json({
+        success: false,
+        message: 'Erreur lors de la récupération du trade',
+        error: error.message,
+      });
   }
 };
-
-// Fonction utilitaire pour recalculer toutes les stats d'un compte
 async function recalculateAccountStats(idTradingAccount) {
-  // Récupérer les trades avec les informations de la devise
   const trades = await prisma.trade.findMany({
     where: { idTradingAccount },
-    include: {
-      currency: true, // Inclure les informations de la devise pour avoir contractSize
-    },
+    include: { currency: true },
   });
-
   const totalTrade = trades.length;
   const winningTrades = trades.filter(t => t.exitPrice - t.entryPrice > 0);
   const losingTrades = trades.filter(t => t.exitPrice - t.entryPrice < 0);
   const breakEvenTrades = trades.filter(t => t.exitPrice - t.entryPrice === 0);
-
-  // Calculer le profit en tenant compte du contractSize
   const profit = trades.reduce(
     (acc, t) =>
       acc +
@@ -61,8 +62,6 @@ async function recalculateAccountStats(idTradingAccount) {
       ),
     0
   );
-
-  // Calculer la perte en tenant compte du contractSize
   const loss = trades.reduce(
     (acc, t) =>
       acc +
@@ -72,11 +71,8 @@ async function recalculateAccountStats(idTradingAccount) {
       ),
     0
   );
-
   const winRate =
     totalTrade > 0 ? (winningTrades.length / totalTrade) * 100 : 0;
-
-  // Calculer la moyenne des gains en tenant compte du contractSize
   const averageWin =
     winningTrades.length > 0
       ? winningTrades.reduce(
@@ -86,8 +82,6 @@ async function recalculateAccountStats(idTradingAccount) {
           0
         ) / winningTrades.length
       : 0;
-
-  // Calculer la moyenne des pertes en tenant compte du contractSize
   const averageLoss =
     losingTrades.length > 0
       ? losingTrades.reduce(
@@ -97,10 +91,7 @@ async function recalculateAccountStats(idTradingAccount) {
           0
         ) / losingTrades.length
       : 0;
-
   const profitFactor = Math.abs(loss) > 0 ? profit / Math.abs(loss) : 0;
-
-  // Calculer la moyenne des trades en tenant compte du contractSize
   const averageTrade =
     totalTrade > 0
       ? trades.reduce(
@@ -110,7 +101,6 @@ async function recalculateAccountStats(idTradingAccount) {
           0
         ) / totalTrade
       : 0;
-
   await prisma.accountStats.upsert({
     where: { idTradingAccount },
     update: {
@@ -143,25 +133,50 @@ async function recalculateAccountStats(idTradingAccount) {
     },
   });
 }
-
-// Créer un nouveau trade
 exports.createTrade = async (req, res) => {
   try {
+    const tradingAccount = await prisma.tradingAccount.findUnique({
+      where: { idTradingAccount: req.body.idTradingAccount },
+    });
+    if (!tradingAccount) {
+      return res
+        .status(404)
+        .json({ success: false, message: 'Compte de trading non trouvé' });
+    }
+    if (tradingAccount.idUser !== req.user.idUser) {
+      return res
+        .status(403)
+        .json({ success: false, message: 'Accès non autorisé' });
+    }
     const trade = await prisma.trade.create({ data: req.body });
     await recalculateAccountStats(trade.idTradingAccount);
     res.status(201).json({ success: true, data: trade });
   } catch (error) {
-    res.status(400).json({
-      success: false,
-      message: 'Erreur lors de la création du trade',
-      error: error.message,
-    });
+    res
+      .status(400)
+      .json({
+        success: false,
+        message: 'Erreur lors de la création du trade',
+        error: error.message,
+      });
   }
 };
-
-// Mettre à jour un trade
 exports.updateTrade = async (req, res) => {
   try {
+    const existingTrade = await prisma.trade.findUnique({
+      where: { idTrade: req.params.id },
+      include: { tradingAccount: true },
+    });
+    if (!existingTrade) {
+      return res
+        .status(404)
+        .json({ success: false, message: 'Trade non trouvé' });
+    }
+    if (existingTrade.tradingAccount.idUser !== req.user.idUser) {
+      return res
+        .status(403)
+        .json({ success: false, message: 'Accès non autorisé' });
+    }
     const trade = await prisma.trade.update({
       where: { idTrade: req.params.id },
       data: req.body,
@@ -174,25 +189,30 @@ exports.updateTrade = async (req, res) => {
         .status(404)
         .json({ success: false, message: 'Trade non trouvé' });
     }
-    res.status(400).json({
-      success: false,
-      message: 'Erreur lors de la mise à jour du trade',
-      error: error.message,
-    });
+    res
+      .status(400)
+      .json({
+        success: false,
+        message: 'Erreur lors de la mise à jour du trade',
+        error: error.message,
+      });
   }
 };
-
-// Supprimer un trade
 exports.deleteTrade = async (req, res) => {
   try {
-    // On récupère d'abord le trade pour avoir l'idTradingAccount
     const trade = await prisma.trade.findUnique({
       where: { idTrade: req.params.id },
+      include: { tradingAccount: true },
     });
     if (!trade) {
       return res
         .status(404)
         .json({ success: false, message: 'Trade non trouvé' });
+    }
+    if (trade.tradingAccount.idUser !== req.user.idUser) {
+      return res
+        .status(403)
+        .json({ success: false, message: 'Accès non autorisé' });
     }
     await prisma.trade.delete({ where: { idTrade: req.params.id } });
     await recalculateAccountStats(trade.idTradingAccount);
@@ -205,10 +225,12 @@ exports.deleteTrade = async (req, res) => {
         .status(404)
         .json({ success: false, message: 'Trade non trouvé' });
     }
-    res.status(400).json({
-      success: false,
-      message: 'Erreur lors de la suppression du trade',
-      error: error.message,
-    });
+    res
+      .status(400)
+      .json({
+        success: false,
+        message: 'Erreur lors de la suppression du trade',
+        error: error.message,
+      });
   }
 };

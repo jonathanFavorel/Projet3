@@ -1,2612 +1,2472 @@
 {
-	"id": "76ded4bd-de2f-4839-8b42-41dd24060bd7",
-	"name": "Trading API Backend",
-	"timestamp": "2025-06-28T21:41:28.296Z",
-	"collection_id": "16888366-15e89e09-2c6e-45c7-ab12-64211282f15a",
-	"folder_id": 0,
-	"environment_id": "16888366-4944ac41-c41a-44b0-8a0f-03e803cebd63",
-	"totalPass": 82,
-	"delay": 0,
-	"persist": true,
-	"status": "finished",
-	"startedAt": "2025-06-28T21:41:21.021Z",
-	"totalFail": 58,
-	"results": [
-		{
-			"id": "a466b918-1222-4f99-9378-0911c80a73c6",
-			"name": "Health Check",
-			"url": "http://localhost:3000/health",
-			"time": 19,
-			"responseCode": {
-				"code": 200,
-				"name": "OK"
-			},
-			"tests": {
-				"Status code is 200": true,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 1,
-					"fail": 0
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				19
-			],
-			"allTests": [
-				{
-					"Status code is 200": true,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "c6ef81f2-f09d-407e-bc38-bcf376e3d7ce",
-			"name": "API Info",
-			"url": "http://localhost:3000/",
-			"time": 5,
-			"responseCode": {
-				"code": 200,
-				"name": "OK"
-			},
-			"tests": {
-				"Status code is 200": true,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 1,
-					"fail": 0
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				5
-			],
-			"allTests": [
-				{
-					"Status code is 200": true,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "66b81f27-109a-4270-9a8a-58e670500965",
-			"name": "Inscription",
-			"url": "http://localhost:3000/api/v1/auth/register",
-			"time": 490,
-			"responseCode": {
-				"code": 201,
-				"name": "Created"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				490
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "e3032008-4b03-445c-a192-1d39ead37614",
-			"name": "Connexion",
-			"url": "http://localhost:3000/api/v1/auth/login",
-			"time": 316,
-			"responseCode": {
-				"code": 200,
-				"name": "OK"
-			},
-			"tests": {
-				"Status code is 200": true,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 1,
-					"fail": 0
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				316
-			],
-			"allTests": [
-				{
-					"Status code is 200": true,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "b4fcb488-3977-4289-b3c1-7871e873ef21",
-			"name": "Profil Utilisateur",
-			"url": "http://localhost:3000/api/v1/auth/me",
-			"time": 8,
-			"responseCode": {
-				"code": 404,
-				"name": "Not Found"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				8
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "64726b00-4df8-42f1-94e0-29afd25354af",
-			"name": "Déconnexion",
-			"url": "http://localhost:3000/api/v1/auth/logout",
-			"time": 17,
-			"responseCode": {
-				"code": 500,
-				"name": "Internal Server Error"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				17
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "69e855e9-15f7-4a82-b06e-f822d542edfb",
-			"name": "Créer Utilisateur",
-			"url": "http://localhost:3000/api/v1/users",
-			"time": 336,
-			"responseCode": {
-				"code": 201,
-				"name": "Created"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				336
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "05260dbe-f692-441c-8e30-4b49a326c987",
-			"name": "Liste des Utilisateurs",
-			"url": "http://localhost:3000/api/v1/users?page=1&limit=10",
-			"time": 21,
-			"responseCode": {
-				"code": 200,
-				"name": "OK"
-			},
-			"tests": {
-				"Status code is 200": true,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 1,
-					"fail": 0
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				21
-			],
-			"allTests": [
-				{
-					"Status code is 200": true,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "4961f09a-68b8-4e1f-8743-5817e5eef0fd",
-			"name": "Rechercher Utilisateurs",
-			"url": "http://localhost:3000/api/v1/users?search=john",
-			"time": 9,
-			"responseCode": {
-				"code": 200,
-				"name": "OK"
-			},
-			"tests": {
-				"Status code is 200": true,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 1,
-					"fail": 0
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				9
-			],
-			"allTests": [
-				{
-					"Status code is 200": true,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "9af7eea6-61e3-4176-80dd-f3ab55bfca34",
-			"name": "Statistiques Utilisateurs",
-			"url": "http://localhost:3000/api/v1/users/stats",
-			"time": 15,
-			"responseCode": {
-				"code": 200,
-				"name": "OK"
-			},
-			"tests": {
-				"Status code is 200": true,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 1,
-					"fail": 0
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				15
-			],
-			"allTests": [
-				{
-					"Status code is 200": true,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "44ca38b9-5588-4b72-bbc0-558f002bdaa8",
-			"name": "Utilisateur par ID",
-			"url": "http://localhost:3000/api/v1/users/user-uuid-here",
-			"time": 5,
-			"responseCode": {
-				"code": 400,
-				"name": "Bad Request"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				5
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "9d859890-20e3-47df-9801-44563e4a58b1",
-			"name": "Mettre à jour Utilisateur",
-			"url": "http://localhost:3000/api/v1/users/user-uuid-here",
-			"time": 6,
-			"responseCode": {
-				"code": 400,
-				"name": "Bad Request"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				6
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "57143705-1b18-41ee-b119-d6cc7d625233",
-			"name": "Changer Mot de Passe",
-			"url": "http://localhost:3000/api/v1/users/user-uuid-here/password",
-			"time": 6,
-			"responseCode": {
-				"code": 400,
-				"name": "Bad Request"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				6
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "b45ba9cb-b1f4-43d9-9fc8-5253013b1789",
-			"name": "Supprimer Utilisateur",
-			"url": "http://localhost:3000/api/v1/users/user-uuid-here",
-			"time": 4,
-			"responseCode": {
-				"code": 400,
-				"name": "Bad Request"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				4
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "dc8d49ed-f297-4354-9bf8-ea010072ffae",
-			"name": "Liste des Analyses",
-			"url": "http://localhost:3000/api/v1/analyses",
-			"time": 43,
-			"responseCode": {
-				"code": 200,
-				"name": "OK"
-			},
-			"tests": {
-				"Status code is 200": true,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 1,
-					"fail": 0
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				43
-			],
-			"allTests": [
-				{
-					"Status code is 200": true,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "6a3f2f22-3247-484d-a2f7-71c7ce55ef41",
-			"name": "Créer Analyse",
-			"url": "http://localhost:3000/api/v1/analyses",
-			"time": 11,
-			"responseCode": {
-				"code": 500,
-				"name": "Internal Server Error"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				11
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "f9a305d3-300e-4c18-af41-8a92f9f0e727",
-			"name": "Analyse par ID",
-			"url": "http://localhost:3000/api/v1/analyses/analysis-uuid-here",
-			"time": 5,
-			"responseCode": {
-				"code": 404,
-				"name": "Not Found"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				5
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "17446577-ef20-4b51-8c78-905e9b892ff0",
-			"name": "Mettre à jour Analyse",
-			"url": "http://localhost:3000/api/v1/analyses/analysis-uuid-here",
-			"time": 9,
-			"responseCode": {
-				"code": 404,
-				"name": "Not Found"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				9
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "082035cd-99cc-43af-b30a-6db185840185",
-			"name": "Supprimer Analyse",
-			"url": "http://localhost:3000/api/v1/analyses/analysis-uuid-here",
-			"time": 8,
-			"responseCode": {
-				"code": 404,
-				"name": "Not Found"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				8
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "1155bc05-e850-49db-bcd2-b74f1eb11756",
-			"name": "Liste des Trades",
-			"url": "http://localhost:3000/api/v1/trades",
-			"time": 3,
-			"responseCode": {
-				"code": 200,
-				"name": "OK"
-			},
-			"tests": {
-				"Status code is 200": true,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 1,
-					"fail": 0
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				3
-			],
-			"allTests": [
-				{
-					"Status code is 200": true,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "4e7fdf29-d3e1-4e1c-9321-7f64988adba5",
-			"name": "Créer Trade",
-			"url": "http://localhost:3000/api/v1/trades",
-			"time": 4,
-			"responseCode": {
-				"code": 404,
-				"name": "Not Found"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				4
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "cffc3c60-3432-46d9-9273-d7f9b7d7569e",
-			"name": "Trade par ID",
-			"url": "http://localhost:3000/api/v1/trades/trade-uuid-here",
-			"time": 3,
-			"responseCode": {
-				"code": 404,
-				"name": "Not Found"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				3
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "aeceffac-3e13-4e40-a3e8-1a7d79dfd629",
-			"name": "Mettre à jour Trade",
-			"url": "http://localhost:3000/api/v1/trades/trade-uuid-here",
-			"time": 3,
-			"responseCode": {
-				"code": 404,
-				"name": "Not Found"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				3
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "952d4759-9677-424e-a256-eab8b56c19ad",
-			"name": "Supprimer Trade",
-			"url": "http://localhost:3000/api/v1/trades/trade-uuid-here",
-			"time": 3,
-			"responseCode": {
-				"code": 404,
-				"name": "Not Found"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				3
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "c240018a-4083-4dcd-a695-42e5c7a5e69d",
-			"name": "Liste des Comptes",
-			"url": "http://localhost:3000/api/v1/accounts",
-			"time": 42,
-			"responseCode": {
-				"code": 200,
-				"name": "OK"
-			},
-			"tests": {
-				"Status code is 200": true,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 1,
-					"fail": 0
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				42
-			],
-			"allTests": [
-				{
-					"Status code is 200": true,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "9702a01b-9d2a-40fc-91f6-98ebd7bebaef",
-			"name": "Créer Compte",
-			"url": "http://localhost:3000/api/v1/accounts",
-			"time": 12,
-			"responseCode": {
-				"code": 500,
-				"name": "Internal Server Error"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				12
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "b416fccd-3004-4bec-b48d-963941e7082c",
-			"name": "Compte par ID",
-			"url": "http://localhost:3000/api/v1/accounts/account-uuid-here",
-			"time": 5,
-			"responseCode": {
-				"code": 404,
-				"name": "Not Found"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				5
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "84a4cdd6-8bd1-4a44-9f57-5ca48e9036d6",
-			"name": "Mettre à jour Compte",
-			"url": "http://localhost:3000/api/v1/accounts/account-uuid-here",
-			"time": 14,
-			"responseCode": {
-				"code": 500,
-				"name": "Internal Server Error"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				14
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "c85048c8-a6b2-40ae-8dbf-335818870a17",
-			"name": "Supprimer Compte",
-			"url": "http://localhost:3000/api/v1/accounts/account-uuid-here",
-			"time": 10,
-			"responseCode": {
-				"code": 500,
-				"name": "Internal Server Error"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				10
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "efeb36b3-4583-4009-9925-53de9f840add",
-			"name": "Liste des Devises",
-			"url": "http://localhost:3000/api/v1/currencies",
-			"time": 51,
-			"responseCode": {
-				"code": 200,
-				"name": "OK"
-			},
-			"tests": {
-				"Status code is 200": true,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 1,
-					"fail": 0
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				51
-			],
-			"allTests": [
-				{
-					"Status code is 200": true,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "2fad3c1a-7810-4725-9837-bbc13acdea91",
-			"name": "Créer Devise",
-			"url": "http://localhost:3000/api/v1/currencies",
-			"time": 9,
-			"responseCode": {
-				"code": 201,
-				"name": "Created"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				9
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "0f093c03-7406-41ad-8967-82ff6a7cf923",
-			"name": "Devise par ID",
-			"url": "http://localhost:3000/api/v1/currencies/currency-uuid-here",
-			"time": 6,
-			"responseCode": {
-				"code": 404,
-				"name": "Not Found"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				6
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "03991b62-6cec-4c1e-8aa4-1e9f412944e4",
-			"name": "Mettre à jour Devise",
-			"url": "http://localhost:3000/api/v1/currencies/currency-uuid-here",
-			"time": 11,
-			"responseCode": {
-				"code": 404,
-				"name": "Not Found"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				11
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "e97eb0e4-87d6-4c69-acdc-c097f5c34d42",
-			"name": "Supprimer Devise",
-			"url": "http://localhost:3000/api/v1/currencies/currency-uuid-here",
-			"time": 8,
-			"responseCode": {
-				"code": 404,
-				"name": "Not Found"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				8
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "109c49a9-7d66-4fee-ba3b-4aabd7c6df77",
-			"name": "Liste des Prop Firms",
-			"url": "http://localhost:3000/api/v1/prop-firms",
-			"time": 41,
-			"responseCode": {
-				"code": 200,
-				"name": "OK"
-			},
-			"tests": {
-				"Status code is 200": true,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 1,
-					"fail": 0
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				41
-			],
-			"allTests": [
-				{
-					"Status code is 200": true,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "b9041bc3-4fe5-4018-b4a8-60af14bcaa24",
-			"name": "Créer Prop Firm",
-			"url": "http://localhost:3000/api/v1/prop-firms",
-			"time": 12,
-			"responseCode": {
-				"code": 201,
-				"name": "Created"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				12
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "5342e41b-c750-4af2-b931-c4bd86185a76",
-			"name": "Prop Firm par ID",
-			"url": "http://localhost:3000/api/v1/prop-firms/propfirm-uuid-here",
-			"time": 4,
-			"responseCode": {
-				"code": 404,
-				"name": "Not Found"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				4
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "ccded9e8-d8db-46f2-acb5-d653fab0ddd1",
-			"name": "Mettre à jour Prop Firm",
-			"url": "http://localhost:3000/api/v1/prop-firms/propfirm-uuid-here",
-			"time": 11,
-			"responseCode": {
-				"code": 404,
-				"name": "Not Found"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				11
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "df028ae5-8bda-4186-a59a-bd000e7f3aaf",
-			"name": "Supprimer Prop Firm",
-			"url": "http://localhost:3000/api/v1/prop-firms/propfirm-uuid-here",
-			"time": 14,
-			"responseCode": {
-				"code": 404,
-				"name": "Not Found"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				14
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "afb6cb74-13e7-4124-a3e0-eb5654a60f15",
-			"name": "Créer Commentaire",
-			"url": "http://localhost:3000/api/v1/comments",
-			"time": 127,
-			"responseCode": {
-				"code": 500,
-				"name": "Internal Server Error"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				127
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "f74364db-e3c3-43c1-b48a-ca90b54ed589",
-			"name": "Commentaires par Analyse",
-			"url": "http://localhost:3000/api/v1/comments/analysis/analysis-uuid-here",
-			"time": 9,
-			"responseCode": {
-				"code": 200,
-				"name": "OK"
-			},
-			"tests": {
-				"Status code is 200": true,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 1,
-					"fail": 0
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				9
-			],
-			"allTests": [
-				{
-					"Status code is 200": true,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "854ba48c-a285-4750-81a0-28114387389e",
-			"name": "Commentaire par ID",
-			"url": "http://localhost:3000/api/v1/comments/comment-uuid-here",
-			"time": 5,
-			"responseCode": {
-				"code": 404,
-				"name": "Not Found"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				5
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "3f98d1a5-27cf-481d-8678-1472dca3a8ae",
-			"name": "Mettre à jour Commentaire",
-			"url": "http://localhost:3000/api/v1/comments/comment-uuid-here",
-			"time": 5,
-			"responseCode": {
-				"code": 404,
-				"name": "Not Found"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				5
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "e064585d-9439-44f0-9d6c-d44ab1465750",
-			"name": "Supprimer Commentaire",
-			"url": "http://localhost:3000/api/v1/comments/comment-uuid-here",
-			"time": 5,
-			"responseCode": {
-				"code": 404,
-				"name": "Not Found"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				5
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "db74396a-48cf-4d29-a4b3-4dfc93f042f3",
-			"name": "Envoyer Message",
-			"url": "http://localhost:3000/api/v1/messages",
-			"time": 49,
-			"responseCode": {
-				"code": 404,
-				"name": "Not Found"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				49
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "6b275c19-5252-4096-a22a-2f80c2cff53f",
-			"name": "Conversations",
-			"url": "http://localhost:3000/api/v1/messages/conversations",
-			"time": 11,
-			"responseCode": {
-				"code": 500,
-				"name": "Internal Server Error"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				11
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "f0d9d124-3765-438d-a1e7-29584c607967",
-			"name": "Messages d'une Conversation",
-			"url": "http://localhost:3000/api/v1/messages/conversation/user-uuid-here",
-			"time": 6,
-			"responseCode": {
-				"code": 404,
-				"name": "Not Found"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				6
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "da49b48c-fc4d-4fb4-bc6d-9655e8f72e1b",
-			"name": "Message par ID",
-			"url": "http://localhost:3000/api/v1/messages/message-uuid-here",
-			"time": 8,
-			"responseCode": {
-				"code": 500,
-				"name": "Internal Server Error"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				8
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "d16bb45b-a17a-451e-9f7b-4715dfcc4242",
-			"name": "Marquer comme Lu",
-			"url": "http://localhost:3000/api/v1/messages/message-uuid-here/read",
-			"time": 10,
-			"responseCode": {
-				"code": 500,
-				"name": "Internal Server Error"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				10
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "eefe41db-74e3-42c2-bbb7-c1268af4d5a0",
-			"name": "Messages Non Lus",
-			"url": "http://localhost:3000/api/v1/messages/unread/count",
-			"time": 9,
-			"responseCode": {
-				"code": 500,
-				"name": "Internal Server Error"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				9
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "885fc79f-2a70-405e-b5ad-406b85115670",
-			"name": "Supprimer Message",
-			"url": "http://localhost:3000/api/v1/messages/message-uuid-here",
-			"time": 8,
-			"responseCode": {
-				"code": 500,
-				"name": "Internal Server Error"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				8
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "0cb75329-fd7a-417e-9473-6c0aad0e5d43",
-			"name": "Créer Signalement",
-			"url": "http://localhost:3000/api/v1/reports",
-			"time": 46,
-			"responseCode": {
-				"code": 404,
-				"name": "Not Found"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				46
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "449a0fec-3047-4f47-be02-2684dd5785c5",
-			"name": "Signalement Commentaire",
-			"url": "http://localhost:3000/api/v1/reports",
-			"time": 5,
-			"responseCode": {
-				"code": 404,
-				"name": "Not Found"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				5
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "ab4d36d7-a0d1-43f7-8da5-b0026058b8f5",
-			"name": "Tous les Signalements",
-			"url": "http://localhost:3000/api/v1/reports",
-			"time": 4,
-			"responseCode": {
-				"code": 500,
-				"name": "Internal Server Error"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				4
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "48105d39-df21-482f-a000-d6bc6431e6de",
-			"name": "Signalement par ID",
-			"url": "http://localhost:3000/api/v1/reports/report-uuid-here",
-			"time": 4,
-			"responseCode": {
-				"code": 500,
-				"name": "Internal Server Error"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				4
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "1096fb9e-de07-404f-b748-4c22981a9ad2",
-			"name": "Signalements d'une Analyse",
-			"url": "http://localhost:3000/api/v1/reports/analysis/analysis-uuid-here",
-			"time": 5,
-			"responseCode": {
-				"code": 404,
-				"name": "Not Found"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				5
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "cce801ec-9f0c-441d-a84d-74fd533e3419",
-			"name": "Signalements d'un Commentaire",
-			"url": "http://localhost:3000/api/v1/reports/comment/comment-uuid-here",
-			"time": 5,
-			"responseCode": {
-				"code": 404,
-				"name": "Not Found"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				5
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "1a5eae92-cab3-43f8-8001-32f94e45904a",
-			"name": "Supprimer Signalement",
-			"url": "http://localhost:3000/api/v1/reports/report-uuid-here",
-			"time": 4,
-			"responseCode": {
-				"code": 500,
-				"name": "Internal Server Error"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				4
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "a2abe53f-501c-4173-94d3-046027848b18",
-			"name": "Statistiques Dashboard",
-			"url": "http://localhost:3000/api/v1/admin/stats",
-			"time": 41,
-			"responseCode": {
-				"code": 500,
-				"name": "Internal Server Error"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				41
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "6e8c086a-1ca0-4953-a3a1-63a3125b8918",
-			"name": "Liste Utilisateurs",
-			"url": "http://localhost:3000/api/v1/admin/users",
-			"time": 8,
-			"responseCode": {
-				"code": 500,
-				"name": "Internal Server Error"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				8
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "31336d9d-497c-4c52-8e5d-ff9c746da5bb",
-			"name": "Commentaires Signalés",
-			"url": "http://localhost:3000/api/v1/admin/reported-comments",
-			"time": 8,
-			"responseCode": {
-				"code": 500,
-				"name": "Internal Server Error"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				8
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "ba6120dd-8db2-43ce-9efc-0b75c597e22e",
-			"name": "Analyses Signalées",
-			"url": "http://localhost:3000/api/v1/admin/reported-analyses",
-			"time": 7,
-			"responseCode": {
-				"code": 500,
-				"name": "Internal Server Error"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				7
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "0e7b437b-6900-4449-924a-b76077bd3748",
-			"name": "Supprimer Commentaire",
-			"url": "http://localhost:3000/api/v1/admin/comment/comment-uuid-here",
-			"time": 7,
-			"responseCode": {
-				"code": 500,
-				"name": "Internal Server Error"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				7
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "9170105a-e951-48a3-a7f5-75a9254c27e1",
-			"name": "Supprimer Analyse",
-			"url": "http://localhost:3000/api/v1/admin/analysis/analysis-uuid-here",
-			"time": 8,
-			"responseCode": {
-				"code": 500,
-				"name": "Internal Server Error"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				8
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "12be7763-ddb2-4262-b052-81875ebd3fef",
-			"name": "Avertir Utilisateur",
-			"url": "http://localhost:3000/api/v1/admin/user/user-uuid-here/warn",
-			"time": 8,
-			"responseCode": {
-				"code": 500,
-				"name": "Internal Server Error"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				8
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "1fe56b3c-503b-4029-a8a7-f665a40821cf",
-			"name": "Bannir Utilisateur",
-			"url": "http://localhost:3000/api/v1/admin/user/user-uuid-here/ban",
-			"time": 8,
-			"responseCode": {
-				"code": 500,
-				"name": "Internal Server Error"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				8
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "5a2dc1a0-7547-48f3-821f-ee2bd2a949d2",
-			"name": "Supprimer Utilisateur",
-			"url": "http://localhost:3000/api/v1/admin/user/user-uuid-here",
-			"time": 8,
-			"responseCode": {
-				"code": 500,
-				"name": "Internal Server Error"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				8
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "ab2588fd-b711-4c94-b262-1bac84b89213",
-			"name": "Liste des Analystes",
-			"url": "http://localhost:3000/api/v1/admin/analysts",
-			"time": 9,
-			"responseCode": {
-				"code": 500,
-				"name": "Internal Server Error"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				9
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "2072b55a-0a5a-4684-8f90-3f8d6b82b092",
-			"name": "Ajouter Rôle Analyste",
-			"url": "http://localhost:3000/api/v1/admin/user/user-uuid-here/analyst",
-			"time": 7,
-			"responseCode": {
-				"code": 500,
-				"name": "Internal Server Error"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				7
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		},
-		{
-			"id": "fbe3d16e-83fe-43ee-9bf5-768c3e882510",
-			"name": "Retirer Rôle Analyste",
-			"url": "http://localhost:3000/api/v1/admin/user/user-uuid-here/analyst",
-			"time": 7,
-			"responseCode": {
-				"code": 500,
-				"name": "Internal Server Error"
-			},
-			"tests": {
-				"Status code is 200": false,
-				"Response time is less than 2000ms": true
-			},
-			"testPassFailCounts": {
-				"Status code is 200": {
-					"pass": 0,
-					"fail": 1
-				},
-				"Response time is less than 2000ms": {
-					"pass": 1,
-					"fail": 0
-				}
-			},
-			"times": [
-				7
-			],
-			"allTests": [
-				{
-					"Status code is 200": false,
-					"Response time is less than 2000ms": true
-				}
-			]
-		}
-	],
-	"count": 1,
-	"totalTime": 2050,
-	"collection": {
-		"requests": [
-			{
-				"id": "a466b918-1222-4f99-9378-0911c80a73c6",
-				"method": "GET"
-			},
-			{
-				"id": "c6ef81f2-f09d-407e-bc38-bcf376e3d7ce",
-				"method": "GET"
-			},
-			{
-				"id": "66b81f27-109a-4270-9a8a-58e670500965",
-				"method": "POST"
-			},
-			{
-				"id": "e3032008-4b03-445c-a192-1d39ead37614",
-				"method": "POST"
-			},
-			{
-				"id": "b4fcb488-3977-4289-b3c1-7871e873ef21",
-				"method": "GET"
-			},
-			{
-				"id": "64726b00-4df8-42f1-94e0-29afd25354af",
-				"method": "POST"
-			},
-			{
-				"id": "69e855e9-15f7-4a82-b06e-f822d542edfb",
-				"method": "POST"
-			},
-			{
-				"id": "05260dbe-f692-441c-8e30-4b49a326c987",
-				"method": "GET"
-			},
-			{
-				"id": "4961f09a-68b8-4e1f-8743-5817e5eef0fd",
-				"method": "GET"
-			},
-			{
-				"id": "9af7eea6-61e3-4176-80dd-f3ab55bfca34",
-				"method": "GET"
-			},
-			{
-				"id": "44ca38b9-5588-4b72-bbc0-558f002bdaa8",
-				"method": "GET"
-			},
-			{
-				"id": "9d859890-20e3-47df-9801-44563e4a58b1",
-				"method": "PUT"
-			},
-			{
-				"id": "57143705-1b18-41ee-b119-d6cc7d625233",
-				"method": "PATCH"
-			},
-			{
-				"id": "b45ba9cb-b1f4-43d9-9fc8-5253013b1789",
-				"method": "DELETE"
-			},
-			{
-				"id": "dc8d49ed-f297-4354-9bf8-ea010072ffae",
-				"method": "GET"
-			},
-			{
-				"id": "6a3f2f22-3247-484d-a2f7-71c7ce55ef41",
-				"method": "POST"
-			},
-			{
-				"id": "f9a305d3-300e-4c18-af41-8a92f9f0e727",
-				"method": "GET"
-			},
-			{
-				"id": "17446577-ef20-4b51-8c78-905e9b892ff0",
-				"method": "PUT"
-			},
-			{
-				"id": "082035cd-99cc-43af-b30a-6db185840185",
-				"method": "DELETE"
-			},
-			{
-				"id": "1155bc05-e850-49db-bcd2-b74f1eb11756",
-				"method": "GET"
-			},
-			{
-				"id": "4e7fdf29-d3e1-4e1c-9321-7f64988adba5",
-				"method": "POST"
-			},
-			{
-				"id": "cffc3c60-3432-46d9-9273-d7f9b7d7569e",
-				"method": "GET"
-			},
-			{
-				"id": "aeceffac-3e13-4e40-a3e8-1a7d79dfd629",
-				"method": "PUT"
-			},
-			{
-				"id": "952d4759-9677-424e-a256-eab8b56c19ad",
-				"method": "DELETE"
-			},
-			{
-				"id": "c240018a-4083-4dcd-a695-42e5c7a5e69d",
-				"method": "GET"
-			},
-			{
-				"id": "9702a01b-9d2a-40fc-91f6-98ebd7bebaef",
-				"method": "POST"
-			},
-			{
-				"id": "b416fccd-3004-4bec-b48d-963941e7082c",
-				"method": "GET"
-			},
-			{
-				"id": "84a4cdd6-8bd1-4a44-9f57-5ca48e9036d6",
-				"method": "PUT"
-			},
-			{
-				"id": "c85048c8-a6b2-40ae-8dbf-335818870a17",
-				"method": "DELETE"
-			},
-			{
-				"id": "efeb36b3-4583-4009-9925-53de9f840add",
-				"method": "GET"
-			},
-			{
-				"id": "2fad3c1a-7810-4725-9837-bbc13acdea91",
-				"method": "POST"
-			},
-			{
-				"id": "0f093c03-7406-41ad-8967-82ff6a7cf923",
-				"method": "GET"
-			},
-			{
-				"id": "03991b62-6cec-4c1e-8aa4-1e9f412944e4",
-				"method": "PUT"
-			},
-			{
-				"id": "e97eb0e4-87d6-4c69-acdc-c097f5c34d42",
-				"method": "DELETE"
-			},
-			{
-				"id": "109c49a9-7d66-4fee-ba3b-4aabd7c6df77",
-				"method": "GET"
-			},
-			{
-				"id": "b9041bc3-4fe5-4018-b4a8-60af14bcaa24",
-				"method": "POST"
-			},
-			{
-				"id": "5342e41b-c750-4af2-b931-c4bd86185a76",
-				"method": "GET"
-			},
-			{
-				"id": "ccded9e8-d8db-46f2-acb5-d653fab0ddd1",
-				"method": "PUT"
-			},
-			{
-				"id": "df028ae5-8bda-4186-a59a-bd000e7f3aaf",
-				"method": "DELETE"
-			},
-			{
-				"id": "afb6cb74-13e7-4124-a3e0-eb5654a60f15",
-				"method": "POST"
-			},
-			{
-				"id": "f74364db-e3c3-43c1-b48a-ca90b54ed589",
-				"method": "GET"
-			},
-			{
-				"id": "854ba48c-a285-4750-81a0-28114387389e",
-				"method": "GET"
-			},
-			{
-				"id": "3f98d1a5-27cf-481d-8678-1472dca3a8ae",
-				"method": "PUT"
-			},
-			{
-				"id": "e064585d-9439-44f0-9d6c-d44ab1465750",
-				"method": "DELETE"
-			},
-			{
-				"id": "db74396a-48cf-4d29-a4b3-4dfc93f042f3",
-				"method": "POST"
-			},
-			{
-				"id": "6b275c19-5252-4096-a22a-2f80c2cff53f",
-				"method": "GET"
-			},
-			{
-				"id": "f0d9d124-3765-438d-a1e7-29584c607967",
-				"method": "GET"
-			},
-			{
-				"id": "da49b48c-fc4d-4fb4-bc6d-9655e8f72e1b",
-				"method": "GET"
-			},
-			{
-				"id": "d16bb45b-a17a-451e-9f7b-4715dfcc4242",
-				"method": "PATCH"
-			},
-			{
-				"id": "eefe41db-74e3-42c2-bbb7-c1268af4d5a0",
-				"method": "GET"
-			},
-			{
-				"id": "885fc79f-2a70-405e-b5ad-406b85115670",
-				"method": "DELETE"
-			},
-			{
-				"id": "0cb75329-fd7a-417e-9473-6c0aad0e5d43",
-				"method": "POST"
-			},
-			{
-				"id": "449a0fec-3047-4f47-be02-2684dd5785c5",
-				"method": "POST"
-			},
-			{
-				"id": "ab4d36d7-a0d1-43f7-8da5-b0026058b8f5",
-				"method": "GET"
-			},
-			{
-				"id": "48105d39-df21-482f-a000-d6bc6431e6de",
-				"method": "GET"
-			},
-			{
-				"id": "1096fb9e-de07-404f-b748-4c22981a9ad2",
-				"method": "GET"
-			},
-			{
-				"id": "cce801ec-9f0c-441d-a84d-74fd533e3419",
-				"method": "GET"
-			},
-			{
-				"id": "1a5eae92-cab3-43f8-8001-32f94e45904a",
-				"method": "DELETE"
-			},
-			{
-				"id": "a2abe53f-501c-4173-94d3-046027848b18",
-				"method": "GET"
-			},
-			{
-				"id": "6e8c086a-1ca0-4953-a3a1-63a3125b8918",
-				"method": "GET"
-			},
-			{
-				"id": "31336d9d-497c-4c52-8e5d-ff9c746da5bb",
-				"method": "GET"
-			},
-			{
-				"id": "ba6120dd-8db2-43ce-9efc-0b75c597e22e",
-				"method": "GET"
-			},
-			{
-				"id": "0e7b437b-6900-4449-924a-b76077bd3748",
-				"method": "DELETE"
-			},
-			{
-				"id": "9170105a-e951-48a3-a7f5-75a9254c27e1",
-				"method": "DELETE"
-			},
-			{
-				"id": "12be7763-ddb2-4262-b052-81875ebd3fef",
-				"method": "POST"
-			},
-			{
-				"id": "1fe56b3c-503b-4029-a8a7-f665a40821cf",
-				"method": "POST"
-			},
-			{
-				"id": "5a2dc1a0-7547-48f3-821f-ee2bd2a949d2",
-				"method": "DELETE"
-			},
-			{
-				"id": "ab2588fd-b711-4c94-b262-1bac84b89213",
-				"method": "GET"
-			},
-			{
-				"id": "2072b55a-0a5a-4684-8f90-3f8d6b82b092",
-				"method": "POST"
-			},
-			{
-				"id": "fbe3d16e-83fe-43ee-9bf5-768c3e882510",
-				"method": "DELETE"
-			}
-		]
-	}
+  "id": "76ded4bd-de2f-4839-8b42-41dd24060bd7",
+  "name": "Trading API Backend",
+  "timestamp": "2025-06-28T21:41:28.296Z",
+  "collection_id": "16888366-15e89e09-2c6e-45c7-ab12-64211282f15a",
+  "folder_id": 0,
+  "environment_id": "16888366-4944ac41-c41a-44b0-8a0f-03e803cebd63",
+  "totalPass": 82,
+  "delay": 0,
+  "persist": true,
+  "status": "finished",
+  "startedAt": "2025-06-28T21:41:21.021Z",
+  "totalFail": 58,
+  "results": [
+    {
+      "id": "a466b918-1222-4f99-9378-0911c80a73c6",
+      "name": "Health Check",
+      "url": "http://localhost:3000/health",
+      "time": 19,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "Status code is 200": true,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 1,
+          "fail": 0
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [19],
+      "allTests": [
+        {
+          "Status code is 200": true,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "c6ef81f2-f09d-407e-bc38-bcf376e3d7ce",
+      "name": "API Info",
+      "url": "http://localhost:3000/",
+      "time": 5,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "Status code is 200": true,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 1,
+          "fail": 0
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [5],
+      "allTests": [
+        {
+          "Status code is 200": true,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "66b81f27-109a-4270-9a8a-58e670500965",
+      "name": "Inscription",
+      "url": "http://localhost:3000/api/v1/auth/register",
+      "time": 490,
+      "responseCode": {
+        "code": 201,
+        "name": "Created"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [490],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "e3032008-4b03-445c-a192-1d39ead37614",
+      "name": "Connexion",
+      "url": "http://localhost:3000/api/v1/auth/login",
+      "time": 316,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "Status code is 200": true,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 1,
+          "fail": 0
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [316],
+      "allTests": [
+        {
+          "Status code is 200": true,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "b4fcb488-3977-4289-b3c1-7871e873ef21",
+      "name": "Profil Utilisateur",
+      "url": "http://localhost:3000/api/v1/auth/me",
+      "time": 8,
+      "responseCode": {
+        "code": 404,
+        "name": "Not Found"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [8],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "64726b00-4df8-42f1-94e0-29afd25354af",
+      "name": "Déconnexion",
+      "url": "http://localhost:3000/api/v1/auth/logout",
+      "time": 17,
+      "responseCode": {
+        "code": 500,
+        "name": "Internal Server Error"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [17],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "69e855e9-15f7-4a82-b06e-f822d542edfb",
+      "name": "Créer Utilisateur",
+      "url": "http://localhost:3000/api/v1/users",
+      "time": 336,
+      "responseCode": {
+        "code": 201,
+        "name": "Created"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [336],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "05260dbe-f692-441c-8e30-4b49a326c987",
+      "name": "Liste des Utilisateurs",
+      "url": "http://localhost:3000/api/v1/users?page=1&limit=10",
+      "time": 21,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "Status code is 200": true,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 1,
+          "fail": 0
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [21],
+      "allTests": [
+        {
+          "Status code is 200": true,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "4961f09a-68b8-4e1f-8743-5817e5eef0fd",
+      "name": "Rechercher Utilisateurs",
+      "url": "http://localhost:3000/api/v1/users?search=john",
+      "time": 9,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "Status code is 200": true,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 1,
+          "fail": 0
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [9],
+      "allTests": [
+        {
+          "Status code is 200": true,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "9af7eea6-61e3-4176-80dd-f3ab55bfca34",
+      "name": "Statistiques Utilisateurs",
+      "url": "http://localhost:3000/api/v1/users/stats",
+      "time": 15,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "Status code is 200": true,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 1,
+          "fail": 0
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [15],
+      "allTests": [
+        {
+          "Status code is 200": true,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "44ca38b9-5588-4b72-bbc0-558f002bdaa8",
+      "name": "Utilisateur par ID",
+      "url": "http://localhost:3000/api/v1/users/user-uuid-here",
+      "time": 5,
+      "responseCode": {
+        "code": 400,
+        "name": "Bad Request"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [5],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "9d859890-20e3-47df-9801-44563e4a58b1",
+      "name": "Mettre à jour Utilisateur",
+      "url": "http://localhost:3000/api/v1/users/user-uuid-here",
+      "time": 6,
+      "responseCode": {
+        "code": 400,
+        "name": "Bad Request"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [6],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "57143705-1b18-41ee-b119-d6cc7d625233",
+      "name": "Changer Mot de Passe",
+      "url": "http://localhost:3000/api/v1/users/user-uuid-here/password",
+      "time": 6,
+      "responseCode": {
+        "code": 400,
+        "name": "Bad Request"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [6],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "b45ba9cb-b1f4-43d9-9fc8-5253013b1789",
+      "name": "Supprimer Utilisateur",
+      "url": "http://localhost:3000/api/v1/users/user-uuid-here",
+      "time": 4,
+      "responseCode": {
+        "code": 400,
+        "name": "Bad Request"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [4],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "dc8d49ed-f297-4354-9bf8-ea010072ffae",
+      "name": "Liste des Analyses",
+      "url": "http://localhost:3000/api/v1/analyses",
+      "time": 43,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "Status code is 200": true,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 1,
+          "fail": 0
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [43],
+      "allTests": [
+        {
+          "Status code is 200": true,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "6a3f2f22-3247-484d-a2f7-71c7ce55ef41",
+      "name": "Créer Analyse",
+      "url": "http://localhost:3000/api/v1/analyses",
+      "time": 11,
+      "responseCode": {
+        "code": 500,
+        "name": "Internal Server Error"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [11],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "f9a305d3-300e-4c18-af41-8a92f9f0e727",
+      "name": "Analyse par ID",
+      "url": "http://localhost:3000/api/v1/analyses/analysis-uuid-here",
+      "time": 5,
+      "responseCode": {
+        "code": 404,
+        "name": "Not Found"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [5],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "17446577-ef20-4b51-8c78-905e9b892ff0",
+      "name": "Mettre à jour Analyse",
+      "url": "http://localhost:3000/api/v1/analyses/analysis-uuid-here",
+      "time": 9,
+      "responseCode": {
+        "code": 404,
+        "name": "Not Found"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [9],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "082035cd-99cc-43af-b30a-6db185840185",
+      "name": "Supprimer Analyse",
+      "url": "http://localhost:3000/api/v1/analyses/analysis-uuid-here",
+      "time": 8,
+      "responseCode": {
+        "code": 404,
+        "name": "Not Found"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [8],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "1155bc05-e850-49db-bcd2-b74f1eb11756",
+      "name": "Liste des Trades",
+      "url": "http://localhost:3000/api/v1/trades",
+      "time": 3,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "Status code is 200": true,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 1,
+          "fail": 0
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [3],
+      "allTests": [
+        {
+          "Status code is 200": true,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "4e7fdf29-d3e1-4e1c-9321-7f64988adba5",
+      "name": "Créer Trade",
+      "url": "http://localhost:3000/api/v1/trades",
+      "time": 4,
+      "responseCode": {
+        "code": 404,
+        "name": "Not Found"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [4],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "cffc3c60-3432-46d9-9273-d7f9b7d7569e",
+      "name": "Trade par ID",
+      "url": "http://localhost:3000/api/v1/trades/trade-uuid-here",
+      "time": 3,
+      "responseCode": {
+        "code": 404,
+        "name": "Not Found"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [3],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "aeceffac-3e13-4e40-a3e8-1a7d79dfd629",
+      "name": "Mettre à jour Trade",
+      "url": "http://localhost:3000/api/v1/trades/trade-uuid-here",
+      "time": 3,
+      "responseCode": {
+        "code": 404,
+        "name": "Not Found"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [3],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "952d4759-9677-424e-a256-eab8b56c19ad",
+      "name": "Supprimer Trade",
+      "url": "http://localhost:3000/api/v1/trades/trade-uuid-here",
+      "time": 3,
+      "responseCode": {
+        "code": 404,
+        "name": "Not Found"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [3],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "c240018a-4083-4dcd-a695-42e5c7a5e69d",
+      "name": "Liste des Comptes",
+      "url": "http://localhost:3000/api/v1/accounts",
+      "time": 42,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "Status code is 200": true,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 1,
+          "fail": 0
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [42],
+      "allTests": [
+        {
+          "Status code is 200": true,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "9702a01b-9d2a-40fc-91f6-98ebd7bebaef",
+      "name": "Créer Compte",
+      "url": "http://localhost:3000/api/v1/accounts",
+      "time": 12,
+      "responseCode": {
+        "code": 500,
+        "name": "Internal Server Error"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [12],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "b416fccd-3004-4bec-b48d-963941e7082c",
+      "name": "Compte par ID",
+      "url": "http://localhost:3000/api/v1/accounts/account-uuid-here",
+      "time": 5,
+      "responseCode": {
+        "code": 404,
+        "name": "Not Found"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [5],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "84a4cdd6-8bd1-4a44-9f57-5ca48e9036d6",
+      "name": "Mettre à jour Compte",
+      "url": "http://localhost:3000/api/v1/accounts/account-uuid-here",
+      "time": 14,
+      "responseCode": {
+        "code": 500,
+        "name": "Internal Server Error"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [14],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "c85048c8-a6b2-40ae-8dbf-335818870a17",
+      "name": "Supprimer Compte",
+      "url": "http://localhost:3000/api/v1/accounts/account-uuid-here",
+      "time": 10,
+      "responseCode": {
+        "code": 500,
+        "name": "Internal Server Error"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [10],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "efeb36b3-4583-4009-9925-53de9f840add",
+      "name": "Liste des Devises",
+      "url": "http://localhost:3000/api/v1/currencies",
+      "time": 51,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "Status code is 200": true,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 1,
+          "fail": 0
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [51],
+      "allTests": [
+        {
+          "Status code is 200": true,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "2fad3c1a-7810-4725-9837-bbc13acdea91",
+      "name": "Créer Devise",
+      "url": "http://localhost:3000/api/v1/currencies",
+      "time": 9,
+      "responseCode": {
+        "code": 201,
+        "name": "Created"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [9],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "0f093c03-7406-41ad-8967-82ff6a7cf923",
+      "name": "Devise par ID",
+      "url": "http://localhost:3000/api/v1/currencies/currency-uuid-here",
+      "time": 6,
+      "responseCode": {
+        "code": 404,
+        "name": "Not Found"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [6],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "03991b62-6cec-4c1e-8aa4-1e9f412944e4",
+      "name": "Mettre à jour Devise",
+      "url": "http://localhost:3000/api/v1/currencies/currency-uuid-here",
+      "time": 11,
+      "responseCode": {
+        "code": 404,
+        "name": "Not Found"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [11],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "e97eb0e4-87d6-4c69-acdc-c097f5c34d42",
+      "name": "Supprimer Devise",
+      "url": "http://localhost:3000/api/v1/currencies/currency-uuid-here",
+      "time": 8,
+      "responseCode": {
+        "code": 404,
+        "name": "Not Found"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [8],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "109c49a9-7d66-4fee-ba3b-4aabd7c6df77",
+      "name": "Liste des Prop Firms",
+      "url": "http://localhost:3000/api/v1/prop-firms",
+      "time": 41,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "Status code is 200": true,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 1,
+          "fail": 0
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [41],
+      "allTests": [
+        {
+          "Status code is 200": true,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "b9041bc3-4fe5-4018-b4a8-60af14bcaa24",
+      "name": "Créer Prop Firm",
+      "url": "http://localhost:3000/api/v1/prop-firms",
+      "time": 12,
+      "responseCode": {
+        "code": 201,
+        "name": "Created"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [12],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "5342e41b-c750-4af2-b931-c4bd86185a76",
+      "name": "Prop Firm par ID",
+      "url": "http://localhost:3000/api/v1/prop-firms/propfirm-uuid-here",
+      "time": 4,
+      "responseCode": {
+        "code": 404,
+        "name": "Not Found"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [4],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "ccded9e8-d8db-46f2-acb5-d653fab0ddd1",
+      "name": "Mettre à jour Prop Firm",
+      "url": "http://localhost:3000/api/v1/prop-firms/propfirm-uuid-here",
+      "time": 11,
+      "responseCode": {
+        "code": 404,
+        "name": "Not Found"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [11],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "df028ae5-8bda-4186-a59a-bd000e7f3aaf",
+      "name": "Supprimer Prop Firm",
+      "url": "http://localhost:3000/api/v1/prop-firms/propfirm-uuid-here",
+      "time": 14,
+      "responseCode": {
+        "code": 404,
+        "name": "Not Found"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [14],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "afb6cb74-13e7-4124-a3e0-eb5654a60f15",
+      "name": "Créer Commentaire",
+      "url": "http://localhost:3000/api/v1/comments",
+      "time": 127,
+      "responseCode": {
+        "code": 500,
+        "name": "Internal Server Error"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [127],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "f74364db-e3c3-43c1-b48a-ca90b54ed589",
+      "name": "Commentaires par Analyse",
+      "url": "http://localhost:3000/api/v1/comments/analysis/analysis-uuid-here",
+      "time": 9,
+      "responseCode": {
+        "code": 200,
+        "name": "OK"
+      },
+      "tests": {
+        "Status code is 200": true,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 1,
+          "fail": 0
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [9],
+      "allTests": [
+        {
+          "Status code is 200": true,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "854ba48c-a285-4750-81a0-28114387389e",
+      "name": "Commentaire par ID",
+      "url": "http://localhost:3000/api/v1/comments/comment-uuid-here",
+      "time": 5,
+      "responseCode": {
+        "code": 404,
+        "name": "Not Found"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [5],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "3f98d1a5-27cf-481d-8678-1472dca3a8ae",
+      "name": "Mettre à jour Commentaire",
+      "url": "http://localhost:3000/api/v1/comments/comment-uuid-here",
+      "time": 5,
+      "responseCode": {
+        "code": 404,
+        "name": "Not Found"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [5],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "e064585d-9439-44f0-9d6c-d44ab1465750",
+      "name": "Supprimer Commentaire",
+      "url": "http://localhost:3000/api/v1/comments/comment-uuid-here",
+      "time": 5,
+      "responseCode": {
+        "code": 404,
+        "name": "Not Found"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [5],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "db74396a-48cf-4d29-a4b3-4dfc93f042f3",
+      "name": "Envoyer Message",
+      "url": "http://localhost:3000/api/v1/messages",
+      "time": 49,
+      "responseCode": {
+        "code": 404,
+        "name": "Not Found"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [49],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "6b275c19-5252-4096-a22a-2f80c2cff53f",
+      "name": "Conversations",
+      "url": "http://localhost:3000/api/v1/messages/conversations",
+      "time": 11,
+      "responseCode": {
+        "code": 500,
+        "name": "Internal Server Error"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [11],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "f0d9d124-3765-438d-a1e7-29584c607967",
+      "name": "Messages d'une Conversation",
+      "url": "http://localhost:3000/api/v1/messages/conversation/user-uuid-here",
+      "time": 6,
+      "responseCode": {
+        "code": 404,
+        "name": "Not Found"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [6],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "da49b48c-fc4d-4fb4-bc6d-9655e8f72e1b",
+      "name": "Message par ID",
+      "url": "http://localhost:3000/api/v1/messages/message-uuid-here",
+      "time": 8,
+      "responseCode": {
+        "code": 500,
+        "name": "Internal Server Error"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [8],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "d16bb45b-a17a-451e-9f7b-4715dfcc4242",
+      "name": "Marquer comme Lu",
+      "url": "http://localhost:3000/api/v1/messages/message-uuid-here/read",
+      "time": 10,
+      "responseCode": {
+        "code": 500,
+        "name": "Internal Server Error"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [10],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "eefe41db-74e3-42c2-bbb7-c1268af4d5a0",
+      "name": "Messages Non Lus",
+      "url": "http://localhost:3000/api/v1/messages/unread/count",
+      "time": 9,
+      "responseCode": {
+        "code": 500,
+        "name": "Internal Server Error"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [9],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "885fc79f-2a70-405e-b5ad-406b85115670",
+      "name": "Supprimer Message",
+      "url": "http://localhost:3000/api/v1/messages/message-uuid-here",
+      "time": 8,
+      "responseCode": {
+        "code": 500,
+        "name": "Internal Server Error"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [8],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "0cb75329-fd7a-417e-9473-6c0aad0e5d43",
+      "name": "Créer Signalement",
+      "url": "http://localhost:3000/api/v1/reports",
+      "time": 46,
+      "responseCode": {
+        "code": 404,
+        "name": "Not Found"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [46],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "449a0fec-3047-4f47-be02-2684dd5785c5",
+      "name": "Signalement Commentaire",
+      "url": "http://localhost:3000/api/v1/reports",
+      "time": 5,
+      "responseCode": {
+        "code": 404,
+        "name": "Not Found"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [5],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "ab4d36d7-a0d1-43f7-8da5-b0026058b8f5",
+      "name": "Tous les Signalements",
+      "url": "http://localhost:3000/api/v1/reports",
+      "time": 4,
+      "responseCode": {
+        "code": 500,
+        "name": "Internal Server Error"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [4],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "48105d39-df21-482f-a000-d6bc6431e6de",
+      "name": "Signalement par ID",
+      "url": "http://localhost:3000/api/v1/reports/report-uuid-here",
+      "time": 4,
+      "responseCode": {
+        "code": 500,
+        "name": "Internal Server Error"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [4],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "1096fb9e-de07-404f-b748-4c22981a9ad2",
+      "name": "Signalements d'une Analyse",
+      "url": "http://localhost:3000/api/v1/reports/analysis/analysis-uuid-here",
+      "time": 5,
+      "responseCode": {
+        "code": 404,
+        "name": "Not Found"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [5],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "cce801ec-9f0c-441d-a84d-74fd533e3419",
+      "name": "Signalements d'un Commentaire",
+      "url": "http://localhost:3000/api/v1/reports/comment/comment-uuid-here",
+      "time": 5,
+      "responseCode": {
+        "code": 404,
+        "name": "Not Found"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [5],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "1a5eae92-cab3-43f8-8001-32f94e45904a",
+      "name": "Supprimer Signalement",
+      "url": "http://localhost:3000/api/v1/reports/report-uuid-here",
+      "time": 4,
+      "responseCode": {
+        "code": 500,
+        "name": "Internal Server Error"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [4],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "a2abe53f-501c-4173-94d3-046027848b18",
+      "name": "Statistiques Dashboard",
+      "url": "http://localhost:3000/api/v1/admin/stats",
+      "time": 41,
+      "responseCode": {
+        "code": 500,
+        "name": "Internal Server Error"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [41],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "6e8c086a-1ca0-4953-a3a1-63a3125b8918",
+      "name": "Liste Utilisateurs",
+      "url": "http://localhost:3000/api/v1/admin/users",
+      "time": 8,
+      "responseCode": {
+        "code": 500,
+        "name": "Internal Server Error"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [8],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "31336d9d-497c-4c52-8e5d-ff9c746da5bb",
+      "name": "Commentaires Signalés",
+      "url": "http://localhost:3000/api/v1/admin/reported-comments",
+      "time": 8,
+      "responseCode": {
+        "code": 500,
+        "name": "Internal Server Error"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [8],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "ba6120dd-8db2-43ce-9efc-0b75c597e22e",
+      "name": "Analyses Signalées",
+      "url": "http://localhost:3000/api/v1/admin/reported-analyses",
+      "time": 7,
+      "responseCode": {
+        "code": 500,
+        "name": "Internal Server Error"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [7],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "0e7b437b-6900-4449-924a-b76077bd3748",
+      "name": "Supprimer Commentaire",
+      "url": "http://localhost:3000/api/v1/admin/comment/comment-uuid-here",
+      "time": 7,
+      "responseCode": {
+        "code": 500,
+        "name": "Internal Server Error"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [7],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "9170105a-e951-48a3-a7f5-75a9254c27e1",
+      "name": "Supprimer Analyse",
+      "url": "http://localhost:3000/api/v1/admin/analysis/analysis-uuid-here",
+      "time": 8,
+      "responseCode": {
+        "code": 500,
+        "name": "Internal Server Error"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [8],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "12be7763-ddb2-4262-b052-81875ebd3fef",
+      "name": "Avertir Utilisateur",
+      "url": "http://localhost:3000/api/v1/admin/user/user-uuid-here/warn",
+      "time": 8,
+      "responseCode": {
+        "code": 500,
+        "name": "Internal Server Error"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [8],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "1fe56b3c-503b-4029-a8a7-f665a40821cf",
+      "name": "Bannir Utilisateur",
+      "url": "http://localhost:3000/api/v1/admin/user/user-uuid-here/ban",
+      "time": 8,
+      "responseCode": {
+        "code": 500,
+        "name": "Internal Server Error"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [8],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "5a2dc1a0-7547-48f3-821f-ee2bd2a949d2",
+      "name": "Supprimer Utilisateur",
+      "url": "http://localhost:3000/api/v1/admin/user/user-uuid-here",
+      "time": 8,
+      "responseCode": {
+        "code": 500,
+        "name": "Internal Server Error"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [8],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "ab2588fd-b711-4c94-b262-1bac84b89213",
+      "name": "Liste des Analystes",
+      "url": "http://localhost:3000/api/v1/admin/analysts",
+      "time": 9,
+      "responseCode": {
+        "code": 500,
+        "name": "Internal Server Error"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [9],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "2072b55a-0a5a-4684-8f90-3f8d6b82b092",
+      "name": "Ajouter Rôle Analyste",
+      "url": "http://localhost:3000/api/v1/admin/user/user-uuid-here/analyst",
+      "time": 7,
+      "responseCode": {
+        "code": 500,
+        "name": "Internal Server Error"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [7],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    },
+    {
+      "id": "fbe3d16e-83fe-43ee-9bf5-768c3e882510",
+      "name": "Retirer Rôle Analyste",
+      "url": "http://localhost:3000/api/v1/admin/user/user-uuid-here/analyst",
+      "time": 7,
+      "responseCode": {
+        "code": 500,
+        "name": "Internal Server Error"
+      },
+      "tests": {
+        "Status code is 200": false,
+        "Response time is less than 2000ms": true
+      },
+      "testPassFailCounts": {
+        "Status code is 200": {
+          "pass": 0,
+          "fail": 1
+        },
+        "Response time is less than 2000ms": {
+          "pass": 1,
+          "fail": 0
+        }
+      },
+      "times": [7],
+      "allTests": [
+        {
+          "Status code is 200": false,
+          "Response time is less than 2000ms": true
+        }
+      ]
+    }
+  ],
+  "count": 1,
+  "totalTime": 2050,
+  "collection": {
+    "requests": [
+      {
+        "id": "a466b918-1222-4f99-9378-0911c80a73c6",
+        "method": "GET"
+      },
+      {
+        "id": "c6ef81f2-f09d-407e-bc38-bcf376e3d7ce",
+        "method": "GET"
+      },
+      {
+        "id": "66b81f27-109a-4270-9a8a-58e670500965",
+        "method": "POST"
+      },
+      {
+        "id": "e3032008-4b03-445c-a192-1d39ead37614",
+        "method": "POST"
+      },
+      {
+        "id": "b4fcb488-3977-4289-b3c1-7871e873ef21",
+        "method": "GET"
+      },
+      {
+        "id": "64726b00-4df8-42f1-94e0-29afd25354af",
+        "method": "POST"
+      },
+      {
+        "id": "69e855e9-15f7-4a82-b06e-f822d542edfb",
+        "method": "POST"
+      },
+      {
+        "id": "05260dbe-f692-441c-8e30-4b49a326c987",
+        "method": "GET"
+      },
+      {
+        "id": "4961f09a-68b8-4e1f-8743-5817e5eef0fd",
+        "method": "GET"
+      },
+      {
+        "id": "9af7eea6-61e3-4176-80dd-f3ab55bfca34",
+        "method": "GET"
+      },
+      {
+        "id": "44ca38b9-5588-4b72-bbc0-558f002bdaa8",
+        "method": "GET"
+      },
+      {
+        "id": "9d859890-20e3-47df-9801-44563e4a58b1",
+        "method": "PUT"
+      },
+      {
+        "id": "57143705-1b18-41ee-b119-d6cc7d625233",
+        "method": "PATCH"
+      },
+      {
+        "id": "b45ba9cb-b1f4-43d9-9fc8-5253013b1789",
+        "method": "DELETE"
+      },
+      {
+        "id": "dc8d49ed-f297-4354-9bf8-ea010072ffae",
+        "method": "GET"
+      },
+      {
+        "id": "6a3f2f22-3247-484d-a2f7-71c7ce55ef41",
+        "method": "POST"
+      },
+      {
+        "id": "f9a305d3-300e-4c18-af41-8a92f9f0e727",
+        "method": "GET"
+      },
+      {
+        "id": "17446577-ef20-4b51-8c78-905e9b892ff0",
+        "method": "PUT"
+      },
+      {
+        "id": "082035cd-99cc-43af-b30a-6db185840185",
+        "method": "DELETE"
+      },
+      {
+        "id": "1155bc05-e850-49db-bcd2-b74f1eb11756",
+        "method": "GET"
+      },
+      {
+        "id": "4e7fdf29-d3e1-4e1c-9321-7f64988adba5",
+        "method": "POST"
+      },
+      {
+        "id": "cffc3c60-3432-46d9-9273-d7f9b7d7569e",
+        "method": "GET"
+      },
+      {
+        "id": "aeceffac-3e13-4e40-a3e8-1a7d79dfd629",
+        "method": "PUT"
+      },
+      {
+        "id": "952d4759-9677-424e-a256-eab8b56c19ad",
+        "method": "DELETE"
+      },
+      {
+        "id": "c240018a-4083-4dcd-a695-42e5c7a5e69d",
+        "method": "GET"
+      },
+      {
+        "id": "9702a01b-9d2a-40fc-91f6-98ebd7bebaef",
+        "method": "POST"
+      },
+      {
+        "id": "b416fccd-3004-4bec-b48d-963941e7082c",
+        "method": "GET"
+      },
+      {
+        "id": "84a4cdd6-8bd1-4a44-9f57-5ca48e9036d6",
+        "method": "PUT"
+      },
+      {
+        "id": "c85048c8-a6b2-40ae-8dbf-335818870a17",
+        "method": "DELETE"
+      },
+      {
+        "id": "efeb36b3-4583-4009-9925-53de9f840add",
+        "method": "GET"
+      },
+      {
+        "id": "2fad3c1a-7810-4725-9837-bbc13acdea91",
+        "method": "POST"
+      },
+      {
+        "id": "0f093c03-7406-41ad-8967-82ff6a7cf923",
+        "method": "GET"
+      },
+      {
+        "id": "03991b62-6cec-4c1e-8aa4-1e9f412944e4",
+        "method": "PUT"
+      },
+      {
+        "id": "e97eb0e4-87d6-4c69-acdc-c097f5c34d42",
+        "method": "DELETE"
+      },
+      {
+        "id": "109c49a9-7d66-4fee-ba3b-4aabd7c6df77",
+        "method": "GET"
+      },
+      {
+        "id": "b9041bc3-4fe5-4018-b4a8-60af14bcaa24",
+        "method": "POST"
+      },
+      {
+        "id": "5342e41b-c750-4af2-b931-c4bd86185a76",
+        "method": "GET"
+      },
+      {
+        "id": "ccded9e8-d8db-46f2-acb5-d653fab0ddd1",
+        "method": "PUT"
+      },
+      {
+        "id": "df028ae5-8bda-4186-a59a-bd000e7f3aaf",
+        "method": "DELETE"
+      },
+      {
+        "id": "afb6cb74-13e7-4124-a3e0-eb5654a60f15",
+        "method": "POST"
+      },
+      {
+        "id": "f74364db-e3c3-43c1-b48a-ca90b54ed589",
+        "method": "GET"
+      },
+      {
+        "id": "854ba48c-a285-4750-81a0-28114387389e",
+        "method": "GET"
+      },
+      {
+        "id": "3f98d1a5-27cf-481d-8678-1472dca3a8ae",
+        "method": "PUT"
+      },
+      {
+        "id": "e064585d-9439-44f0-9d6c-d44ab1465750",
+        "method": "DELETE"
+      },
+      {
+        "id": "db74396a-48cf-4d29-a4b3-4dfc93f042f3",
+        "method": "POST"
+      },
+      {
+        "id": "6b275c19-5252-4096-a22a-2f80c2cff53f",
+        "method": "GET"
+      },
+      {
+        "id": "f0d9d124-3765-438d-a1e7-29584c607967",
+        "method": "GET"
+      },
+      {
+        "id": "da49b48c-fc4d-4fb4-bc6d-9655e8f72e1b",
+        "method": "GET"
+      },
+      {
+        "id": "d16bb45b-a17a-451e-9f7b-4715dfcc4242",
+        "method": "PATCH"
+      },
+      {
+        "id": "eefe41db-74e3-42c2-bbb7-c1268af4d5a0",
+        "method": "GET"
+      },
+      {
+        "id": "885fc79f-2a70-405e-b5ad-406b85115670",
+        "method": "DELETE"
+      },
+      {
+        "id": "0cb75329-fd7a-417e-9473-6c0aad0e5d43",
+        "method": "POST"
+      },
+      {
+        "id": "449a0fec-3047-4f47-be02-2684dd5785c5",
+        "method": "POST"
+      },
+      {
+        "id": "ab4d36d7-a0d1-43f7-8da5-b0026058b8f5",
+        "method": "GET"
+      },
+      {
+        "id": "48105d39-df21-482f-a000-d6bc6431e6de",
+        "method": "GET"
+      },
+      {
+        "id": "1096fb9e-de07-404f-b748-4c22981a9ad2",
+        "method": "GET"
+      },
+      {
+        "id": "cce801ec-9f0c-441d-a84d-74fd533e3419",
+        "method": "GET"
+      },
+      {
+        "id": "1a5eae92-cab3-43f8-8001-32f94e45904a",
+        "method": "DELETE"
+      },
+      {
+        "id": "a2abe53f-501c-4173-94d3-046027848b18",
+        "method": "GET"
+      },
+      {
+        "id": "6e8c086a-1ca0-4953-a3a1-63a3125b8918",
+        "method": "GET"
+      },
+      {
+        "id": "31336d9d-497c-4c52-8e5d-ff9c746da5bb",
+        "method": "GET"
+      },
+      {
+        "id": "ba6120dd-8db2-43ce-9efc-0b75c597e22e",
+        "method": "GET"
+      },
+      {
+        "id": "0e7b437b-6900-4449-924a-b76077bd3748",
+        "method": "DELETE"
+      },
+      {
+        "id": "9170105a-e951-48a3-a7f5-75a9254c27e1",
+        "method": "DELETE"
+      },
+      {
+        "id": "12be7763-ddb2-4262-b052-81875ebd3fef",
+        "method": "POST"
+      },
+      {
+        "id": "1fe56b3c-503b-4029-a8a7-f665a40821cf",
+        "method": "POST"
+      },
+      {
+        "id": "5a2dc1a0-7547-48f3-821f-ee2bd2a949d2",
+        "method": "DELETE"
+      },
+      {
+        "id": "ab2588fd-b711-4c94-b262-1bac84b89213",
+        "method": "GET"
+      },
+      {
+        "id": "2072b55a-0a5a-4684-8f90-3f8d6b82b092",
+        "method": "POST"
+      },
+      {
+        "id": "fbe3d16e-83fe-43ee-9bf5-768c3e882510",
+        "method": "DELETE"
+      }
+    ]
+  }
 }

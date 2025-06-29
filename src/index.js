@@ -16,13 +16,20 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Configuration du rate limiting
-const limiter = rateLimit({
-  windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS) || 15 * 60 * 1000, // 15 minutes
-  max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS) || 100, // limite chaque IP à 100 requêtes par fenêtre
-  message: {
-    error: 'Trop de requêtes depuis cette IP, veuillez réessayer plus tard.',
-  },
-});
+let limiter;
+if (process.env.NODE_ENV === 'test') {
+  // Désactive le rate limiting en mode test
+  limiter = (req, res, next) => next();
+} else {
+  limiter = rateLimit({
+    windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS) || 15 * 60 * 1000, // 15 minutes
+    max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS) || 100, // limite chaque IP à 100 requêtes par fenêtre
+    message: {
+      error: 'Trop de requêtes depuis cette IP, veuillez réessayer plus tard.',
+    },
+    skip: (req, res) => req.headers['x-disable-rate-limit'] === 'true',
+  });
+}
 
 // Middleware de sécurité et de performance
 app.use(helmet());

@@ -15,13 +15,11 @@ exports.createPropFirm = async (req, res) => {
     });
     res.status(201).json({ success: true, data: propFirm });
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: 'Erreur serveur',
-        error: error.message,
-      });
+    res.status(500).json({
+      success: false,
+      message: 'Erreur serveur',
+      error: error.message,
+    });
   }
 };
 
@@ -31,13 +29,11 @@ exports.getAllPropFirms = async (req, res) => {
     const propFirms = await prisma.propFirm.findMany();
     res.json({ success: true, data: propFirms });
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: 'Erreur serveur',
-        error: error.message,
-      });
+    res.status(500).json({
+      success: false,
+      message: 'Erreur serveur',
+      error: error.message,
+    });
   }
 };
 
@@ -55,13 +51,11 @@ exports.getPropFirmById = async (req, res) => {
     }
     res.json({ success: true, data: propFirm });
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: 'Erreur serveur',
-        error: error.message,
-      });
+    res.status(500).json({
+      success: false,
+      message: 'Erreur serveur',
+      error: error.message,
+    });
   }
 };
 
@@ -81,13 +75,11 @@ exports.updatePropFirm = async (req, res) => {
         .status(404)
         .json({ success: false, message: 'Firme de trading non trouvée' });
     }
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: 'Erreur serveur',
-        error: error.message,
-      });
+    res.status(500).json({
+      success: false,
+      message: 'Erreur serveur',
+      error: error.message,
+    });
   }
 };
 
@@ -103,12 +95,10 @@ exports.deletePropFirm = async (req, res) => {
         .status(404)
         .json({ success: false, message: 'Firme de trading non trouvée' });
     }
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: 'Erreur serveur',
-        error: error.message,
-      });
+    res.status(500).json({
+      success: false,
+      message: 'Erreur serveur',
+      error: error.message,
+    });
   }
 };

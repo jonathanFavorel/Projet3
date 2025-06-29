@@ -10,7 +10,7 @@ services:
       POSTGRES_USER: trading_user
       POSTGRES_PASSWORD: trading_password
     ports:
-      - "5432:5432"
+      - '5432:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
@@ -29,7 +29,7 @@ services:
       DATABASE_URL: postgresql://trading_user:trading_password@postgres:5432/trading_db
       PORT: 3000
     ports:
-      - "3000:3000"
+      - '3000:3000'
     volumes:
       - .:/app
       - /app/node_modules
@@ -48,7 +48,7 @@ services:
       PGADMIN_DEFAULT_EMAIL: admin@trading.com
       PGADMIN_DEFAULT_PASSWORD: admin123
     ports:
-      - "5050:80"
+      - '5050:80'
     volumes:
       - pgadmin_data:/var/lib/pgadmin
     depends_on:
@@ -63,4 +63,4 @@ volumes:
 
 networks:
   trading_network:
-    driver: bridge 
+    driver: bridge

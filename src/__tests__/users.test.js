@@ -6,76 +6,181 @@ const jwt = require('jsonwebtoken');
 
 const prisma = new PrismaClient();
 
-describe('Users API', () => {
-  let authToken;
-  let testUserId;
-  let testUserData;
+describe('Users System', () => {
+  let token;
+  let userId;
 
-  beforeAll(async () => {
-    // Nettoyer tous les utilisateurs de test potentiels
-    await prisma.user.deleteMany({
-      where: {
-        OR: [
-          { email: 'test@example.com' },
-          { email: 'newuser@example.com' },
-          { email: 'updateuser@example.com' },
-          { email: 'deleteuser@example.com' },
-          { nameTag: 'testuser' },
-          { nameTag: 'newuser' },
-          { nameTag: 'updateuser' },
-          { nameTag: 'deleteuser' },
-        ],
-      },
-    });
+  beforeEach(async () => {
+    // Générer des identifiants uniques pour chaque test
+    const timestamp = Math.floor(Date.now() + Math.random() * 1000000)
+      .toString()
+      .replace(/\./g, '_');
+    const email = `user${timestamp}@test.com`;
+    const password = 'Test1234!';
 
-    // Créer un utilisateur de test pour l'authentification
-    const hashedPassword = await bcrypt.hash('TestPassword123!', 12);
-    const testUser = await prisma.user.create({
-      data: {
-        nameTag: 'testuser',
+    // Créer l'utilisateur via l'API
+    const registerRes = await request(app)
+      .post('/api/v1/auth/register')
+      .send({
+        nameTag: `user_${timestamp}`,
         firstname: 'Test',
         lastname: 'User',
-        email: 'test@example.com',
-        password: hashedPassword,
-        isConnected: false,
-      },
-    });
+        email,
+        password,
+      });
 
-    // Générer un token JWT
-    authToken = jwt.sign(
-      { userId: testUser.idUser, email: testUser.email },
-      process.env.JWT_SECRET || 'your-secret-key',
-      { expiresIn: '1h' }
-    );
+    if (registerRes.statusCode !== 201) {
+      throw new Error(
+        `Échec création utilisateur: ${JSON.stringify(registerRes.body)}`
+      );
+    }
 
-    testUserId = testUser.idUser;
-    testUserData = testUser;
+    userId = registerRes.body.data.user.idUser;
+
+    // Se connecter pour obtenir le token
+    const loginRes = await request(app)
+      .post('/api/v1/auth/login')
+      .send({ email, password });
+
+    if (loginRes.statusCode !== 200 || !loginRes.body.data.token) {
+      throw new Error(
+        `Échec connexion utilisateur: ${JSON.stringify(loginRes.body)}`
+      );
+    }
+
+    token = loginRes.body.data.token;
   });
 
-  afterAll(async () => {
-    // Nettoyer tous les utilisateurs de test créés
-    await prisma.user.deleteMany({
-      where: {
-        OR: [
-          { email: 'test@example.com' },
-          { email: 'newuser@example.com' },
-          { email: 'updateuser@example.com' },
-          { email: 'deleteuser@example.com' },
-          { nameTag: 'testuser' },
-          { nameTag: 'newuser' },
-          { nameTag: 'updateuser' },
-          { nameTag: 'deleteuser' },
-        ],
-      },
-    });
-    await prisma.$disconnect();
+  it('récupère le profil utilisateur', async () => {
+    const res = await request(app)
+      .get(`/api/v1/users/${userId}`)
+      .set('Authorization', `Bearer ${token}`);
+    expect(res.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(res.body.data.idUser).toBe(userId);
+  });
+
+  it('met à jour le profil utilisateur', async () => {
+    const res = await request(app)
+      .put(`/api/v1/users/${userId}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        firstname: 'Nouveau',
+        lastname: 'Nom',
+        bio: 'Nouvelle bio',
+      });
+    expect(res.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(res.body.data.firstname).toBe('Nouveau');
+    expect(res.body.data.lastname).toBe('Nom');
+  });
+
+  it('change le mot de passe', async () => {
+    const res = await request(app)
+      .patch(`/api/v1/users/${userId}/password`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        currentPassword: 'Test1234!',
+        newPassword: 'Nouveau1234!',
+      });
+    expect(res.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
+  });
+
+  it('supprime le compte utilisateur', async () => {
+    const res = await request(app)
+      .delete(`/api/v1/users/${userId}`)
+      .set('Authorization', `Bearer ${token}`);
+    expect(res.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
+  });
+
+  it('erreur accès sans authentification', async () => {
+    const res = await request(app).get(
+      '/api/v1/users/00000000-0000-0000-0000-000000000000'
+    );
+    expect(res.statusCode).toBe(401);
+  });
+
+  it('erreur changement mot de passe incorrect', async () => {
+    const res = await request(app)
+      .patch(`/api/v1/users/${userId}/password`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        currentPassword: 'MotDePasseIncorrect',
+        newPassword: 'Nouveau1234!',
+      });
+    expect(res.statusCode).toBe(401);
+    expect(res.body.success).toBe(false);
+  });
+
+  it('erreur mise à jour email déjà utilisé', async () => {
+    // Créer un autre utilisateur
+    const timestamp = Math.floor(Date.now() + Math.random() * 1000000)
+      .toString()
+      .replace(/\./g, '_');
+    const otherUserEmail = `other${timestamp}@test.com`;
+
+    await request(app)
+      .post('/api/v1/auth/register')
+      .send({
+        nameTag: `otheruser_${timestamp}`,
+        firstname: 'Other',
+        lastname: 'User',
+        email: otherUserEmail,
+        password: 'Test1234!',
+      });
+
+    const res = await request(app)
+      .put(`/api/v1/users/${userId}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({ email: otherUserEmail });
+    expect(res.statusCode).toBe(409);
+    expect(res.body.success).toBe(false);
+  });
+});
+
+describe('Users API', () => {
+  beforeEach(async () => {
+    // Créer un utilisateur de test unique pour chaque test
+    const timestamp = Date.now();
+    const email = `testuser${timestamp}@test.com`;
+    const registerRes = await request(app)
+      .post('/api/v1/auth/register')
+      .send({
+        nameTag: `testuser_${timestamp}`,
+        firstname: 'Test',
+        lastname: 'User',
+        email,
+        password: 'TestPassword123!',
+      });
+
+    if (registerRes.statusCode !== 201) {
+      throw new Error(
+        `Échec création utilisateur de test: ${JSON.stringify(registerRes.body)}`
+      );
+    }
+
+    // Se connecter pour obtenir le token
+    const loginRes = await request(app)
+      .post('/api/v1/auth/login')
+      .send({ email, password: 'TestPassword123!' });
+
+    if (loginRes.statusCode !== 200) {
+      throw new Error('Échec login utilisateur de test');
+    }
+
+    // Stocker les données pour les tests
+    this.testUser = registerRes.body.data.user;
+    this.testToken = loginRes.body.data.token;
+    this.testUserId = this.testUser.idUser;
   });
 
   describe('GET /api/v1/users', () => {
     test('should get all users with pagination', async () => {
       const response = await request(app)
         .get('/api/v1/users?page=1&limit=5')
-        .set('Authorization', `Bearer ${authToken}`)
+        .set('Authorization', `Bearer ${this.testToken}`)
         .expect(200);
 
       expect(response.body.success).toBe(true);
@@ -88,7 +193,7 @@ describe('Users API', () => {
     test('should search users by name', async () => {
       const response = await request(app)
         .get('/api/v1/users?search=test')
-        .set('Authorization', `Bearer ${authToken}`)
+        .set('Authorization', `Bearer ${this.testToken}`)
         .expect(200);
 
       expect(response.body.success).toBe(true);
@@ -98,7 +203,7 @@ describe('Users API', () => {
     test('should return 400 for invalid pagination parameters', async () => {
       const response = await request(app)
         .get('/api/v1/users?page=0&limit=200')
-        .set('Authorization', `Bearer ${authToken}`)
+        .set('Authorization', `Bearer ${this.testToken}`)
         .expect(400);
 
       expect(response.body.success).toBe(false);
@@ -115,7 +220,7 @@ describe('Users API', () => {
     test('should get user statistics', async () => {
       const response = await request(app)
         .get('/api/v1/users/stats')
-        .set('Authorization', `Bearer ${authToken}`)
+        .set('Authorization', `Bearer ${this.testToken}`)
         .expect(200);
 
       expect(response.body.success).toBe(true);
@@ -137,13 +242,13 @@ describe('Users API', () => {
   describe('GET /api/v1/users/:id', () => {
     test('should get user by ID', async () => {
       const response = await request(app)
-        .get(`/api/v1/users/${testUserId}`)
-        .set('Authorization', `Bearer ${authToken}`)
+        .get(`/api/v1/users/${this.testUserId}`)
+        .set('Authorization', `Bearer ${this.testToken}`)
         .expect(200);
 
       expect(response.body.success).toBe(true);
-      expect(response.body.data.idUser).toBe(testUserId);
-      expect(response.body.data.nameTag).toBe(testUserData.nameTag);
+      expect(response.body.data.idUser).toBe(this.testUserId);
+      expect(response.body.data.nameTag).toBe(this.testUser.nameTag);
       expect(response.body.data).not.toHaveProperty('password');
     });
 
@@ -151,7 +256,7 @@ describe('Users API', () => {
       const fakeId = '123e4567-e89b-12d3-a456-426614174000';
       const response = await request(app)
         .get(`/api/v1/users/${fakeId}`)
-        .set('Authorization', `Bearer ${authToken}`)
+        .set('Authorization', `Bearer ${this.testToken}`)
         .expect(404);
 
       expect(response.body.success).toBe(false);
@@ -161,7 +266,7 @@ describe('Users API', () => {
     test('should return 400 for invalid UUID', async () => {
       const response = await request(app)
         .get('/api/v1/users/invalid-uuid')
-        .set('Authorization', `Bearer ${authToken}`)
+        .set('Authorization', `Bearer ${this.testToken}`)
         .expect(400);
 
       expect(response.body.success).toBe(false);
@@ -169,7 +274,7 @@ describe('Users API', () => {
 
     test('should return 401 without authentication', async () => {
       const response = await request(app)
-        .get(`/api/v1/users/${testUserId}`)
+        .get(`/api/v1/users/${this.testUserId}`)
         .expect(401);
 
       expect(response.body.success).toBe(false);
@@ -185,8 +290,8 @@ describe('Users API', () => {
 
     test('should update user with valid data', async () => {
       const response = await request(app)
-        .put(`/api/v1/users/${testUserId}`)
-        .set('Authorization', `Bearer ${authToken}`)
+        .put(`/api/v1/users/${this.testUserId}`)
+        .set('Authorization', `Bearer ${this.testToken}`)
         .send(updateData)
         .expect(200);
 
@@ -201,7 +306,7 @@ describe('Users API', () => {
       const fakeId = '123e4567-e89b-12d3-a456-426614174000';
       const response = await request(app)
         .put(`/api/v1/users/${fakeId}`)
-        .set('Authorization', `Bearer ${authToken}`)
+        .set('Authorization', `Bearer ${this.testToken}`)
         .send(updateData)
         .expect(404);
 
@@ -211,8 +316,8 @@ describe('Users API', () => {
     test('should return 400 for invalid data', async () => {
       const invalidData = { firstname: 'A' }; // Trop court
       const response = await request(app)
-        .put(`/api/v1/users/${testUserId}`)
-        .set('Authorization', `Bearer ${authToken}`)
+        .put(`/api/v1/users/${this.testUserId}`)
+        .set('Authorization', `Bearer ${this.testToken}`)
         .send(invalidData)
         .expect(400);
 
@@ -221,7 +326,7 @@ describe('Users API', () => {
 
     test('should return 401 without authentication', async () => {
       const response = await request(app)
-        .put(`/api/v1/users/${testUserId}`)
+        .put(`/api/v1/users/${this.testUserId}`)
         .send(updateData)
         .expect(401);
 
@@ -237,8 +342,8 @@ describe('Users API', () => {
 
     test('should change password with valid data', async () => {
       const response = await request(app)
-        .patch(`/api/v1/users/${testUserId}/password`)
-        .set('Authorization', `Bearer ${authToken}`)
+        .patch(`/api/v1/users/${this.testUserId}/password`)
+        .set('Authorization', `Bearer ${this.testToken}`)
         .send(passwordData)
         .expect(200);
 
@@ -253,8 +358,8 @@ describe('Users API', () => {
       };
 
       const response = await request(app)
-        .patch(`/api/v1/users/${testUserId}/password`)
-        .set('Authorization', `Bearer ${authToken}`)
+        .patch(`/api/v1/users/${this.testUserId}/password`)
+        .set('Authorization', `Bearer ${this.testToken}`)
         .send(invalidData)
         .expect(401);
 
@@ -269,8 +374,8 @@ describe('Users API', () => {
       };
 
       const response = await request(app)
-        .patch(`/api/v1/users/${testUserId}/password`)
-        .set('Authorization', `Bearer ${authToken}`)
+        .patch(`/api/v1/users/${this.testUserId}/password`)
+        .set('Authorization', `Bearer ${this.testToken}`)
         .send(invalidData)
         .expect(400);
 
@@ -281,7 +386,7 @@ describe('Users API', () => {
       const fakeId = '123e4567-e89b-12d3-a456-426614174000';
       const response = await request(app)
         .patch(`/api/v1/users/${fakeId}/password`)
-        .set('Authorization', `Bearer ${authToken}`)
+        .set('Authorization', `Bearer ${this.testToken}`)
         .send(passwordData)
         .expect(404);
 
@@ -310,7 +415,7 @@ describe('Users API', () => {
     test('should delete user successfully', async () => {
       const response = await request(app)
         .delete(`/api/v1/users/${userToDelete.idUser}`)
-        .set('Authorization', `Bearer ${authToken}`)
+        .set('Authorization', `Bearer ${this.testToken}`)
         .expect(200);
 
       expect(response.body.success).toBe(true);
@@ -327,7 +432,7 @@ describe('Users API', () => {
       const fakeId = '123e4567-e89b-12d3-a456-426614174000';
       const response = await request(app)
         .delete(`/api/v1/users/${fakeId}`)
-        .set('Authorization', `Bearer ${authToken}`)
+        .set('Authorization', `Bearer ${this.testToken}`)
         .expect(404);
 
       expect(response.body.success).toBe(false);
@@ -337,7 +442,7 @@ describe('Users API', () => {
     test('should return 400 for invalid UUID', async () => {
       const response = await request(app)
         .delete('/api/v1/users/invalid-uuid')
-        .set('Authorization', `Bearer ${authToken}`)
+        .set('Authorization', `Bearer ${this.testToken}`)
         .expect(400);
 
       expect(response.body.success).toBe(false);
@@ -345,7 +450,7 @@ describe('Users API', () => {
 
     test('should return 401 without authentication', async () => {
       const response = await request(app)
-        .delete(`/api/v1/users/${testUserId}`)
+        .delete(`/api/v1/users/${this.testUserId}`)
         .expect(401);
 
       expect(response.body.success).toBe(false);
@@ -355,8 +460,8 @@ describe('Users API', () => {
   describe('Security Tests', () => {
     test('should not expose password in responses', async () => {
       const response = await request(app)
-        .get(`/api/v1/users/${testUserId}`)
-        .set('Authorization', `Bearer ${authToken}`)
+        .get(`/api/v1/users/${this.testUserId}`)
+        .set('Authorization', `Bearer ${this.testToken}`)
         .expect(200);
 
       expect(response.body.data).not.toHaveProperty('password');
@@ -365,7 +470,7 @@ describe('Users API', () => {
     test('should validate UUID format strictly', async () => {
       const response = await request(app)
         .get('/api/v1/users/not-a-uuid')
-        .set('Authorization', `Bearer ${authToken}`)
+        .set('Authorization', `Bearer ${this.testToken}`)
         .expect(400);
 
       expect(response.body.success).toBe(false);

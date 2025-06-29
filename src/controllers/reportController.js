@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 exports.createReport = async (req, res) => {
   try {
     const { content, idAnalysis, idComment } = req.body;
-    const idUser = req.user.userId;
+    const idUser = req.user.idUser;
 
     if (!content) {
       return res
@@ -194,6 +194,8 @@ exports.getAllReports = async (req, res) => {
 exports.getReportById = async (req, res) => {
   try {
     const { id } = req.params;
+    const userId = req.user.idUser;
+    const isAdmin = req.user.isAdmin;
 
     const report = await prisma.report.findUnique({
       where: { idReport: id },
@@ -235,6 +237,14 @@ exports.getReportById = async (req, res) => {
       return res
         .status(404)
         .json({ success: false, message: 'Signalement non trouvé' });
+    }
+
+    // Vérification d'accès : admin ou créateur du report
+    if (!isAdmin && report.idUser !== userId) {
+      return res.status(403).json({
+        success: false,
+        message: 'Accès non autorisé à ce signalement',
+      });
     }
 
     res.json({
@@ -333,7 +343,7 @@ exports.getReportsByComment = async (req, res) => {
 exports.deleteReport = async (req, res) => {
   try {
     const { id } = req.params;
-    const userId = req.user.userId;
+    const userId = req.user.idUser;
 
     const report = await prisma.report.findUnique({
       where: { idReport: id },

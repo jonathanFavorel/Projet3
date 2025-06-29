@@ -64,17 +64,30 @@ describe('🔐 Authentification', () => {
     });
 
     it("devrait refuser l'inscription avec un email déjà existant", async () => {
-      const userData = {
-        nameTag: 'authuser2',
+      const timestamp = Date.now();
+      const firstUserData = {
+        nameTag: `user1_${timestamp}`,
         firstname: 'Test',
         lastname: 'User',
-        email: 'authuser@example.com', // Email déjà utilisé
-        password: 'TestPass123!',
+        email: `test${timestamp}@example.com`,
+        password: 'Test1234!',
       };
 
+      const secondUserData = {
+        nameTag: `user2_${timestamp}`,
+        firstname: 'Test',
+        lastname: 'User',
+        email: `test${timestamp}@example.com`, // Même email
+        password: 'Test1234!',
+      };
+
+      // Créer le premier utilisateur
+      await request(app).post('/api/v1/auth/register').send(firstUserData);
+
+      // Essayer de créer un deuxième utilisateur avec le même email
       const response = await request(app)
         .post('/api/v1/auth/register')
-        .send(userData)
+        .send(secondUserData)
         .expect(409);
 
       expect(response.body.success).toBe(false);
@@ -84,17 +97,30 @@ describe('🔐 Authentification', () => {
     });
 
     it("devrait refuser l'inscription avec un nameTag déjà existant", async () => {
-      const userData = {
-        nameTag: 'authuser', // NameTag déjà utilisé
+      const timestamp = Date.now();
+      const firstUserData = {
+        nameTag: `user_${timestamp}`,
         firstname: 'Test',
         lastname: 'User',
-        email: 'authuser2@example.com',
-        password: 'TestPass123!',
+        email: `test1${timestamp}@example.com`,
+        password: 'Test1234!',
       };
 
+      const secondUserData = {
+        nameTag: `user_${timestamp}`, // Même nameTag
+        firstname: 'Test',
+        lastname: 'User',
+        email: `test2${timestamp}@example.com`,
+        password: 'Test1234!',
+      };
+
+      // Créer le premier utilisateur
+      await request(app).post('/api/v1/auth/register').send(firstUserData);
+
+      // Essayer de créer un deuxième utilisateur avec le même nameTag
       const response = await request(app)
         .post('/api/v1/auth/register')
-        .send(userData)
+        .send(secondUserData)
         .expect(409);
 
       expect(response.body.success).toBe(false);
@@ -121,6 +147,17 @@ describe('🔐 Authentification', () => {
   });
 
   describe('POST /api/v1/auth/login', () => {
+    beforeEach(async () => {
+      // Créer l'utilisateur de test via l'API avant chaque test de login
+      await request(app).post('/api/v1/auth/register').send({
+        nameTag: 'authuser',
+        firstname: 'Test',
+        lastname: 'User',
+        email: 'authuser@example.com',
+        password: 'TestPass123!',
+      });
+    });
+
     it('devrait connecter un utilisateur avec des identifiants valides', async () => {
       const loginData = {
         email: 'authuser@example.com',
@@ -200,15 +237,41 @@ describe('🔐 Authentification', () => {
     });
 
     it("devrait récupérer les informations de l'utilisateur connecté", async () => {
+      const timestamp = Date.now();
+      const email = `authuser${timestamp}@test.com`;
+      const nameTag = `authuser_${timestamp}`;
+      const userData = {
+        nameTag,
+        firstname: 'Test',
+        lastname: 'User',
+        email,
+        password: 'TestPassword123!',
+      };
+
+      // Créer l'utilisateur
+      const registerResponse = await request(app)
+        .post('/api/v1/auth/register')
+        .send(userData);
+      expect(registerResponse.statusCode).toBe(201);
+
+      // Se connecter
+      const loginResponse = await request(app)
+        .post('/api/v1/auth/login')
+        .send({ email, password: 'TestPassword123!' });
+      expect(loginResponse.statusCode).toBe(200);
+
+      const token = loginResponse.body.data.token;
+
+      // Récupérer les informations de l'utilisateur
       const response = await request(app)
         .get('/api/v1/auth/me')
-        .set('Authorization', `Bearer ${authToken}`)
+        .set('Authorization', `Bearer ${token}`)
         .expect(200);
 
       expect(response.body.success).toBe(true);
       expect(response.body.data.user).toHaveProperty('idUser');
-      expect(response.body.data.user.email).toBe('authuser@example.com');
-      expect(response.body.data.user.nameTag).toBe('authuser');
+      expect(response.body.data.user.email).toBe(email);
+      expect(response.body.data.user.nameTag).toBe(nameTag);
     });
 
     it("devrait refuser l'accès sans token", async () => {

@@ -29,13 +29,11 @@ exports.getAllCurrencies = async (req, res) => {
     const currencies = await prisma.currency.findMany();
     res.json({ success: true, data: currencies });
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: 'Erreur serveur',
-        error: error.message,
-      });
+    res.status(500).json({
+      success: false,
+      message: 'Erreur serveur',
+      error: error.message,
+    });
   }
 };
 
@@ -53,13 +51,11 @@ exports.getCurrencyById = async (req, res) => {
     }
     res.json({ success: true, data: currency });
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: 'Erreur serveur',
-        error: error.message,
-      });
+    res.status(500).json({
+      success: false,
+      message: 'Erreur serveur',
+      error: error.message,
+    });
   }
 };
 
@@ -79,13 +75,11 @@ exports.updateCurrency = async (req, res) => {
         .status(404)
         .json({ success: false, message: 'Devise non trouvée' });
     }
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: 'Erreur serveur',
-        error: error.message,
-      });
+    res.status(500).json({
+      success: false,
+      message: 'Erreur serveur',
+      error: error.message,
+    });
   }
 };
 
@@ -101,12 +95,10 @@ exports.deleteCurrency = async (req, res) => {
         .status(404)
         .json({ success: false, message: 'Devise non trouvée' });
     }
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: 'Erreur serveur',
-        error: error.message,
-      });
+    res.status(500).json({
+      success: false,
+      message: 'Erreur serveur',
+      error: error.message,
+    });
   }
 };

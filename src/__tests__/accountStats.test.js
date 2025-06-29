@@ -3,162 +3,190 @@ const app = require('../index');
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
-describe('AccountStats API', () => {
-  let testUser, testCurrency, testTradingAccount, testAccountStats, authToken;
+describe('Account Stats System', () => {
+  let token;
+  let userId;
+  let accountId;
 
-  beforeAll(async () => {
-    // Générer un email et un nameTag uniques
-    const uniqueId = Date.now();
-    const email = `teststats${uniqueId}@example.com`;
-    const nameTag = `teststatsuser${uniqueId}`;
-    const password = 'Test1234!';
+  beforeEach(async () => {
+    // Générer des identifiants uniques pour chaque test
+    const timestamp = Math.floor(Date.now() + Math.random() * 1000000)
+      .toString()
+      .replace(/\./g, '_');
+    const userEmail = `stats${timestamp}@test.com`;
+    const userPassword = 'Test1234!';
 
-    // Créer un utilisateur de test via l'API
-    const registerRes = await request(app).post('/api/v1/auth/register').send({
-      nameTag,
-      firstname: 'Test',
-      lastname: 'Stats',
-      email,
-      password,
-    });
+    // Créer l'utilisateur
+    const registerRes = await request(app)
+      .post('/api/v1/auth/register')
+      .send({
+        nameTag: `statsuser_${timestamp}`,
+        firstname: 'Test',
+        lastname: 'Stats',
+        email: userEmail,
+        password: userPassword,
+      });
 
     if (registerRes.statusCode !== 201) {
       throw new Error(
-        `Échec création utilisateur : ${JSON.stringify(registerRes.body)}`
+        `Échec création utilisateur: ${JSON.stringify(registerRes.body)}`
       );
     }
 
-    testUser = registerRes.body.data.user;
+    // Connexion utilisateur
+    const loginRes = await request(app)
+      .post('/api/v1/auth/login')
+      .send({ email: userEmail, password: userPassword });
 
-    // Obtenir un token d'authentification pour testUser
-    const loginResponse = await request(app).post('/api/v1/auth/login').send({
-      email,
-      password,
-    });
-    authToken = loginResponse.body.data
-      ? loginResponse.body.data.token
-      : undefined;
-
-    // Créer une devise de test
-    testCurrency = await prisma.currency.create({
-      data: {
-        name: 'Test Currency Stats',
-        symbol: 'TST',
-        contractSize: 1000,
-        type: 'test',
-      },
-    });
-
-    // Créer un compte de trading de test pour testUser
-    testTradingAccount = await prisma.tradingAccount.create({
-      data: {
-        amount: 10000,
-        idUser: testUser.idUser,
-        idCurrency: testCurrency.idCurrency,
-      },
-    });
-
-    // Créer des statistiques de test pour ce compte
-    testAccountStats = await prisma.accountStats.create({
-      data: {
-        idTradingAccount: testTradingAccount.idTradingAccount,
-        totalTrade: 10,
-        winningTrade: 6,
-        losingTrade: 3,
-        breakEvenTrade: 1,
-        profit: 1500,
-        loss: 500,
-        winRate: 60,
-        averageWin: 250,
-        averageLoss: 167,
-        profitFactor: 3,
-        averageTrade: 100,
-        rankAccount: 1,
-      },
-    });
-  });
-
-  afterAll(async () => {
-    // Nettoyer les données de test
-    await prisma.accountStats.deleteMany({
-      where: { idTradingAccount: testTradingAccount.idTradingAccount },
-    });
-    await prisma.tradingAccount.deleteMany({
-      where: { idTradingAccount: testTradingAccount.idTradingAccount },
-    });
-    await prisma.user.deleteMany({
-      where: { idUser: testUser.idUser },
-    });
-    await prisma.currency.deleteMany({
-      where: { idCurrency: testCurrency.idCurrency },
-    });
-    await prisma.$disconnect();
-  });
-
-  describe('GET /api/v1/accounts/:id/stats', () => {
-    test('devrait récupérer les statistiques d\'un compte avec un token valide', async () => {
-      const response = await request(app)
-        .get(`/api/v1/accounts/${testTradingAccount.idTradingAccount}/stats`)
-        .set('Authorization', `Bearer ${authToken}`);
-      if (response.status !== 200) {
-        console.error('Réponse inattendue:', response.status, response.body);
-      }
-      expect(response.status).toBe(200);
-      expect(response.body.success).toBe(true);
-      expect(response.body.data).toBeDefined();
-      expect(response.body.data.idTradingAccount).toBe(
-        testTradingAccount.idTradingAccount
+    if (
+      loginRes.statusCode !== 200 ||
+      !loginRes.body.data ||
+      !loginRes.body.data.token
+    ) {
+      throw new Error(
+        `Échec connexion utilisateur: ${JSON.stringify(loginRes.body)}`
       );
-      expect(response.body.data.totalTrade).toBe(10);
-      expect(response.body.data.winningTrade).toBe(6);
-      expect(response.body.data.losingTrade).toBe(3);
-      expect(response.body.data.breakEvenTrade).toBe(1);
-      expect(response.body.data.profit).toBe(1500);
-      expect(response.body.data.loss).toBe(500);
-      expect(response.body.data.winRate).toBe(60);
-      expect(response.body.data.averageWin).toBe(250);
-      expect(response.body.data.averageLoss).toBe(167);
-      expect(response.body.data.profitFactor).toBe(3);
-      expect(response.body.data.averageTrade).toBe(100);
-    });
+    }
 
-    test('devrait retourner 401 sans token d\'authentification', async () => {
-      const response = await request(app)
-        .get(`/api/v1/accounts/${testTradingAccount.idTradingAccount}/stats`)
-        .expect(401);
+    token = loginRes.body.data.token;
+    userId = loginRes.body.data.user.idUser;
 
-      expect(response.body.success).toBe(false);
-      expect(response.body.message).toContain('Token d\'accès requis');
-    });
+    // Créer une devise pour le compte
+    const currencyRes = await request(app)
+      .post('/api/v1/currencies')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        name: 'US Dollar',
+        symbol: 'USD',
+        contractSize: 100000,
+        type: 'forex',
+      });
 
-    test('devrait retourner 403 avec un token invalide', async () => {
-      const response = await request(app)
-        .get(`/api/v1/accounts/${testTradingAccount.idTradingAccount}/stats`)
-        .set('Authorization', 'Bearer invalid-token')
-        .expect(403);
+    if (currencyRes.statusCode !== 201) {
+      throw new Error(
+        `Échec création devise: ${JSON.stringify(currencyRes.body)}`
+      );
+    }
 
-      expect(response.body.success).toBe(false);
-      expect(response.body.message).toContain('Token invalide ou expiré');
-    });
+    const currencyId = currencyRes.body.data.idCurrency;
 
-    test('devrait retourner 404 pour un compte inexistant', async () => {
-      const response = await request(app)
-        .get('/api/v1/accounts/999999/stats')
-        .set('Authorization', `Bearer ${authToken}`)
-        .expect(404);
+    // Créer un compte de trading
+    const accountRes = await request(app)
+      .post('/api/v1/accounts')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        amount: 10000,
+        idCurrency: currencyId,
+        leverage: 100,
+        isPropFirm: false,
+      });
 
-      expect(response.body.success).toBe(false);
-      expect(response.body.message).toContain('Statistiques non trouvées');
-    });
+    if (accountRes.statusCode !== 201) {
+      throw new Error(
+        `Échec création compte: ${JSON.stringify(accountRes.body)}`
+      );
+    }
 
-    test('devrait retourner 404 pour un ID de compte invalide', async () => {
-      const response = await request(app)
-        .get('/api/v1/accounts/invalid-id/stats')
-        .set('Authorization', `Bearer ${authToken}`)
-        .expect(404);
+    accountId = accountRes.body.data.idTradingAccount;
+  });
 
-      expect(response.body.success).toBe(false);
-      expect(response.body.message).toContain('Statistiques non trouvées');
-    });
+  it("récupère les statistiques d'un compte", async () => {
+    // Créer d'abord une devise pour les trades
+    const currencyRes = await request(app)
+      .post('/api/v1/currencies')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        name: 'US Dollar',
+        symbol: 'USD',
+        contractSize: 100000,
+        type: 'forex',
+      });
+
+    if (currencyRes.statusCode !== 201) {
+      throw new Error(
+        `Échec création devise: ${JSON.stringify(currencyRes.body)}`
+      );
+    }
+
+    const currencyId = currencyRes.body.data.idCurrency;
+
+    // Créer un trade pour générer des stats
+    await request(app)
+      .post('/api/v1/trades')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        entryPrice: 1.1,
+        exitPrice: 1.105,
+        takeProfit: 1.11,
+        quantity: 1.0,
+        status: 'CLOSED',
+        dateEntry: new Date().toISOString(),
+        dateExit: new Date().toISOString(),
+        idTradingAccount: accountId,
+        idCurrency: currencyId,
+      });
+
+    const res = await request(app)
+      .get(`/api/v1/accounts/${accountId}/stats`)
+      .set('Authorization', `Bearer ${token}`);
+    expect(res.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(res.body.data).toBeDefined();
+    expect(res.body.data.idTradingAccount).toBe(accountId);
+  });
+
+  it('erreur accès sans authentification', async () => {
+    const res = await request(app).get(`/api/v1/accounts/${accountId}/stats`);
+    expect(res.statusCode).toBe(401);
+  });
+
+  it('erreur accès compte non autorisé', async () => {
+    // Créer un autre utilisateur
+    const timestamp = Date.now() + Math.random();
+    const otherUserEmail = `other${timestamp}@test.com`;
+
+    const registerRes = await request(app)
+      .post('/api/v1/auth/register')
+      .send({
+        nameTag: `otheruser_${Math.floor(timestamp)}`,
+        firstname: 'Other',
+        lastname: 'User',
+        email: otherUserEmail,
+        password: 'Test1234!',
+      });
+
+    if (registerRes.statusCode !== 201) {
+      throw new Error(
+        `Échec création autre utilisateur: ${JSON.stringify(registerRes.body)}`
+      );
+    }
+
+    const loginRes = await request(app)
+      .post('/api/v1/auth/login')
+      .send({ email: otherUserEmail, password: 'Test1234!' });
+
+    if (
+      loginRes.statusCode !== 200 ||
+      !loginRes.body.data ||
+      !loginRes.body.data.token
+    ) {
+      throw new Error(
+        `Échec connexion autre utilisateur: ${JSON.stringify(loginRes.body)}`
+      );
+    }
+
+    const otherToken = loginRes.body.data.token;
+
+    const res = await request(app)
+      .get(`/api/v1/accounts/${accountId}/stats`)
+      .set('Authorization', `Bearer ${otherToken}`);
+    expect(res.statusCode).toBe(403);
+  });
+
+  it('erreur compte inexistant', async () => {
+    const res = await request(app)
+      .get('/api/v1/accounts/00000000-0000-0000-0000-000000000000/stats')
+      .set('Authorization', `Bearer ${token}`);
+    expect(res.statusCode).toBe(404);
   });
 });

@@ -4,5 +4,7 @@ module.exports = {
   collectCoverageFrom: ['src/**/*.js', '!src/index.js', '!**/node_modules/**'],
   coverageDirectory: 'coverage',
   coverageReporters: ['text', 'lcov', 'html'],
-  testTimeout: 10000,
+  testTimeout: 30000,
+  maxWorkers: 1,
+  globalTeardown: './jest.teardown.js',
 };

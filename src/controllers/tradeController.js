@@ -28,29 +28,98 @@ exports.getTradeById = async (req, res) => {
     }
     res.status(200).json({ success: true, data: trade });
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: 'Erreur lors de la récupération du trade',
-        error: error.message,
-      });
+    res.status(500).json({
+      success: false,
+      message: 'Erreur lors de la récupération du trade',
+      error: error.message,
+    });
   }
 };
+
+// Fonction utilitaire pour recalculer toutes les stats d'un compte
+async function recalculateAccountStats(idTradingAccount) {
+  const trades = await prisma.trade.findMany({ where: { idTradingAccount } });
+  const totalTrade = trades.length;
+  const winningTrades = trades.filter(t => t.exitPrice - t.entryPrice > 0);
+  const losingTrades = trades.filter(t => t.exitPrice - t.entryPrice < 0);
+  const breakEvenTrades = trades.filter(t => t.exitPrice - t.entryPrice === 0);
+  const profit = trades.reduce(
+    (acc, t) => acc + Math.max(0, (t.exitPrice - t.entryPrice) * t.quantity),
+    0
+  );
+  const loss = trades.reduce(
+    (acc, t) => acc + Math.min(0, (t.exitPrice - t.entryPrice) * t.quantity),
+    0
+  );
+  const winRate =
+    totalTrade > 0 ? (winningTrades.length / totalTrade) * 100 : 0;
+  const averageWin =
+    winningTrades.length > 0
+      ? winningTrades.reduce(
+          (acc, t) => acc + (t.exitPrice - t.entryPrice) * t.quantity,
+          0
+        ) / winningTrades.length
+      : 0;
+  const averageLoss =
+    losingTrades.length > 0
+      ? losingTrades.reduce(
+          (acc, t) => acc + (t.exitPrice - t.entryPrice) * t.quantity,
+          0
+        ) / losingTrades.length
+      : 0;
+  const profitFactor = Math.abs(loss) > 0 ? profit / Math.abs(loss) : 0;
+  const averageTrade =
+    totalTrade > 0
+      ? trades.reduce(
+          (acc, t) => acc + (t.exitPrice - t.entryPrice) * t.quantity,
+          0
+        ) / totalTrade
+      : 0;
+
+  await prisma.accountStats.upsert({
+    where: { idTradingAccount },
+    update: {
+      totalTrade,
+      winningTrade: winningTrades.length,
+      losingTrade: losingTrades.length,
+      breakEvenTrade: breakEvenTrades.length,
+      profit,
+      loss,
+      winRate,
+      averageWin,
+      averageLoss,
+      profitFactor,
+      averageTrade,
+    },
+    create: {
+      idTradingAccount,
+      totalTrade,
+      winningTrade: winningTrades.length,
+      losingTrade: losingTrades.length,
+      breakEvenTrade: breakEvenTrades.length,
+      profit,
+      loss,
+      winRate,
+      averageWin,
+      averageLoss,
+      profitFactor,
+      averageTrade,
+    },
+  });
+}
 
 // Créer un nouveau trade
 exports.createTrade = async (req, res) => {
   try {
     const trade = await prisma.trade.create({ data: req.body });
+    await recalculateAccountStats(trade.idTradingAccount);
     res.status(201).json({ success: true, data: trade });
   } catch (error) {
-    res
-      .status(400)
-      .json({
-        success: false,
-        message: 'Erreur lors de la création du trade',
-        error: error.message,
-      });
+    res.status(400).json({
+      success: false,
+      message: 'Erreur lors de la création du trade',
+      error: error.message,
+    });
   }
 };
 
@@ -61,6 +130,7 @@ exports.updateTrade = async (req, res) => {
       where: { idTrade: req.params.id },
       data: req.body,
     });
+    await recalculateAccountStats(trade.idTradingAccount);
     res.status(200).json({ success: true, data: trade });
   } catch (error) {
     if (error.code === 'P2025') {
@@ -68,20 +138,28 @@ exports.updateTrade = async (req, res) => {
         .status(404)
         .json({ success: false, message: 'Trade non trouvé' });
     }
-    res
-      .status(400)
-      .json({
-        success: false,
-        message: 'Erreur lors de la mise à jour du trade',
-        error: error.message,
-      });
+    res.status(400).json({
+      success: false,
+      message: 'Erreur lors de la mise à jour du trade',
+      error: error.message,
+    });
   }
 };
 
 // Supprimer un trade
 exports.deleteTrade = async (req, res) => {
   try {
+    // On récupère d'abord le trade pour avoir l'idTradingAccount
+    const trade = await prisma.trade.findUnique({
+      where: { idTrade: req.params.id },
+    });
+    if (!trade) {
+      return res
+        .status(404)
+        .json({ success: false, message: 'Trade non trouvé' });
+    }
     await prisma.trade.delete({ where: { idTrade: req.params.id } });
+    await recalculateAccountStats(trade.idTradingAccount);
     res
       .status(200)
       .json({ success: true, message: 'Trade supprimé avec succès' });
@@ -91,12 +169,10 @@ exports.deleteTrade = async (req, res) => {
         .status(404)
         .json({ success: false, message: 'Trade non trouvé' });
     }
-    res
-      .status(400)
-      .json({
-        success: false,
-        message: 'Erreur lors de la suppression du trade',
-        error: error.message,
-      });
+    res.status(400).json({
+      success: false,
+      message: 'Erreur lors de la suppression du trade',
+      error: error.message,
+    });
   }
 };

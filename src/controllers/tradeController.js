@@ -38,42 +38,77 @@ exports.getTradeById = async (req, res) => {
 
 // Fonction utilitaire pour recalculer toutes les stats d'un compte
 async function recalculateAccountStats(idTradingAccount) {
-  const trades = await prisma.trade.findMany({ where: { idTradingAccount } });
+  // Récupérer les trades avec les informations de la devise
+  const trades = await prisma.trade.findMany({
+    where: { idTradingAccount },
+    include: {
+      currency: true, // Inclure les informations de la devise pour avoir contractSize
+    },
+  });
+
   const totalTrade = trades.length;
   const winningTrades = trades.filter(t => t.exitPrice - t.entryPrice > 0);
   const losingTrades = trades.filter(t => t.exitPrice - t.entryPrice < 0);
   const breakEvenTrades = trades.filter(t => t.exitPrice - t.entryPrice === 0);
+
+  // Calculer le profit en tenant compte du contractSize
   const profit = trades.reduce(
-    (acc, t) => acc + Math.max(0, (t.exitPrice - t.entryPrice) * t.quantity),
+    (acc, t) =>
+      acc +
+      Math.max(
+        0,
+        (t.exitPrice - t.entryPrice) * t.quantity * t.currency.contractSize
+      ),
     0
   );
+
+  // Calculer la perte en tenant compte du contractSize
   const loss = trades.reduce(
-    (acc, t) => acc + Math.min(0, (t.exitPrice - t.entryPrice) * t.quantity),
+    (acc, t) =>
+      acc +
+      Math.min(
+        0,
+        (t.exitPrice - t.entryPrice) * t.quantity * t.currency.contractSize
+      ),
     0
   );
+
   const winRate =
     totalTrade > 0 ? (winningTrades.length / totalTrade) * 100 : 0;
+
+  // Calculer la moyenne des gains en tenant compte du contractSize
   const averageWin =
     winningTrades.length > 0
       ? winningTrades.reduce(
-        (acc, t) => acc + (t.exitPrice - t.entryPrice) * t.quantity,
-        0
-      ) / winningTrades.length
+          (acc, t) =>
+            acc +
+            (t.exitPrice - t.entryPrice) * t.quantity * t.currency.contractSize,
+          0
+        ) / winningTrades.length
       : 0;
+
+  // Calculer la moyenne des pertes en tenant compte du contractSize
   const averageLoss =
     losingTrades.length > 0
       ? losingTrades.reduce(
-        (acc, t) => acc + (t.exitPrice - t.entryPrice) * t.quantity,
-        0
-      ) / losingTrades.length
+          (acc, t) =>
+            acc +
+            (t.exitPrice - t.entryPrice) * t.quantity * t.currency.contractSize,
+          0
+        ) / losingTrades.length
       : 0;
+
   const profitFactor = Math.abs(loss) > 0 ? profit / Math.abs(loss) : 0;
+
+  // Calculer la moyenne des trades en tenant compte du contractSize
   const averageTrade =
     totalTrade > 0
       ? trades.reduce(
-        (acc, t) => acc + (t.exitPrice - t.entryPrice) * t.quantity,
-        0
-      ) / totalTrade
+          (acc, t) =>
+            acc +
+            (t.exitPrice - t.entryPrice) * t.quantity * t.currency.contractSize,
+          0
+        ) / totalTrade
       : 0;
 
   await prisma.accountStats.upsert({

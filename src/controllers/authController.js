@@ -71,6 +71,7 @@ const register = async (req, res) => {
         bio: true,
         createdAt: true,
         isConnected: true,
+        isAdmin: true,
       },
     });
 
@@ -80,6 +81,7 @@ const register = async (req, res) => {
         userId: newUser.idUser,
         email: newUser.email,
         nameTag: newUser.nameTag,
+        isAdmin: newUser.isAdmin,
       },
       process.env.JWT_SECRET,
       { expiresIn: process.env.JWT_EXPIRES_IN || '24h' }
@@ -133,6 +135,7 @@ const login = async (req, res) => {
         createdAt: true,
         lastLogin: true,
         isConnected: true,
+        isAdmin: true,
       },
     });
 
@@ -167,6 +170,7 @@ const login = async (req, res) => {
         userId: user.idUser,
         email: user.email,
         nameTag: user.nameTag,
+        isAdmin: user.isAdmin,
       },
       process.env.JWT_SECRET,
       { expiresIn: process.env.JWT_EXPIRES_IN || '24h' }
@@ -196,8 +200,13 @@ const login = async (req, res) => {
 // Récupérer les informations de l'utilisateur connecté
 const getMe = async (req, res) => {
   try {
+    if (!req.user) {
+      return res.status(401).json({
+        success: false,
+        message: "Token d'accès requis",
+      });
+    }
     const userId = req.user.userId;
-
     const user = await prisma.user.findUnique({
       where: { idUser: userId },
       select: {
@@ -211,26 +220,26 @@ const getMe = async (req, res) => {
         createdAt: true,
         lastLogin: true,
         isConnected: true,
+        isAdmin: true,
       },
     });
-
     if (!user) {
       return res.status(404).json({
         success: false,
         message: 'Utilisateur non trouvé',
       });
     }
-
     res.status(200).json({
       success: true,
-      data: { user },
+      data: {
+        user,
+      },
     });
   } catch (error) {
-    console.error('Erreur lors de la récupération du profil:', error);
     res.status(500).json({
       success: false,
-      message: 'Erreur interne du serveur',
-      error: process.env.NODE_ENV === 'development' ? error.message : undefined,
+      message: "Erreur lors de la récupération de l'utilisateur",
+      error: error.message,
     });
   }
 };

@@ -20,21 +20,42 @@ describe('Admin Dashboard', () => {
     // Hasher le mot de passe pour l'admin
     const hashedPassword = await bcrypt.hash(userPassword, 10);
 
-    // Créer l'utilisateur admin directement en base
-    const adminUser = await prisma.user.create({
-      data: {
+    // Créer l'utilisateur admin via l'API
+    const adminRegisterRes = await request(app)
+      .post('/api/v1/auth/register')
+      .send({
         nameTag: `admin${timestamp}`,
         firstname: 'Admin',
         lastname: 'Test',
         email: adminEmail,
-        password: hashedPassword,
-        isAdmin: true,
-      },
+        password: userPassword,
+      });
+    if (adminRegisterRes.statusCode !== 201) {
+      throw new Error(
+        `Échec création admin : ${JSON.stringify(adminRegisterRes.body)}`
+      );
+    }
+    // Mettre à jour le rôle admin en base
+    await prisma.user.update({
+      where: { email: adminEmail },
+      data: { isAdmin: true },
     });
-    adminId = adminUser.idUser;
+    // Récupérer l'id de l'admin
+    adminId = adminRegisterRes.body.data.user.idUser;
+
+    // Refaire un login pour obtenir un token admin valide
+    const adminLoginRes = await request(app)
+      .post('/api/v1/auth/login')
+      .send({ email: adminEmail, password: userPassword });
+    if (adminLoginRes.statusCode !== 200) {
+      throw new Error(
+        `Échec login admin : ${JSON.stringify(adminLoginRes.body)}`
+      );
+    }
+    adminToken = adminLoginRes.body.data.token;
 
     // Créer l'utilisateur normal
-    const userRes = await request(app)
+    const userRegisterRes = await request(app)
       .post('/api/v1/auth/register')
       .send({
         nameTag: `user${timestamp}`,
@@ -43,29 +64,43 @@ describe('Admin Dashboard', () => {
         email: userEmail,
         password: userPassword,
       });
+    if (userRegisterRes.statusCode !== 201) {
+      throw new Error(
+        `Échec création utilisateur : ${JSON.stringify(userRegisterRes.body)}`
+      );
+    }
+    userId = userRegisterRes.body.data.user.idUser;
 
-    // Connexion des utilisateurs
-    const adminLoginRes = await request(app)
-      .post('/api/v1/auth/login')
-      .send({ email: adminEmail, password: userPassword });
-    adminToken = adminLoginRes.body.data.token;
-
+    // Refaire un login pour obtenir un token utilisateur valide
     const userLoginRes = await request(app)
       .post('/api/v1/auth/login')
       .send({ email: userEmail, password: userPassword });
+    if (userLoginRes.statusCode !== 200) {
+      throw new Error(
+        `Échec login utilisateur : ${JSON.stringify(userLoginRes.body)}`
+      );
+    }
     userToken = userLoginRes.body.data.token;
-    userId = userLoginRes.body.data.user.idUser;
 
     // Créer une analyse et un commentaire pour les tests
     const analysisRes = await request(app)
       .post('/api/v1/analyses')
-      .set('Authorization', `Bearer ${userToken}`)
+      .set('Authorization', `Bearer ${adminToken}`)
       .send({
-        title: 'Analyse pour test admin',
+        title: 'Analyse admin',
         content: 'Contenu de test pour admin',
       });
+    if (!analysisRes.body.data || !analysisRes.body.data.idAnalysis) {
+      console.error(
+        'Erreur création analyse :',
+        analysisRes.status,
+        analysisRes.body
+      );
+      throw new Error('La création de l\'analyse a échoué, data manquant');
+    }
     analysisId = analysisRes.body.data.idAnalysis;
 
+    // Créer un commentaire pour les tests
     const commentRes = await request(app)
       .post('/api/v1/comments')
       .set('Authorization', `Bearer ${userToken}`)
@@ -73,7 +108,25 @@ describe('Admin Dashboard', () => {
         content: 'Commentaire pour test admin',
         idAnalysis: analysisId,
       });
-    commentId = commentRes.body.data.idComment;
+
+    if (commentRes.statusCode !== 201) {
+      console.error(
+        'Erreur création commentaire :',
+        commentRes.status,
+        commentRes.body
+      );
+      // Créer le commentaire directement via Prisma si l'API échoue
+      const comment = await prisma.comment.create({
+        data: {
+          content: 'Commentaire pour test admin',
+          idAnalysis: analysisId,
+          idUser: userId,
+        },
+      });
+      commentId = comment.idComment;
+    } else {
+      commentId = commentRes.body.data.idComment;
+    }
 
     // Créer des signalements pour les tests
     await request(app)
@@ -399,7 +452,7 @@ describe('Admin Dashboard', () => {
   });
 
   describe('DELETE /api/v1/admin/user/:id/analyst', () => {
-    it("retirer rôle analyste d'un utilisateur", async () => {
+    it('retirer rôle analyste d\'un utilisateur', async () => {
       // Créer un utilisateur analyste
       const timestamp = Date.now();
       const analystUserEmail = `analystuser3${timestamp}@test.com`;
@@ -434,7 +487,7 @@ describe('Admin Dashboard', () => {
       expect(res.body.data.isAnalyste).toBe(false);
     });
 
-    it("erreur retirer rôle analyste d'un utilisateur non analyste", async () => {
+    it('erreur retirer rôle analyste d\'un utilisateur non analyste', async () => {
       // Créer un utilisateur normal
       const timestamp = Date.now();
       const normalUserEmail = `normaluser${timestamp}@test.com`;
@@ -463,7 +516,7 @@ describe('Admin Dashboard', () => {
       expect(res.body.success).toBe(false);
     });
 
-    it("erreur retirer rôle analyste d'un utilisateur inexistant", async () => {
+    it('erreur retirer rôle analyste d\'un utilisateur inexistant', async () => {
       const res = await request(app)
         .delete('/api/v1/admin/user/fake-id/analyst')
         .set('Authorization', `Bearer ${adminToken}`);

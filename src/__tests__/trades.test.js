@@ -7,22 +7,43 @@ let authToken;
 let createdTradeId;
 let currency;
 let tradingAccount;
+let testUser;
 
 beforeAll(async () => {
-  // Créer un utilisateur et récupérer un token
-  const user = await prisma.user.create({
-    data: {
-      nameTag: 'tradetester',
+  // Générer un email unique
+  const timestamp = Date.now();
+  const userEmail = `tradetester${timestamp}@example.com`;
+  const userPassword = 'Test1234!';
+
+  // Créer un utilisateur via l'API
+  const registerRes = await request(app)
+    .post('/api/v1/auth/register')
+    .send({
+      nameTag: `tradetester${timestamp}`,
       firstname: 'Trade',
       lastname: 'Tester',
-      email: 'tradetester@example.com',
-      password: await require('bcrypt').hash('Test1234!', 10),
-    },
-  });
-  const res = await request(app)
+      email: userEmail,
+      password: userPassword,
+    });
+
+  if (registerRes.statusCode !== 201) {
+    throw new Error(
+      `Échec création utilisateur : ${JSON.stringify(registerRes.body)}`
+    );
+  }
+
+  testUser = registerRes.body.data.user;
+
+  // Login pour obtenir le token
+  const loginRes = await request(app)
     .post('/api/v1/auth/login')
-    .send({ email: 'tradetester@example.com', password: 'Test1234!' });
-  authToken = res.body.data.token;
+    .send({ email: userEmail, password: userPassword });
+
+  if (loginRes.statusCode !== 200) {
+    throw new Error(`Échec login : ${JSON.stringify(loginRes.body)}`);
+  }
+
+  authToken = loginRes.body.data.token;
 
   // Créer une devise pour les tests
   currency = await prisma.currency.create({
@@ -38,7 +59,7 @@ beforeAll(async () => {
   tradingAccount = await prisma.tradingAccount.create({
     data: {
       amount: 10000,
-      idUser: user.idUser,
+      idUser: testUser.idUser,
       idCurrency: currency.idCurrency,
     },
   });
@@ -48,7 +69,7 @@ afterAll(async () => {
   await prisma.trade.deleteMany({});
   await prisma.tradingAccount.deleteMany({});
   await prisma.currency.deleteMany({});
-  await prisma.user.deleteMany({ where: { email: 'tradetester@example.com' } });
+  await prisma.user.deleteMany({ where: { idUser: testUser.idUser } });
   await prisma.$disconnect();
 });
 
@@ -72,8 +93,13 @@ describe('Trades API', () => {
     const res = await request(app)
       .post('/api/v1/trades')
       .set('Authorization', `Bearer ${authToken}`)
-      .send(tradeData)
-      .expect(201);
+      .send(tradeData);
+
+    if (res.statusCode !== 201) {
+      console.error('Erreur création trade :', res.status, res.body);
+      throw new Error(`Échec création trade : ${JSON.stringify(res.body)}`);
+    }
+
     expect(res.body.success).toBe(true);
     expect(res.body.data).toHaveProperty('idTrade');
     createdTradeId = res.body.data.idTrade;

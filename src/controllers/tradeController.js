@@ -56,24 +56,24 @@ async function recalculateAccountStats(idTradingAccount) {
   const averageWin =
     winningTrades.length > 0
       ? winningTrades.reduce(
-          (acc, t) => acc + (t.exitPrice - t.entryPrice) * t.quantity,
-          0
-        ) / winningTrades.length
+        (acc, t) => acc + (t.exitPrice - t.entryPrice) * t.quantity,
+        0
+      ) / winningTrades.length
       : 0;
   const averageLoss =
     losingTrades.length > 0
       ? losingTrades.reduce(
-          (acc, t) => acc + (t.exitPrice - t.entryPrice) * t.quantity,
-          0
-        ) / losingTrades.length
+        (acc, t) => acc + (t.exitPrice - t.entryPrice) * t.quantity,
+        0
+      ) / losingTrades.length
       : 0;
   const profitFactor = Math.abs(loss) > 0 ? profit / Math.abs(loss) : 0;
   const averageTrade =
     totalTrade > 0
       ? trades.reduce(
-          (acc, t) => acc + (t.exitPrice - t.entryPrice) * t.quantity,
-          0
-        ) / totalTrade
+        (acc, t) => acc + (t.exitPrice - t.entryPrice) * t.quantity,
+        0
+      ) / totalTrade
       : 0;
 
   await prisma.accountStats.upsert({
@@ -104,6 +104,7 @@ async function recalculateAccountStats(idTradingAccount) {
       averageLoss,
       profitFactor,
       averageTrade,
+      rankAccount: 1,
     },
   });
 }

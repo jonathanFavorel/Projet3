@@ -7,7 +7,7 @@ const authenticateToken = (req, res, next) => {
   if (!token) {
     return res.status(401).json({
       success: false,
-      message: "Token d'accès requis",
+      message: 'Token d\'accès requis',
     });
   }
 
@@ -18,7 +18,6 @@ const authenticateToken = (req, res, next) => {
         message: 'Token invalide ou expiré',
       });
     }
-
     req.user = user;
     next();
   });

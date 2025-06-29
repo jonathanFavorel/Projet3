@@ -13,7 +13,7 @@
     },
     {
       "key": "api_prefix",
-      "value": "/api/v1",
+      "value": "api/v1",
       "type": "string"
     },
     {

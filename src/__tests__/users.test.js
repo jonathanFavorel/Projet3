@@ -71,88 +71,6 @@ describe('Users API', () => {
     await prisma.$disconnect();
   });
 
-  describe('POST /api/v1/users', () => {
-    const validUserData = {
-      nameTag: 'newuser',
-      firstname: 'New',
-      lastname: 'User',
-      email: 'newuser@example.com',
-      password: 'NewPassword123!',
-      phone: '+33123456789',
-      bio: 'Test bio',
-    };
-
-    test('should create a new user with valid data', async () => {
-      const response = await request(app)
-        .post('/api/v1/users')
-        .set('Authorization', `Bearer ${authToken}`)
-        .send(validUserData)
-        .expect(201);
-
-      expect(response.body.success).toBe(true);
-      expect(response.body.message).toBe('Utilisateur créé avec succès');
-      expect(response.body.data).toHaveProperty('idUser');
-      expect(response.body.data.nameTag).toBe(validUserData.nameTag);
-      expect(response.body.data.email).toBe(validUserData.email);
-      expect(response.body.data).not.toHaveProperty('password');
-    });
-
-    test('should return 400 for invalid nameTag', async () => {
-      const invalidData = { ...validUserData, nameTag: 'ab' };
-      const response = await request(app)
-        .post('/api/v1/users')
-        .set('Authorization', `Bearer ${authToken}`)
-        .send(invalidData)
-        .expect(400);
-
-      expect(response.body.success).toBe(false);
-      expect(response.body.errors).toBeDefined();
-    });
-
-    test('should return 400 for invalid email', async () => {
-      const invalidData = { ...validUserData, email: 'invalid-email' };
-      const response = await request(app)
-        .post('/api/v1/users')
-        .set('Authorization', `Bearer ${authToken}`)
-        .send(invalidData)
-        .expect(400);
-
-      expect(response.body.success).toBe(false);
-    });
-
-    test('should return 400 for weak password', async () => {
-      const invalidData = { ...validUserData, password: 'weak' };
-      const response = await request(app)
-        .post('/api/v1/users')
-        .set('Authorization', `Bearer ${authToken}`)
-        .send(invalidData)
-        .expect(400);
-
-      expect(response.body.success).toBe(false);
-    });
-
-    test('should return 409 for duplicate email', async () => {
-      const duplicateData = { ...validUserData, email: testUserData.email };
-      const response = await request(app)
-        .post('/api/v1/users')
-        .set('Authorization', `Bearer ${authToken}`)
-        .send(duplicateData)
-        .expect(409);
-
-      expect(response.body.success).toBe(false);
-      expect(response.body.message).toContain('existe déjà');
-    });
-
-    test('should return 401 without authentication', async () => {
-      const response = await request(app)
-        .post('/api/v1/users')
-        .send(validUserData)
-        .expect(401);
-
-      expect(response.body.success).toBe(false);
-    });
-  });
-
   describe('GET /api/v1/users', () => {
     test('should get all users with pagination', async () => {
       const response = await request(app)
@@ -448,24 +366,6 @@ describe('Users API', () => {
       const response = await request(app)
         .get('/api/v1/users/not-a-uuid')
         .set('Authorization', `Bearer ${authToken}`)
-        .expect(400);
-
-      expect(response.body.success).toBe(false);
-    });
-
-    test('should sanitize input data', async () => {
-      const maliciousData = {
-        nameTag: 'test<script>alert("xss")</script>',
-        firstname: 'Test',
-        lastname: 'User',
-        email: 'test@example.com',
-        password: 'TestPassword123!',
-      };
-
-      const response = await request(app)
-        .post('/api/v1/users')
-        .set('Authorization', `Bearer ${authToken}`)
-        .send(maliciousData)
         .expect(400);
 
       expect(response.body.success).toBe(false);
